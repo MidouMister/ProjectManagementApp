@@ -1,0 +1,12 @@
+// PMA Database Schema
+// Prisma 7 configuration
+// Full schema to be defined in M01
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
