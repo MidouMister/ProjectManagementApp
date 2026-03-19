@@ -76,39 +76,39 @@
 
 ---
 
-## M01 — Prisma Schema & Database
+## M01 — Prisma Schema & Database ✅
 
 > **Important:** Schema goes in `src/prisma/schema.prisma` with Prisma 7 output path
 
 ### Create Schema
 
-- [ ] Create `src/prisma/schema.prisma` with Prisma 7 generator:
+- [x] Create `src/prisma/schema.prisma` with Prisma 7 generator:
   ```prisma
   generator client {
     provider = "prisma-client"
     output   = "../generated/prisma"
   }
   ```
-- [ ] Define all enums from PRD §10: `Role`, `ProjectStatus`, `PhaseStatus`, `SubPhaseStatus`, `InvitationStatus`, `NotificationType`
-- [ ] Define models: `Plan`, `Subscription`, `Company`, `User`, `Unit`, `Invitation`
-- [ ] Define models: `Client`, `Project`, `Team`, `TeamMember`, `Phase`, `SubPhase`, `GanttMarker`
-- [ ] Define models: `Product`, `Production`, `Lane`, `Task`, `Tag`, `TaskTag`
-- [ ] Define models: `TaskComment`, `TaskMention`, `TimeEntry`, `Notification`, `ActivityLog`
-- [ ] Add `@@index` annotations for all foreign keys (performance optimization)
+- [x] Define all enums from PRD §10: `Role`, `ProjectStatus`, `PhaseStatus`, `SubPhaseStatus`, `InvitationStatus`, `NotificationType`
+- [x] Define models: `Plan`, `Subscription`, `Company`, `User`, `Unit`, `Invitation`
+- [x] Define models: `Client`, `Project`, `Team`, `TeamMember`, `Phase`, `SubPhase`, `GanttMarker`
+- [x] Define models: `Product`, `Production`, `Lane`, `Task`, `Tag`, `TaskTag`
+- [x] Define models: `TaskComment`, `TaskMention`, `TimeEntry`, `Notification`, `ActivityLog`
+- [x] Add `@@index` annotations for all foreign keys (performance optimization)
 
 ### Database Setup
 
-- [ ] Create `src/generated/prisma/` directory
-- [ ] Generate Prisma client: `pnpm exec prisma generate`
-- [ ] Create initial migration: `pnpm exec prisma migrate dev --name init`
+- [x] Create `src/generated/prisma/` directory
+- [x] Generate Prisma client: `pnpm exec prisma generate`
+- [x] Create initial migration: `pnpm exec prisma migrate dev --name init`
 
 ### Seed Data
 
-- [ ] Create `src/prisma/seed.ts` with Plan seed:
+- [x] Create `src/prisma/seed.ts` with Plan seed:
   - **Starter**: `maxUnits=1`, `maxProjects=5`, `maxTasksPerProject=20`, `maxMembers=10`, `priceDA=0`
   - **Pro**: `maxUnits=5`, `maxProjects=30`, `maxTasksPerProject=200`, `maxMembers=50`
   - **Premium**: `maxUnits=null` (unlimited), `maxProjects=null`, `maxTasksPerProject=null`, `maxMembers=null`
-- [ ] Run seed: `pnpm exec prisma db seed`
+- [x] Run seed: `pnpm exec prisma db seed`
 
 ---
 
