@@ -1,3 +1,4 @@
+import { ClerkProvider } from '@clerk/nextjs'
 import { Geist_Mono, DM_Sans } from "next/font/google"
 import { Toaster } from "sonner"
 import { Provider as JotaiProvider } from "jotai"
@@ -20,29 +21,31 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="fr" suppressHydrationWarning>
-      <body
-        className={cn(
-          "antialiased",
-          fontMono.variable,
-          "font-sans",
-          dmSans.variable
-        )}
-      >
-        <JotaiProvider>
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>
-        </JotaiProvider>
-        <Toaster 
-          position="top-right"
-          richColors
-          closeButton
-          toastOptions={{
-            className: "font-sans",
-          }}
-        />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="fr" suppressHydrationWarning>
+        <body
+          className={cn(
+            "antialiased",
+            fontMono.variable,
+            "font-sans",
+            dmSans.variable
+          )}
+        >
+          <JotaiProvider>
+            <ThemeProvider>
+              {children}
+            </ThemeProvider>
+          </JotaiProvider>
+          <Toaster 
+            position="top-right"
+            richColors
+            closeButton
+            toastOptions={{
+              className: "font-sans",
+            }}
+          />
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }

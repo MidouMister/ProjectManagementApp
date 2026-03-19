@@ -112,23 +112,23 @@
 
 ---
 
-## M02 — Authentication (Clerk)
+## M02 — Authentication (Clerk) ✅
 
 ### Middleware & Protection
 
-- [ ] Create `src/middleware.ts` — protect all routes except `/`, `/company/sign-in`, `/company/sign-up`
+- [x] Create `src/middleware.ts` — protect all routes except `/`, `/company/sign-in`, `/company/sign-up`
 - [ ] Implement role-based redirect (OWNER → company, ADMIN → unit, USER → dashboard)
 - [ ] Detect invitation token from URL params
 
 ### Auth Pages
 
-- [ ] Create `src/app/(auth)/company/sign-in/[[...sign-in]]/page.tsx`
-- [ ] Create `src/app/(auth)/company/sign-up/[[...sign-up]]/page.tsx`
+- [x] Create `src/app/(auth)/company/sign-in/[[...sign-in]]/page.tsx`
+- [x] Create `src/app/(auth)/company/sign-up/[[...sign-up]]/page.tsx`
 - [ ] Create `/onboarding` redirect if user has no company
 
 ### Webhooks
 
-- [ ] Create `/api/webhooks/clerk/route.ts`
+- [x] Create `/api/webhooks/clerk/route.ts`
   - Handle `user.created` → sync to `User` table
   - Handle `user.updated` → update name/email
   - Handle `user.deleted` → soft-delete or archive
