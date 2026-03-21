@@ -1,8 +1,18 @@
 import { SignIn } from "@clerk/nextjs";
 
-export default function SignInPage() {
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+};
+
+export default async function SignInPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const rawToken = searchParams.token || searchParams.__clerk_ticket;
+  const tokenStr = Array.isArray(rawToken) ? rawToken[0] : rawToken;
+  const redirectUrl = tokenStr ? `/dashboard?token=${tokenStr}` : "/dashboard";
+
   return (
     <SignIn
+      fallbackRedirectUrl={redirectUrl}
       appearance={{
         elements: {
           rootBox: "w-full",

@@ -1,8 +1,18 @@
 import { SignUp } from "@clerk/nextjs";
 
-export default function SignUpPage() {
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+};
+
+export default async function SignUpPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const rawToken = searchParams.token || searchParams.__clerk_ticket;
+  const tokenStr = Array.isArray(rawToken) ? rawToken[0] : rawToken;
+  const redirectUrl = tokenStr ? `/dashboard?token=${tokenStr}` : "/dashboard";
+
   return (
     <SignUp
+      fallbackRedirectUrl={redirectUrl}
       appearance={{
         elements: {
           rootBox: "w-full",
