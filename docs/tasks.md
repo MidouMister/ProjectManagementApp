@@ -145,28 +145,28 @@
 
 ### Dashboard Layout
 
-- [ ] Create `src/app/(dashboard)/layout.tsx`
-- [ ] Build `Sidebar` component:
-  - [ ] Collapsed/expanded (Jotai atom + localStorage)
-  - [ ] Role-based menu items
-  - [ ] Active route indicator (left-border)
-  - [ ] User footer (avatar, name, role)
-  - [ ] Days-remaining countdown chip
-  - [ ] Mobile: hamburger → Sheet
-  - [ ] Glassmorphism styling
-- [ ] Build `Navbar` component:
-  - [ ] Breadcrumbs
-  - [ ] Global search
-  - [ ] `NotificationBell` with badge
-  - [ ] `ThemeToggle`
+- [x] Create `src/app/(dashboard)/layout.tsx`
+- [x] Build `Sidebar` component:
+  - [x] Collapsed/expanded (Jotai atom + localStorage)
+  - [x] Role-based menu items
+  - [x] Active route indicator (left-border)
+  - [x] User footer (avatar, name, role)
+  - [x] Days-remaining countdown chip
+  - [x] Mobile: hamburger → Sheet
+  - [x] Glassmorphism styling
+- [x] Build `Navbar` component:
+  - [x] Breadcrumbs
+  - [x] Global search
+  - [x] `NotificationBell` with badge
+  - [x] `ThemeToggle`
 
 ### InfoBar
 
-- [ ] Build `InfoBar` component (contextual info strip)
+- [x] Build `InfoBar` component (contextual info strip)
 
 ### Dashboard Redirect
 
-- [ ] Create `src/app/(dashboard)/dashboard/page.tsx` — role-based redirect hub
+- [x] Create `src/app/(dashboard)/dashboard/page.tsx` — role-based redirect hub
 
 ---
 

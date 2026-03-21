@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "@/lib/db";
 import { createClerkClient } from "@clerk/nextjs/server";
 import { revalidateTag } from "next/cache";
@@ -109,4 +111,12 @@ export async function acceptInvitation(clerkId: string, token: string) {
     console.error("Error accepting invitation:", error);
     return { success: false, error: "ACCEPTANCE_FAILED" };
   }
+}
+
+/**
+ * Get unread notifications count (M15 Placeholder)
+ */
+export async function getUnreadCount(): Promise<number> {
+  // TODO: Implement actual query in M15
+  return 0;
 }
