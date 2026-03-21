@@ -4,6 +4,7 @@ import { Toaster } from "sonner"
 import { Provider as JotaiProvider } from "jotai"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
+import { InvitationProcessor } from "@/components/auth/InvitationProcessor";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -25,15 +26,15 @@ export default function RootLayout({
       <html lang="fr" suppressHydrationWarning>
         <body
           className={cn(
-            "antialiased",
+            "antialiased font-sans",
             fontMono.variable,
-            "font-sans",
             dmSans.variable
           )}
         >
           <JotaiProvider>
             <ThemeProvider>
               {children}
+              <InvitationProcessor />
             </ThemeProvider>
           </JotaiProvider>
           <Toaster 

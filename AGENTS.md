@@ -1,6 +1,6 @@
 # AGENTS.md — PMA Implementation Bible
 
-> **Version:** 4.1.0 · **Updated:** March 2026
+> **Version:** 4.2.0 · **Updated:** March 2026
 > This file is the single source of truth for all agents. Read it fully before every task.
 
 ---
@@ -247,13 +247,19 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
 ---
 
-## 10. When in Doubt
+## 10. Agent Guidelines & MCP
+
+1. **Skills & MCP First:** It is **CRITICAL** to utilize installed **Skills** and **MCP servers** (like `supabase-mcp-server`) to gather context and follow established patterns **BEFORE** writing any code.
+2. **Read Before Writing:** Always read relevant skill files (e.g., `SKILL.md`) if they apply to the current task.
+3. **Verify State:** Use MCP tools to check the current state of the database or environment before proposing changes.
+
+## 11. When in Doubt
 
 1. Check `AGENTS.md` first
 2. Check `docs/PRD.md` second
-3. Query Context7 MCP third
+3. Query Context7 MCP or Supabase MCP third
 4. Only ask the user if none of the above resolves the ambiguity
 
 ---
 
-_End of AGENTS.md v4.1.0_
+_End of AGENTS.md v4.2.0_

@@ -2,6 +2,7 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { createClerkClient } from "@clerk/nextjs/server";
 
 type WebhookEvent = {
   type: string;
@@ -78,6 +79,14 @@ export async function POST(req: Request) {
             role: "USER",
           },
         });
+
+        // Sync role to Clerk metadata for fast lookup in middleware
+        const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+        await clerk.users.updateUser(data.id, {
+          publicMetadata: {
+            role: "USER",
+          },
+        });
         break;
       }
 
@@ -100,7 +109,10 @@ export async function POST(req: Request) {
       }
 
       case "user.deleted": {
-        console.log(`[Webhook] User deleted: ${data.id}`);
+        await prisma.user.delete({
+          where: { clerkId: data.id },
+        });
+        console.log(`[Webhook] User deleted from DB: ${data.id}`);
         break;
       }
 

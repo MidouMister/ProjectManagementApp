@@ -116,28 +116,28 @@
 
 ### Middleware & Protection
 
-- [x] Create `src/middleware.ts` — protect all routes except `/`, `/company/sign-in`, `/company/sign-up`
-- [ ] Implement role-based redirect (OWNER → company, ADMIN → unit, USER → dashboard)
-- [ ] Detect invitation token from URL params
+- [x] Create `src/proxy.ts` — protect all routes except `/`, `/company/sign-in`, `/company/sign-up`
+- [x] Implement role-based redirect (OWNER → company, ADMIN → unit, USER → dashboard)
+- [x] Create `/onboarding` redirect if user has no company
 
 ### Auth Pages
 
 - [x] Create `src/app/(auth)/company/sign-in/[[...sign-in]]/page.tsx`
 - [x] Create `src/app/(auth)/company/sign-up/[[...sign-up]]/page.tsx`
-- [ ] Create `/onboarding` redirect if user has no company
+- [x] Style auth pages with premium "Refined Professional" aesthetic
 
 ### Webhooks
 
 - [x] Create `/api/webhooks/clerk/route.ts`
-  - Handle `user.created` → sync to `User` table
-  - Handle `user.updated` → update name/email
-  - Handle `user.deleted` → soft-delete or archive
+  - [x] Handle `user.created` → sync to `User` table + sync role to Clerk metadata
+  - [x] Handle `user.updated` → update name/email
+  - [x] Handle `user.deleted` → delete from DB
 
 ### Invitation Flow
 
-- [ ] Create `InvitationProcessor` component (shown after sign-up if ticket exists)
-- [ ] Parse Clerk ticket → extract invitation token
-- [ ] Create `Invitation.accept()` logic with role/unit assignment
+- [x] Create `InvitationProcessor` component (shown after sign-up if ticket exists)
+- [x] Parse Clerk ticket/token → extract invitation token from URL
+- [x] Create `Invitation.accept()` logic with role/unit assignment and Clerk metadata sync
 
 ---
 
@@ -171,6 +171,9 @@
 ---
 
 ## M04 — Onboarding Wizard
+
+> [!IMPORTANT]
+> Because the middleware (`src/proxy.ts`) now relies on `publicMetadata` for redirects, the `role` and `companyId` MUST be correctly set in Clerk during the `createCompany()` Server Action to trigger automated dashboard routing.
 
 ### Routes & Components
 
