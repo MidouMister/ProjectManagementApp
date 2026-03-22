@@ -8,24 +8,23 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
-  Building2,
+  CheckCircle,
+  Inbox,
+  BarChart3,
+  FolderOpen,
   Users,
-  CreditCard,
-  Briefcase,
-  KanbanSquare,
-  Network,
-  Bell,
+  Target,
   Settings,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
-  User as UserIcon,
+  Star,
+  PanelLeftClose,
+  PanelLeft,
   LucideIcon
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
-// Minimal User interface to satisfy types without @clerk/types dependency
 interface SidebarUser {
   imageUrl: string;
   firstName: string | null;
@@ -38,7 +37,13 @@ interface NavItem {
   label?: string;
   href?: string;
   section?: string;
+  badge?: number;
+  isFavourite?: boolean;
+  favouriteColor?: string;
 }
+
+const SIDEBAR_WIDTH = "240px";
+const SIDEBAR_COLLAPSED_WIDTH = "72px";
 
 const SidebarContent = ({
   collapsed,
@@ -59,79 +64,128 @@ const SidebarContent = ({
   unitId: string | undefined;
   handleSignOut: () => void;
 }) => {
-  const getNavItems = () => {
+  const getNavItems = (): NavItem[] => {
     const items: NavItem[] = [];
 
     if (role === "OWNER" && companyId) {
       items.push({ section: "Entreprise" });
-      items.push({ icon: Building2, label: "Vue d'ensemble", href: `/company/${companyId}` });
-      items.push({ icon: Network, label: "Unités", href: `/company/${companyId}/units` });
+      items.push({ icon: LayoutDashboard, label: "Vue d'ensemble", href: `/company/${companyId}` });
+      items.push({ icon: FolderOpen, label: "Unités", href: `/company/${companyId}/units` });
       items.push({ icon: Users, label: "Équipe globale", href: `/company/${companyId}/team` });
-      items.push({ icon: CreditCard, label: "Abonnement", href: `/company/${companyId}/settings/billing` });
+      items.push({ icon: Settings, label: "Abonnement", href: `/company/${companyId}/settings/billing` });
     }
 
     if ((role === "OWNER" || role === "ADMIN") && unitId) {
       items.push({ section: "Unité Opérationnelle" });
       items.push({ icon: LayoutDashboard, label: "Tableau de bord", href: `/unite/${unitId}` });
-      items.push({ icon: Briefcase, label: "Projets", href: `/unite/${unitId}/projects` });
-      items.push({ icon: KanbanSquare, label: "Kanban", href: `/unite/${unitId}/kanban` });
+      items.push({ icon: BarChart3, label: "Projets", href: `/unite/${unitId}/projects` });
+      items.push({ icon: CheckCircle, label: "Kanban", href: `/unite/${unitId}/kanban` });
       items.push({ icon: Users, label: "Clients", href: `/unite/${unitId}/clients` });
-      items.push({ icon: UserIcon, label: "Membres", href: `/unite/${unitId}/members` });
-      items.push({ icon: Settings, label: "Paramètres", href: `/unite/${unitId}/settings` });
+      items.push({ icon: Settings, label: "Membres", href: `/unite/${unitId}/members` });
+      items.push({ icon: Target, label: "Paramètres", href: `/unite/${unitId}/settings` });
     }
 
     if (role === "USER") {
       items.push({ section: "Mon Espace" });
       items.push({ icon: LayoutDashboard, label: "Tableau de bord", href: `/dashboard` });
-      items.push({ icon: Briefcase, label: "Mes Projets", href: `/dashboard/projects` });
-      items.push({ icon: KanbanSquare, label: "Mes Tâches", href: `/dashboard/tasks` });
+      items.push({ icon: CheckCircle, label: "Mes Tâches", href: `/dashboard/tasks` });
+      items.push({ icon: Inbox, label: "Boîte de réception", href: `/dashboard/inbox`, badge: 5 });
+      items.push({ icon: BarChart3, label: "Reporting", href: `/dashboard/reporting` });
+      items.push({ icon: FolderOpen, label: "Portfolio", href: `/dashboard/portfolio` });
+      items.push({ icon: Users, label: "Comptes", href: `/dashboard/accounts` });
+      items.push({ icon: Target, label: "Objectifs", href: `/dashboard/goals` });
 
       if (unitId) {
-        items.push({ icon: KanbanSquare, label: "Kanban Unité", href: `/unite/${unitId}/kanban` });
+        items.push({ section: "Favoris" });
+        items.push({ 
+          icon: Star, 
+          label: "ABC Projects", 
+          href: `/unite/${unitId}`, 
+          isFavourite: true, 
+          favouriteColor: "tertiary" 
+        });
+        items.push({ 
+          icon: Star, 
+          label: "Marketing Ops", 
+          href: `/unite/${unitId}/marketing`, 
+          isFavourite: true, 
+          favouriteColor: "primary" 
+        });
       }
     }
-
-    items.push({ section: "Personnel" });
-    items.push({ icon: Bell, label: "Notifications", href: `/dashboard/notifications` });
 
     return items;
   };
 
   const navItems = getNavItems();
+  const isActive = (href?: string) => {
+    if (!href) return false;
+    return pathname === href || (pathname.startsWith(href) && href !== "/dashboard");
+  };
 
   return (
-    <div className="flex flex-col h-full bg-card/60 backdrop-blur-3xl border-r border-border shadow-sm text-foreground overflow-hidden">
-      <div className="flex items-center justify-between h-14 shrink-0 px-4 border-b border-border">
-        <div className="flex items-center gap-2 overflow-hidden">
-          <div className="w-7 h-7 bg-primary rounded-md flex items-center justify-center shrink-0">
-            <span className="text-primary-foreground font-bold text-xs tracking-tight">PM</span>
-          </div>
-          {!collapsed && <span className="font-bold text-sm tracking-tight truncate">PMA SYSTEM</span>}
+    <div className="flex flex-col h-full bg-surface-container-low dark:bg-sidebar text-sidebar-foreground overflow-hidden transition-all duration-300">
+      {/* Logo Header */}
+      <div className="flex items-center gap-3 px-4 h-16 shrink-0 border-b border-outline-variant">
+        <div className="w-9 h-9 bg-primary-container rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+          <LayoutDashboard className="w-5 h-5 text-primary-foreground" />
         </div>
-
-        <button
-          className="hidden md:flex w-6 h-6 rounded-full bg-muted items-center justify-center hover:bg-muted-foreground/20 transition-colors shrink-0"
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          {collapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
-        </button>
+        <div className={cn(
+          "flex flex-col leading-none overflow-hidden transition-all duration-300",
+          collapsed ? "opacity-0 w-0" : "opacity-100"
+        )}>
+          <span className="text-lg font-bold tracking-tighter text-foreground">PMA</span>
+          <span className="text-[9px] uppercase tracking-widest text-muted-foreground font-semibold">Project Management</span>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-3 flex flex-col gap-1.5 custom-scrollbar">
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-3 flex flex-col gap-0.5 scrollbar-hide">
         {navItems.map((item, idx) => {
           if (item.section) {
-            if (collapsed) return <div key={idx} className="h-4 mt-2 mb-1 border-b border-border/50 mx-2" />;
+            if (collapsed) return null;
             return (
               <div
                 key={idx}
-                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-4 mb-1 px-2"
+                className="text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground mt-4 mb-2 px-3"
               >
                 {item.section}
               </div>
             );
           }
 
-          const isActive = pathname === item.href || (pathname.startsWith(item.href!) && item.href !== "/dashboard");
+          const active = isActive(item.href);
+
+          if (item.isFavourite) {
+            return (
+              <Link
+                key={item.href}
+                href={item.href!}
+                title={collapsed ? item.label : undefined}
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200",
+                  active 
+                    ? "bg-surface-container-lowest dark:bg-surface-container-high text-foreground shadow-sm font-semibold" 
+                    : "text-muted-foreground hover:text-foreground hover:bg-surface-container-high/50"
+                )}
+              >
+                <span 
+                  className={cn(
+                    "w-2 h-2 rounded-full shrink-0",
+                    item.favouriteColor === "tertiary" 
+                      ? "bg-tertiary-container border border-tertiary" 
+                      : "bg-primary-container/30 border border-primary-container"
+                  )}
+                />
+                <span className={cn(
+                  "text-[13px] whitespace-nowrap transition-opacity duration-300",
+                  collapsed ? "opacity-0 w-0 hidden" : "opacity-100"
+                )}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          }
 
           return (
             <Link
@@ -139,67 +193,116 @@ const SidebarContent = ({
               href={item.href!}
               title={collapsed ? item.label : undefined}
               className={cn(
-                "flex items-center gap-3 px-2.5 py-2 rounded-lg text-sm font-medium transition-all group relative overflow-hidden",
-                isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200",
+                active 
+                  ? "bg-surface-container-lowest dark:bg-surface-container-high text-foreground shadow-sm font-semibold" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-surface-container-high/50"
               )}
             >
-              {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-primary rounded-r-full" />}
               {item.icon && (
                 <item.icon
                   className={cn(
-                    "w-[1.15rem] h-[1.15rem] shrink-0",
-                    isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                    "w-5 h-5 shrink-0 transition-colors",
+                    active ? "text-primary" : "group-hover:text-foreground"
                   )}
                 />
               )}
-
-              <span
-                className={cn(
-                  "whitespace-nowrap transition-opacity duration-200",
-                  collapsed ? "opacity-0 w-0 hidden" : "opacity-100 w-auto"
-                )}
-              >
+              <span className={cn(
+                "text-sm whitespace-nowrap transition-all duration-300",
+                collapsed ? "opacity-0 w-0 hidden" : "opacity-100"
+              )}>
                 {item.label}
               </span>
+              {item.badge && !collapsed && (
+                <span className="ml-auto bg-primary-container text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           );
         })}
-      </div>
+      </nav>
 
-      <div className="p-3 border-t border-border mt-auto shrink-0 bg-background/50">
-        <div className="flex items-center gap-3 w-full p-2 rounded-xl border border-transparent hover:border-border hover:bg-muted/50 transition-all cursor-pointer overflow-hidden group">
-          <Avatar className="w-8 h-8 rounded-lg shrink-0 border border-border">
+      {/* Footer */}
+      <div className="p-3 border-t border-outline-variant shrink-0">
+        {/* Settings Button */}
+        <button
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200",
+            "text-muted-foreground hover:text-foreground hover:bg-surface-container-high/50"
+          )}
+        >
+          <Settings className="w-5 h-5 shrink-0" />
+          <span className={cn(
+            "text-sm whitespace-nowrap transition-all duration-300",
+            collapsed ? "opacity-0 w-0 hidden" : "opacity-100"
+          )}>
+            Paramètres
+          </span>
+        </button>
+
+        {/* Collapse Button */}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200",
+            "text-muted-foreground hover:text-foreground hover:bg-surface-container-high/50 mb-3"
+          )}
+        >
+          {collapsed ? (
+            <PanelLeft className="w-5 h-5 shrink-0" />
+          ) : (
+            <PanelLeftClose className="w-5 h-5 shrink-0" />
+          )}
+          <span className={cn(
+            "text-sm whitespace-nowrap transition-all duration-300",
+            collapsed ? "opacity-0 w-0 hidden" : "opacity-100"
+          )}>
+            Réduire
+          </span>
+        </button>
+
+        {/* User Profile */}
+        <div className={cn(
+          "flex items-center gap-3 p-2 rounded-xl transition-all duration-200",
+          "bg-surface-container-high/30 hover:bg-surface-container-high/50 cursor-pointer"
+        )}>
+          <Avatar className="w-9 h-9 rounded-lg shrink-0 border border-outline-variant">
             <AvatarImage src={user.imageUrl} />
-            <AvatarFallback className="rounded-lg">{user.firstName?.charAt(0) || "U"}</AvatarFallback>
+            <AvatarFallback className="rounded-lg bg-primary-container text-primary-foreground font-bold">
+              {user.firstName?.charAt(0) || "U"}
+            </AvatarFallback>
           </Avatar>
 
-          <div
-            className={cn(
-              "flex flex-col flex-1 min-w-0 transition-opacity duration-200",
-              collapsed ? "opacity-0 w-0 hidden" : "opacity-100 w-auto"
-            )}
-          >
-            <span className="text-sm font-semibold truncate text-foreground">
-              {user.fullName || user.emailAddresses[0].emailAddress}
+          <div className={cn(
+            "flex flex-col min-w-0 flex-1 overflow-hidden transition-all duration-300",
+            collapsed ? "opacity-0 w-0" : "opacity-100"
+          )}>
+            <span className="text-xs font-bold truncate text-foreground">
+              {user.fullName || user.emailAddresses[0]?.emailAddress?.split("@")[0] || "User"}
             </span>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground flex items-center justify-between">
-              {role || "USER"}
+            <span className="text-[10px] text-muted-foreground truncate">
+              {user.emailAddresses[0]?.emailAddress || ""}
             </span>
           </div>
+        </div>
 
-          {!collapsed && (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleSignOut();
-              }}
-              className="w-7 h-7 flex items-center justify-center rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors shrink-0 opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-              title="Déconnexion"
+        {/* Role Badge & Sign Out */}
+        {!collapsed && (
+          <div className="flex items-center justify-between mt-2 px-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded">
+              {role || "USER"}
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleSignOut}
+              className="h-7 px-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
             >
               <LogOut className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -237,21 +340,26 @@ export function Sidebar() {
 
   return (
     <>
+      {/* Mobile Sheet */}
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="p-0 w-72 bg-transparent border-0 shadow-none">
+        <SheetContent side="left" className="p-0 w-[280px] bg-transparent border-0 shadow-none">
           <SheetTitle className="sr-only">Menu principal</SheetTitle>
-          <SheetDescription className="sr-only">Naviguer dans l&apos;application PMA System</SheetDescription>
-          <div className="h-full w-full bg-card rounded-r-2xl overflow-hidden shadow-2xl">
+          <SheetDescription className="sr-only">Naviguer dans l&apos;application PMA</SheetDescription>
+          <div className="h-full w-full rounded-r-2xl overflow-hidden">
             <SidebarContent {...sharedProps} />
           </div>
         </SheetContent>
       </Sheet>
 
+      {/* Desktop Sidebar */}
       <aside
         className={cn(
-          "hidden md:block h-screen sticky top-0 transition-all duration-300 z-30 shrink-0",
-          collapsed ? "w-16" : "w-64"
+          "hidden md:flex h-screen sticky top-0 z-30 shrink-0 flex-col",
+          "transition-all duration-300 ease-in-out"
         )}
+        style={{ 
+          width: collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH,
+        }}
       >
         <SidebarContent {...sharedProps} />
       </aside>

@@ -36,8 +36,8 @@ export default clerkMiddleware(async (auth, req) => {
 
     const url = new URL(req.url);
 
-    // Skip redirect if already on onboarding or sign-in/up routes
-    if (isPublicRoute(req) || url.pathname.startsWith("/onboarding")) {
+    // Skip redirect if already on sign-in/up routes
+    if (isPublicRoute(req)) {
       return NextResponse.next();
     }
 

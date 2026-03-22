@@ -13,18 +13,18 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   }
 
   return (
-    <div className="flex bg-background text-foreground min-h-screen font-sans selection:bg-primary/20 selection:text-primary overflow-hidden">
-      {/* Sidebar - Desktop and Mobile (Sheet) */}
+    <div className="flex bg-background text-foreground min-h-screen font-sans antialiased overflow-hidden">
       <Sidebar />
 
-      {/* Main Content Area */}
       <div className="flex flex-col flex-1 min-w-0 transition-all duration-300">
         <InfoBar />
         <Navbar />
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 custom-scrollbar bg-background">
-          <div className="mx-auto max-w-content w-full h-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-            {children}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-surface-container-low">
+          <div className="p-4 md:p-6 lg:p-8">
+            <div className="mx-auto max-w-content w-full">
+              {children}
+            </div>
           </div>
         </main>
       </div>

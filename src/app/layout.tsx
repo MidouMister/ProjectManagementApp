@@ -5,6 +5,7 @@ import { Provider as JotaiProvider } from "jotai"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { InvitationProcessor } from "@/components/auth/InvitationProcessor";
+import "@/app/globals.css";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],

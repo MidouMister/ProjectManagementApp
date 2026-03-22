@@ -81,8 +81,11 @@ model Company {
   id                       String         @id @default(cuid())
   name                     String
   ownerId                  String         @unique
-  logo                     String
+  logo                     String?
   NIF                      String
+  RC                       String
+  NIS                      String?
+  AI                       String?
   formJur                  String
   sector                   String
   wilaya                   String
@@ -152,7 +155,6 @@ model Unit {
   address       String
   phone         String
   email         String
-  logo          String?
   users         User[]
   invitations   Invitation[]
   clients       Client[]

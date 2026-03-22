@@ -170,47 +170,47 @@
 
 ---
 
-## M04 — Onboarding Wizard
+## M04 — Onboarding Wizard ✅
 
 > [!IMPORTANT]
 > Because the middleware (`src/proxy.ts`) now relies on `publicMetadata` for redirects, the `role` and `companyId` MUST be correctly set in Clerk during the `createCompany()` Server Action to trigger automated dashboard routing.
 
 ### Routes & Components
 
-- [ ] Create `/onboarding/page.tsx`
-- [ ] Build `CompanyOnboardingForm` multi-step component
+- [x] Create `/onboarding/page.tsx` 2026-03-21
+- [x] Build `CompanyOnboardingForm` multi-step component 2026-03-21
 
 ### Step 1: Company Profile
 
-- [ ] Company name, logo (Uploadthing)
-- [ ] LegalForm dropdown (SARL, EURL, SPA, etc.)
-- [ ] Sector dropdown (Construction, Engineering, etc.)
-- [ ] Fiscal Identity: NIF, RC, NIS, AI (all required, unique-validated on blur)
-- [ ] Address, wilaya, phone, email
+- [x] Company name, logo (Uploadthing) 2026-03-21
+- [x] LegalForm dropdown (SARL, EURL, SPA, etc.) 2026-03-21
+- [x] Sector dropdown (Construction, Engineering, etc.) 2026-03-21
+- [x] Fiscal Identity: NIF, RC, NIS, AI (all required, unique-validated on blur) 2026-03-21
+- [x] Address, wilaya, phone, email 2026-03-21
 
 ### Step 2: First Unit
 
-- [ ] Unit name, address, phone, email
-- [ ] Admin assignment (current user auto-assigned)
+- [x] Unit name, address, phone, email 2026-03-21
+- [x] Admin assignment (current user auto-assigned) 2026-03-21
 
 ### Step 3: Invite Team (optional)
 
-- [ ] Email input + role picker (ADMIN, USER)
-- [ ] Skip button
+- [x] Email input + role picker (ADMIN, USER) 2026-03-21
+- [x] Skip button 2026-03-21
 
 ### Server Actions
 
-- [ ] Implement `createCompany()` — creates Company + assigns OWNER
-- [ ] Implement `createUnit()` — creates Unit with admin
-- [ ] Implement `createSubscription()` — auto Starter trial (2 months)
-- [ ] Implement `inviteMember()` — creates Invitation record
+- [x] Implement `createCompany()` — creates Company + assigns OWNER 2026-03-21
+- [x] Implement `createUnit()` — creates Unit with admin 2026-03-21
+- [x] Implement `createSubscription()` — auto Starter trial (2 months) 2026-03-21
+- [x] Implement `inviteMember()` — creates Invitation record 2026-03-21
 
 ### Validation
 
-- [ ] `companySchema` Zod validator (RC regex: `^\\d{5}-\\d{4}$`)
-- [ ] `unitSchema` Zod validator
-- [ ] `invitationSchema` Zod validator
-- [ ] Per-field unique validation for NIF/RC/NIS/AI
+- [x] `companySchema` Zod validator (RC regex: `^\\d{5}-\\d{4}$`) 2026-03-21
+- [x] `unitSchema` Zod validator 2026-03-21
+- [x] `invitationSchema` Zod validator 2026-03-21
+- [x] Per-field unique validation for NIF/RC/NIS/AI 2026-03-21
 
 ---
 

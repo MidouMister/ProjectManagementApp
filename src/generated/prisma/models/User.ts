@@ -512,10 +512,6 @@ export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type UserCreateNestedManyWithoutUnitInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutUnitInput, Prisma.UserUncheckedCreateWithoutUnitInput> | Prisma.UserCreateWithoutUnitInput[] | Prisma.UserUncheckedCreateWithoutUnitInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutUnitInput | Prisma.UserCreateOrConnectWithoutUnitInput[]

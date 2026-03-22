@@ -160,3 +160,44 @@ export const CacheTags = {
   clients: (unitId: string) => `unit:${unitId}:clients`,
   members: (unitId: string) => `unit:${unitId}:members`,
 } as const
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Input Types for Server Actions
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type CompanyInput = {
+  name: string
+  logo?: string | null
+  formJur: LegalForm
+  sector: Sector
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+}
+
+export type UnitInput = {
+  name: string
+  address: string
+  phone: string
+  email: string
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Wilaya (Algerian Provinces)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const WilayaOptions = [
+  "Adrar", "Ain Defla", "Ain Temouchent", "Alger", "Annaba", "Batna", "Bejaia",
+  "Biskra", "Blida", "Bordj Bou Arreridj", "Bouira", "Boumerdes", "Chlef",
+  "Constantine", "Djelfa", "El Bayadh", "El Oued", "El Tarf", "Ghardaia",
+  "Guelma", "Illizi", "Jijel", "Khenchela", "Laghouat", "Mascara", "Medea",
+  "Mila", "Mostaganem", "Msila", "Naama", "Oran", "Ouargla", "Oum El Bouaghi",
+  "Relizane", "Saida", "Setif", "Sidi Bel Abbes", "Skikda", "Souk Ahras",
+  "Tamanrasset", "Tebessa", "Tlemcen", "Touggourt", "Tizi Ouzou",
+] as const
+export type Wilaya = (typeof WilayaOptions)[number]

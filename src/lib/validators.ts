@@ -10,36 +10,31 @@ export const userSchema = z.object({
   unitId: z.string().nullable(),
 })
 
-const fiscalIdRegex = z.string().regex(/^\d{5}-\d{4}$/, {
-  message: "Format invalide (ex: 12345-6789)",
-})
-
 export const companySchema = z.object({
   name: z.string().min(2, "Le nom de l'entreprise est requis"),
-  logo: z.string().url().optional().nullable(),
+  logo: z.string().optional().nullable(),
   formJur: z.enum([
     "SARL", "EURL", "SPA", "SPA-S", "SN", "SNC", "GIE", "EI", "Auto-entrepreneur"
-  ]).optional().nullable(),
+  ]),
   sector: z.enum([
     "Construction", "Engineering", "Public Works", "Architecture",
     "Consulting", "IT", "Manufacturing", "Energy", "Transport", "Other"
-  ]).optional().nullable(),
-  nif: fiscalIdRegex.optional().nullable(),
-  rc: fiscalIdRegex.optional().nullable(),
-  nis: fiscalIdRegex.optional().nullable(),
-  ai: fiscalIdRegex.optional().nullable(),
-  wilaya: z.string().optional().nullable(),
-  address: z.string().optional().nullable(),
-  phone: z.string().optional().nullable(),
-  email: z.string().email().optional().nullable(),
+  ]),
+  NIF: z.string().min(5, "Le NIF est requis"),
+  RC: z.string().min(5, "Le RC est requis"),
+  NIS: z.string().optional().nullable(),
+  AI: z.string().optional().nullable(),
+  wilaya: z.string().min(1, "La wilaya est requise"),
+  address: z.string().min(5, "L'adresse est requise"),
+  phone: z.string().min(10, "Le numéro de téléphone est requis"),
+  email: z.string().email("Email invalide"),
 })
 
 export const unitSchema = z.object({
   name: z.string().min(2, "Le nom de l'unité est requis"),
-  address: z.string().optional().nullable(),
-  phone: z.string().optional().nullable(),
-  email: z.string().email().optional().nullable(),
-  logo: z.string().url().optional().nullable(),
+  address: z.string().min(5, "L'adresse de l'unité est requise"),
+  phone: z.string().min(10, "Le téléphone de l'unité est requis"),
+  email: z.string().email("Email de l'unité invalide"),
 })
 
 export const invitationSchema = z.object({
