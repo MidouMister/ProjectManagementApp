@@ -3,6 +3,7 @@
 
 import { PrismaClient } from "../generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
+import { Prisma } from "../generated/prisma/client"
 
 const adapter = new PrismaPg({
   connectionString: process.env.DIRECT_URL!,
@@ -21,7 +22,7 @@ async function main() {
       maxProjects: 5,
       maxTasksPerProject: 20,
       maxMembers: 10,
-      priceDA: 0,
+      priceDA: new Prisma.Decimal(0),
     },
     {
       name: "Pro",
@@ -29,7 +30,7 @@ async function main() {
       maxProjects: 30,
       maxTasksPerProject: 200,
       maxMembers: 50,
-      priceDA: 50000,
+      priceDA: new Prisma.Decimal(50000),
     },
     {
       name: "Premium",
@@ -37,15 +38,23 @@ async function main() {
       maxProjects: null, // Unlimited
       maxTasksPerProject: null, // Unlimited
       maxMembers: null, // Unlimited
-      priceDA: 150000,
+      priceDA: new Prisma.Decimal(150000),
     },
   ]
 
   for (const p of plansData) {
-    const plan = await prisma.plan.create({
-      data: p,
+    const plan = await prisma.plan.upsert({
+      where: { name: p.name },
+      update: {
+        maxUnits: p.maxUnits,
+        maxProjects: p.maxProjects,
+        maxTasksPerProject: p.maxTasksPerProject,
+        maxMembers: p.maxMembers,
+        priceDA: p.priceDA,
+      },
+      create: p,
     })
-    console.log(`✅ Created plan: ${plan.name} (${plan.id})`)
+    console.log(`✅ Upserted plan: ${plan.name} (${plan.id})`)
   }
 
   console.log("✅ Seeding complete!")

@@ -1,0 +1,4 @@
+
+> ProjectManagementApp@0.0.1 typecheck C:\Users\Cir-Merabet\Desktop\WebApp\ProjectManagementApp
+> tsc --noEmit
+

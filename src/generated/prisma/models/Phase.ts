@@ -27,13 +27,13 @@ export type AggregatePhase = {
 }
 
 export type PhaseAvgAggregateOutputType = {
-  montantHT: number | null
+  montantHT: runtime.Decimal | null
   duration: number | null
   progress: number | null
 }
 
 export type PhaseSumAggregateOutputType = {
-  montantHT: number | null
+  montantHT: runtime.Decimal | null
   duration: number | null
   progress: number | null
 }
@@ -43,7 +43,7 @@ export type PhaseMinAggregateOutputType = {
   projectId: string | null
   name: string | null
   code: string | null
-  montantHT: number | null
+  montantHT: runtime.Decimal | null
   startDate: Date | null
   endDate: Date | null
   duration: number | null
@@ -59,7 +59,7 @@ export type PhaseMaxAggregateOutputType = {
   projectId: string | null
   name: string | null
   code: string | null
-  montantHT: number | null
+  montantHT: runtime.Decimal | null
   startDate: Date | null
   endDate: Date | null
   duration: number | null
@@ -240,7 +240,7 @@ export type PhaseGroupByOutputType = {
   projectId: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal
   startDate: Date
   endDate: Date
   duration: number
@@ -279,7 +279,7 @@ export type PhaseWhereInput = {
   projectId?: Prisma.StringFilter<"Phase"> | string
   name?: Prisma.StringFilter<"Phase"> | string
   code?: Prisma.StringFilter<"Phase"> | string
-  montantHT?: Prisma.FloatFilter<"Phase"> | number
+  montantHT?: Prisma.DecimalFilter<"Phase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"Phase"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Phase"> | Date | string
   duration?: Prisma.IntFilter<"Phase"> | number
@@ -325,7 +325,7 @@ export type PhaseWhereUniqueInput = Prisma.AtLeast<{
   projectId?: Prisma.StringFilter<"Phase"> | string
   name?: Prisma.StringFilter<"Phase"> | string
   code?: Prisma.StringFilter<"Phase"> | string
-  montantHT?: Prisma.FloatFilter<"Phase"> | number
+  montantHT?: Prisma.DecimalFilter<"Phase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"Phase"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Phase"> | Date | string
   duration?: Prisma.IntFilter<"Phase"> | number
@@ -370,7 +370,7 @@ export type PhaseScalarWhereWithAggregatesInput = {
   projectId?: Prisma.StringWithAggregatesFilter<"Phase"> | string
   name?: Prisma.StringWithAggregatesFilter<"Phase"> | string
   code?: Prisma.StringWithAggregatesFilter<"Phase"> | string
-  montantHT?: Prisma.FloatWithAggregatesFilter<"Phase"> | number
+  montantHT?: Prisma.DecimalWithAggregatesFilter<"Phase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Phase"> | Date | string
   endDate?: Prisma.DateTimeWithAggregatesFilter<"Phase"> | Date | string
   duration?: Prisma.IntWithAggregatesFilter<"Phase"> | number
@@ -385,7 +385,7 @@ export type PhaseCreateInput = {
   id?: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -406,7 +406,7 @@ export type PhaseUncheckedCreateInput = {
   projectId: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -425,7 +425,7 @@ export type PhaseUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -446,7 +446,7 @@ export type PhaseUncheckedUpdateInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -466,7 +466,7 @@ export type PhaseCreateManyInput = {
   projectId: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -481,7 +481,7 @@ export type PhaseUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -497,7 +497,7 @@ export type PhaseUncheckedUpdateManyInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -694,7 +694,7 @@ export type PhaseCreateWithoutProjectInput = {
   id?: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -713,7 +713,7 @@ export type PhaseUncheckedCreateWithoutProjectInput = {
   id?: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -762,7 +762,7 @@ export type PhaseScalarWhereInput = {
   projectId?: Prisma.StringFilter<"Phase"> | string
   name?: Prisma.StringFilter<"Phase"> | string
   code?: Prisma.StringFilter<"Phase"> | string
-  montantHT?: Prisma.FloatFilter<"Phase"> | number
+  montantHT?: Prisma.DecimalFilter<"Phase"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"Phase"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Phase"> | Date | string
   duration?: Prisma.IntFilter<"Phase"> | number
@@ -777,7 +777,7 @@ export type PhaseCreateWithoutSubPhasesInput = {
   id?: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -797,7 +797,7 @@ export type PhaseUncheckedCreateWithoutSubPhasesInput = {
   projectId: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -831,7 +831,7 @@ export type PhaseUpdateWithoutSubPhasesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -851,7 +851,7 @@ export type PhaseUncheckedUpdateWithoutSubPhasesInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -869,7 +869,7 @@ export type PhaseCreateWithoutProductInput = {
   id?: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -889,7 +889,7 @@ export type PhaseUncheckedCreateWithoutProductInput = {
   projectId: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -923,7 +923,7 @@ export type PhaseUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -943,7 +943,7 @@ export type PhaseUncheckedUpdateWithoutProductInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -961,7 +961,7 @@ export type PhaseCreateWithoutProductionsInput = {
   id?: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -981,7 +981,7 @@ export type PhaseUncheckedCreateWithoutProductionsInput = {
   projectId: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -1015,7 +1015,7 @@ export type PhaseUpdateWithoutProductionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1035,7 +1035,7 @@ export type PhaseUncheckedUpdateWithoutProductionsInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1053,7 +1053,7 @@ export type PhaseCreateWithoutTasksInput = {
   id?: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -1073,7 +1073,7 @@ export type PhaseUncheckedCreateWithoutTasksInput = {
   projectId: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -1107,7 +1107,7 @@ export type PhaseUpdateWithoutTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1127,7 +1127,7 @@ export type PhaseUncheckedUpdateWithoutTasksInput = {
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1145,7 +1145,7 @@ export type PhaseCreateManyProjectInput = {
   id?: string
   name: string
   code: string
-  montantHT: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   duration: number
@@ -1160,7 +1160,7 @@ export type PhaseUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1179,7 +1179,7 @@ export type PhaseUncheckedUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1198,7 +1198,7 @@ export type PhaseUncheckedUpdateManyWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   duration?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1360,7 +1360,7 @@ export type $PhasePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     projectId: string
     name: string
     code: string
-    montantHT: number
+    montantHT: runtime.Decimal
     startDate: Date
     endDate: Date
     duration: number
@@ -1801,7 +1801,7 @@ export interface PhaseFieldRefs {
   readonly projectId: Prisma.FieldRef<"Phase", 'String'>
   readonly name: Prisma.FieldRef<"Phase", 'String'>
   readonly code: Prisma.FieldRef<"Phase", 'String'>
-  readonly montantHT: Prisma.FieldRef<"Phase", 'Float'>
+  readonly montantHT: Prisma.FieldRef<"Phase", 'Decimal'>
   readonly startDate: Prisma.FieldRef<"Phase", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Phase", 'DateTime'>
   readonly duration: Prisma.FieldRef<"Phase", 'Int'>

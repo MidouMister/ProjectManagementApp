@@ -241,6 +241,7 @@ export type LaneWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Lane"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lane"> | Date | string
   unit?: Prisma.XOR<Prisma.UnitScalarRelationFilter, Prisma.UnitWhereInput>
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   tasks?: Prisma.TaskListRelationFilter
 }
 
@@ -254,6 +255,7 @@ export type LaneOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   unit?: Prisma.UnitOrderByWithRelationInput
+  company?: Prisma.CompanyOrderByWithRelationInput
   tasks?: Prisma.TaskOrderByRelationAggregateInput
 }
 
@@ -270,6 +272,7 @@ export type LaneWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Lane"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Lane"> | Date | string
   unit?: Prisma.XOR<Prisma.UnitScalarRelationFilter, Prisma.UnitWhereInput>
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   tasks?: Prisma.TaskListRelationFilter
 }, "id">
 
@@ -305,13 +308,13 @@ export type LaneScalarWhereWithAggregatesInput = {
 
 export type LaneCreateInput = {
   id?: string
-  companyId: string
   name: string
   color?: string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutLanesInput
+  company: Prisma.CompanyCreateNestedOneWithoutLanesInput
   tasks?: Prisma.TaskCreateNestedManyWithoutLaneInput
 }
 
@@ -329,13 +332,13 @@ export type LaneUncheckedCreateInput = {
 
 export type LaneUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutLanesNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutLanesNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutLaneNestedInput
 }
 
@@ -364,7 +367,6 @@ export type LaneCreateManyInput = {
 
 export type LaneUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -439,6 +441,48 @@ export type LaneNullableScalarRelationFilter = {
   isNot?: Prisma.LaneWhereInput | null
 }
 
+export type LaneCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.LaneCreateWithoutCompanyInput, Prisma.LaneUncheckedCreateWithoutCompanyInput> | Prisma.LaneCreateWithoutCompanyInput[] | Prisma.LaneUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.LaneCreateOrConnectWithoutCompanyInput | Prisma.LaneCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.LaneCreateManyCompanyInputEnvelope
+  connect?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+}
+
+export type LaneUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.LaneCreateWithoutCompanyInput, Prisma.LaneUncheckedCreateWithoutCompanyInput> | Prisma.LaneCreateWithoutCompanyInput[] | Prisma.LaneUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.LaneCreateOrConnectWithoutCompanyInput | Prisma.LaneCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.LaneCreateManyCompanyInputEnvelope
+  connect?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+}
+
+export type LaneUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.LaneCreateWithoutCompanyInput, Prisma.LaneUncheckedCreateWithoutCompanyInput> | Prisma.LaneCreateWithoutCompanyInput[] | Prisma.LaneUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.LaneCreateOrConnectWithoutCompanyInput | Prisma.LaneCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.LaneUpsertWithWhereUniqueWithoutCompanyInput | Prisma.LaneUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.LaneCreateManyCompanyInputEnvelope
+  set?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+  disconnect?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+  delete?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+  connect?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+  update?: Prisma.LaneUpdateWithWhereUniqueWithoutCompanyInput | Prisma.LaneUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.LaneUpdateManyWithWhereWithoutCompanyInput | Prisma.LaneUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.LaneScalarWhereInput | Prisma.LaneScalarWhereInput[]
+}
+
+export type LaneUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.LaneCreateWithoutCompanyInput, Prisma.LaneUncheckedCreateWithoutCompanyInput> | Prisma.LaneCreateWithoutCompanyInput[] | Prisma.LaneUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.LaneCreateOrConnectWithoutCompanyInput | Prisma.LaneCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.LaneUpsertWithWhereUniqueWithoutCompanyInput | Prisma.LaneUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.LaneCreateManyCompanyInputEnvelope
+  set?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+  disconnect?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+  delete?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+  connect?: Prisma.LaneWhereUniqueInput | Prisma.LaneWhereUniqueInput[]
+  update?: Prisma.LaneUpdateWithWhereUniqueWithoutCompanyInput | Prisma.LaneUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.LaneUpdateManyWithWhereWithoutCompanyInput | Prisma.LaneUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.LaneScalarWhereInput | Prisma.LaneScalarWhereInput[]
+}
+
 export type LaneCreateNestedManyWithoutUnitInput = {
   create?: Prisma.XOR<Prisma.LaneCreateWithoutUnitInput, Prisma.LaneUncheckedCreateWithoutUnitInput> | Prisma.LaneCreateWithoutUnitInput[] | Prisma.LaneUncheckedCreateWithoutUnitInput[]
   connectOrCreate?: Prisma.LaneCreateOrConnectWithoutUnitInput | Prisma.LaneCreateOrConnectWithoutUnitInput[]
@@ -497,14 +541,76 @@ export type LaneUpdateOneWithoutTasksNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LaneUpdateToOneWithWhereWithoutTasksInput, Prisma.LaneUpdateWithoutTasksInput>, Prisma.LaneUncheckedUpdateWithoutTasksInput>
 }
 
-export type LaneCreateWithoutUnitInput = {
+export type LaneCreateWithoutCompanyInput = {
   id?: string
-  companyId: string
   name: string
   color?: string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  unit: Prisma.UnitCreateNestedOneWithoutLanesInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutLaneInput
+}
+
+export type LaneUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  unitId: string
+  name: string
+  color?: string | null
+  order: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutLaneInput
+}
+
+export type LaneCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.LaneWhereUniqueInput
+  create: Prisma.XOR<Prisma.LaneCreateWithoutCompanyInput, Prisma.LaneUncheckedCreateWithoutCompanyInput>
+}
+
+export type LaneCreateManyCompanyInputEnvelope = {
+  data: Prisma.LaneCreateManyCompanyInput | Prisma.LaneCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type LaneUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.LaneWhereUniqueInput
+  update: Prisma.XOR<Prisma.LaneUpdateWithoutCompanyInput, Prisma.LaneUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.LaneCreateWithoutCompanyInput, Prisma.LaneUncheckedCreateWithoutCompanyInput>
+}
+
+export type LaneUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.LaneWhereUniqueInput
+  data: Prisma.XOR<Prisma.LaneUpdateWithoutCompanyInput, Prisma.LaneUncheckedUpdateWithoutCompanyInput>
+}
+
+export type LaneUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.LaneScalarWhereInput
+  data: Prisma.XOR<Prisma.LaneUpdateManyMutationInput, Prisma.LaneUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type LaneScalarWhereInput = {
+  AND?: Prisma.LaneScalarWhereInput | Prisma.LaneScalarWhereInput[]
+  OR?: Prisma.LaneScalarWhereInput[]
+  NOT?: Prisma.LaneScalarWhereInput | Prisma.LaneScalarWhereInput[]
+  id?: Prisma.StringFilter<"Lane"> | string
+  unitId?: Prisma.StringFilter<"Lane"> | string
+  companyId?: Prisma.StringFilter<"Lane"> | string
+  name?: Prisma.StringFilter<"Lane"> | string
+  color?: Prisma.StringNullableFilter<"Lane"> | string | null
+  order?: Prisma.IntFilter<"Lane"> | number
+  createdAt?: Prisma.DateTimeFilter<"Lane"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Lane"> | Date | string
+}
+
+export type LaneCreateWithoutUnitInput = {
+  id?: string
+  name: string
+  color?: string | null
+  order: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutLanesInput
   tasks?: Prisma.TaskCreateNestedManyWithoutLaneInput
 }
 
@@ -545,29 +651,15 @@ export type LaneUpdateManyWithWhereWithoutUnitInput = {
   data: Prisma.XOR<Prisma.LaneUpdateManyMutationInput, Prisma.LaneUncheckedUpdateManyWithoutUnitInput>
 }
 
-export type LaneScalarWhereInput = {
-  AND?: Prisma.LaneScalarWhereInput | Prisma.LaneScalarWhereInput[]
-  OR?: Prisma.LaneScalarWhereInput[]
-  NOT?: Prisma.LaneScalarWhereInput | Prisma.LaneScalarWhereInput[]
-  id?: Prisma.StringFilter<"Lane"> | string
-  unitId?: Prisma.StringFilter<"Lane"> | string
-  companyId?: Prisma.StringFilter<"Lane"> | string
-  name?: Prisma.StringFilter<"Lane"> | string
-  color?: Prisma.StringNullableFilter<"Lane"> | string | null
-  order?: Prisma.IntFilter<"Lane"> | number
-  createdAt?: Prisma.DateTimeFilter<"Lane"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Lane"> | Date | string
-}
-
 export type LaneCreateWithoutTasksInput = {
   id?: string
-  companyId: string
   name: string
   color?: string | null
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutLanesInput
+  company: Prisma.CompanyCreateNestedOneWithoutLanesInput
 }
 
 export type LaneUncheckedCreateWithoutTasksInput = {
@@ -599,19 +691,61 @@ export type LaneUpdateToOneWithWhereWithoutTasksInput = {
 
 export type LaneUpdateWithoutTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutLanesNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutLanesNestedInput
 }
 
 export type LaneUncheckedUpdateWithoutTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   unitId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LaneCreateManyCompanyInput = {
+  id?: string
+  unitId: string
+  name: string
+  color?: string | null
+  order: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type LaneUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  unit?: Prisma.UnitUpdateOneRequiredWithoutLanesNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutLaneNestedInput
+}
+
+export type LaneUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  unitId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutLaneNestedInput
+}
+
+export type LaneUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  unitId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
@@ -631,12 +765,12 @@ export type LaneCreateManyUnitInput = {
 
 export type LaneUpdateWithoutUnitInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutLanesNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutLaneNestedInput
 }
 
@@ -702,6 +836,7 @@ export type LaneSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   tasks?: boolean | Prisma.Lane$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.LaneCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lane"]>
@@ -716,6 +851,7 @@ export type LaneSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lane"]>
 
 export type LaneSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -728,6 +864,7 @@ export type LaneSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lane"]>
 
 export type LaneSelectScalar = {
@@ -744,20 +881,24 @@ export type LaneSelectScalar = {
 export type LaneOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "unitId" | "companyId" | "name" | "color" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["lane"]>
 export type LaneInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   tasks?: boolean | Prisma.Lane$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.LaneCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LaneIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }
 export type LaneIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }
 
 export type $LanePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Lane"
   objects: {
     unit: Prisma.$UnitPayload<ExtArgs>
+    company: Prisma.$CompanyPayload<ExtArgs>
     tasks: Prisma.$TaskPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1164,6 +1305,7 @@ readonly fields: LaneFieldRefs;
 export interface Prisma__LaneClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   unit<T extends Prisma.UnitDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UnitDefaultArgs<ExtArgs>>): Prisma.Prisma__UnitClient<runtime.Types.Result.GetResult<Prisma.$UnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tasks<T extends Prisma.Lane$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lane$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

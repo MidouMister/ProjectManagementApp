@@ -8,12 +8,216 @@ import { Role, Result, CompanyInput, UnitInput } from "@/lib/types";
 import { addDays } from "date-fns";
 
 /**
+ * Get all company members across all units with their unit info
+ */
+export async function getCompanyMembers(companyId: string) {
+  return await prisma.user.findMany({
+    where: { companyId },
+    include: {
+      unit: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+}
+
+/**
+ * Get all pending invitations for a company
+ */
+export async function getCompanyInvitations(companyId: string) {
+  return await prisma.invitation.findMany({
+    where: { companyId, status: "PENDING" },
+    include: {
+      unit: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
+
+/**
+ * Invite a new member to a unit
+ */
+export async function inviteMember(
+  email: string,
+  role: Role,
+  companyId: string,
+  unitId: string
+): Promise<Result<{ id: string }>> {
+  try {
+    if (role === "OWNER") {
+      return { success: false, error: "CANNOT_INVITE_OWNER" };
+    }
+
+    const existingUser = await prisma.user.findFirst({
+      where: { email: email.toLowerCase() },
+    });
+
+    if (existingUser && existingUser.companyId === companyId) {
+      return { success: false, error: "USER_ALREADY_IN_COMPANY" };
+    }
+
+    const existingInvitation = await prisma.invitation.findFirst({
+      where: {
+        email: email.toLowerCase(),
+        companyId,
+        status: "PENDING",
+      },
+    });
+
+    if (existingInvitation) {
+      return { success: false, error: "INVITATION_ALREADY_SENT" };
+    }
+
+    const token = crypto.randomUUID();
+    const invitation = await prisma.invitation.create({
+      data: {
+        email: email.toLowerCase(),
+        role,
+        companyId,
+        unitId,
+        token,
+        expiresAt: addDays(new Date(), 7),
+      },
+    });
+
+    revalidateTag(`company:${companyId}:invitations`, "max");
+    return { success: true, data: { id: invitation.id } };
+  } catch (error) {
+    console.error("Error inviting member:", error);
+    return { success: false, error: "INVITATION_FAILED" };
+  }
+}
+
+/**
+ * Cancel a pending invitation
+ */
+export async function cancelInvitation(id: string): Promise<Result<boolean>> {
+  try {
+    const invitation = await prisma.invitation.findUnique({
+      where: { id },
+      select: { companyId: true, status: true },
+    });
+
+    if (!invitation) {
+      return { success: false, error: "INVITATION_NOT_FOUND" };
+    }
+
+    if (invitation.status !== "PENDING") {
+      return { success: false, error: "INVITATION_NOT_PENDING" };
+    }
+
+    await prisma.invitation.update({
+      where: { id },
+      data: { status: "REJECTED" },
+    });
+
+    revalidateTag(`company:${invitation.companyId}:invitations`, "max");
+    return { success: true, data: true };
+  } catch (error) {
+    console.error("Error canceling invitation:", error);
+    return { success: false, error: "CANCEL_FAILED" };
+  }
+}
+
+/**
+ * Resend a pending invitation (regenerate token)
+ */
+export async function resendInvitation(id: string): Promise<Result<boolean>> {
+  try {
+    const invitation = await prisma.invitation.findUnique({
+      where: { id },
+      select: { companyId: true, status: true },
+    });
+
+    if (!invitation) {
+      return { success: false, error: "INVITATION_NOT_FOUND" };
+    }
+
+    if (invitation.status !== "PENDING") {
+      return { success: false, error: "INVITATION_NOT_PENDING" };
+    }
+
+    const token = crypto.randomUUID();
+    await prisma.invitation.update({
+      where: { id },
+      data: {
+        token,
+        expiresAt: addDays(new Date(), 7),
+      },
+    });
+
+    revalidateTag(`company:${invitation.companyId}:invitations`, "max");
+    return { success: true, data: true };
+  } catch (error) {
+    console.error("Error resending invitation:", error);
+    return { success: false, error: "RESEND_FAILED" };
+  }
+}
+
+/**
+ * Remove a member from a unit (keep their data, remove access)
+ */
+export async function removeMember(userId: string, unitId: string): Promise<Result<boolean>> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, role: true, companyId: true, unitId: true },
+    });
+
+    if (!user) {
+      return { success: false, error: "USER_NOT_FOUND" };
+    }
+
+    if (user.role === "OWNER") {
+      return { success: false, error: "CANNOT_REMOVE_OWNER" };
+    }
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { unitId: null },
+    });
+
+    if (user.companyId) {
+      revalidateTag(`company:${user.companyId}:members`, "max");
+      revalidateTag(`unit:${unitId}:members`, "max");
+    }
+
+    return { success: true, data: true };
+  } catch (error) {
+    console.error("Error removing member:", error);
+    return { success: false, error: "REMOVE_FAILED" };
+  }
+}
+
+/**
  * Get user authentication and profile data
  */
 export async function getAuthUser(clerkId: string) {
   try {
+    let targetClerkId = clerkId;
+    
+    if (clerkId === "current") {
+      const { auth } = await import("@clerk/nextjs/server");
+      const { userId } = await auth();
+      if (!userId) return null;
+      targetClerkId = userId;
+    }
+
     const user = await prisma.user.findUnique({
-      where: { clerkId },
+      where: { clerkId: targetClerkId },
       include: {
         company: {
           select: {
@@ -35,6 +239,49 @@ export async function getAuthUser(clerkId: string) {
     return null;
   }
 }
+
+/**
+ * Get company details for dashboard/settings
+ */
+export async function getCompanyById(id: string) {
+  return await prisma.company.findUnique({
+    where: { id },
+    include: {
+      subscription: {
+        include: {
+          plan: true,
+        },
+      },
+      _count: {
+        select: {
+          units: true,
+        },
+      },
+    },
+  });
+}
+
+/**
+ * Get all units for a company with metrics
+ */
+export async function getUnits(companyId: string) {
+  return await prisma.unit.findMany({
+    where: { companyId },
+    include: {
+      _count: {
+        select: {
+          projects: true,
+          clients: true,
+          users: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+}
+
 
 /**
  * Check if a user has a company
@@ -78,8 +325,9 @@ export async function acceptInvitation(clerkId: string, token: string) {
       return { success: false, error: "INVITATION_EXPIRED" };
     }
 
-    // 1. Transaction to update User and Invitation
+    // 1. Transaction to update User, Invitation, and possibly Unit.adminId
     const result = await prisma.$transaction(async (tx) => {
+      // Update user with role and unit
       const user = await tx.user.update({
         where: { clerkId },
         data: {
@@ -89,6 +337,15 @@ export async function acceptInvitation(clerkId: string, token: string) {
         },
       });
 
+      // If role is ADMIN, set this user as the unit admin
+      if (invitation.role === "ADMIN") {
+        await tx.unit.update({
+          where: { id: invitation.unitId },
+          data: { adminId: user.id },
+        });
+      }
+
+      // Mark invitation as accepted
       await tx.invitation.update({
         where: { id: invitation.id },
         data: { status: "ACCEPTED" },
@@ -107,6 +364,9 @@ export async function acceptInvitation(clerkId: string, token: string) {
       },
     });
 
+    // 3. Revalidate cache
+    revalidateTag(CacheTags.company(invitation.companyId), "max");
+    revalidateTag(CacheTags.unit(invitation.unitId), "max");
     revalidateTag(CacheTags.unitMembers(invitation.unitId), "max");
     return { success: true, data: result };
   } catch (error) {
@@ -173,12 +433,14 @@ export async function createCompany(
           logo: data.logo ?? null,
           NIF: data.NIF,
           RC: data.RC,
-          formJur: data.formJur ?? null,
-          sector: data.sector ?? null,
-          wilaya: data.wilaya ?? null,
-          address: data.address ?? null,
-          phone: data.phone ?? null,
-          email: data.email ?? null,
+          NIS: data.NIS ?? null,
+          AI: data.AI ?? null,
+          formJur: data.formJur,
+          sector: data.sector,
+          wilaya: data.wilaya,
+          address: data.address,
+          phone: data.phone,
+          email: data.email,
         },
       });
 
@@ -427,22 +689,22 @@ export async function consolidateOnboarding(
         },
       });
 
-      // 2. Create the Unit
+      // 2. Create the Unit with adminId: null (OWNER is company-wide, not bound to a unit)
       const unit = await tx.unit.create({
         data: {
           ...input.unit,
           companyId: company.id,
-          adminId: user.id, // Auto-assign owner as admin
+          // adminId is NOT set — unit can exist without admin until OWNER invites someone with ADMIN role
         },
       });
 
-      // 3. Update User profile
+      // 3. Update User profile as OWNER (companyId set, unitId: null — OWNER is not bound to a unit)
       await tx.user.update({
         where: { id: user.id },
         data: {
           role: "OWNER",
           companyId: company.id,
-          unitId: unit.id,
+          // unitId is NOT set — OWNER is company-wide, not unit-scoped
         },
       });
 
@@ -477,13 +739,13 @@ export async function consolidateOnboarding(
       return { companyId: company.id, unitId: unit.id };
     });
 
-    // 6. Sync Clerk Data
+    // 6. Sync Clerk Data for OWNER (no unitId — OWNER is company-wide, not unit-scoped)
     const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
     await clerk.users.updateUser(clerkId, {
       publicMetadata: {
         role: "OWNER",
         companyId: result.companyId,
-        unitId: result.unitId,
+        // unitId is NOT included — OWNER is not bound to a unit
       },
     });
 
@@ -498,3 +760,100 @@ export async function consolidateOnboarding(
     return { success: false, error: "ONBOARDING_FAILED" };
   }
 }
+
+/**
+ * Update company details
+ */
+export async function updateCompany(id: string, data: Partial<CompanyInput>) {
+  try {
+    const updated = await prisma.company.update({
+      where: { id },
+      data,
+    });
+    revalidateTag(CacheTags.company(id), "max");
+    return { success: true, data: updated };
+  } catch (error) {
+    console.error("Error updating company:", error);
+    return { success: false, error: "UPDATE_FAILED" };
+  }
+}
+
+/**
+ * Update unit details
+ */
+export async function updateUnit(id: string, data: Partial<UnitInput>) {
+  try {
+    const updated = await prisma.unit.update({
+      where: { id },
+      data,
+    });
+    revalidateTag(CacheTags.unit(id), "max");
+    revalidateTag(CacheTags.companyUnits(updated.companyId), "max");
+    return { success: true, data: updated };
+  } catch (error) {
+    console.error("Error updating unit:", error);
+    return { success: false, error: "UPDATE_FAILED" };
+  }
+}
+
+/**
+ * Delete a unit (cascade to projects, tasks, clients)
+ */
+export async function deleteUnit(id: string) {
+  try {
+    const unit = await prisma.unit.findUnique({
+      where: { id },
+      select: { companyId: true },
+    });
+
+    if (!unit) {
+      return { success: false, error: "UNIT_NOT_FOUND" };
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.task.deleteMany({
+        where: {
+          project: {
+            unitId: id,
+          },
+        },
+      });
+
+      await tx.phase.deleteMany({
+        where: {
+          project: {
+            unitId: id,
+          },
+        },
+      });
+
+      await tx.project.deleteMany({
+        where: { unitId: id },
+      });
+
+      await tx.client.deleteMany({
+        where: { unitId: id },
+      });
+
+      await tx.invitation.deleteMany({
+        where: { unitId: id },
+      });
+
+      await tx.user.updateMany({
+        where: { unitId: id },
+        data: { unitId: null },
+      });
+
+      await tx.unit.delete({
+        where: { id },
+      });
+    });
+
+    revalidateTag(CacheTags.companyUnits(unit.companyId), "max");
+    return { success: true, data: true };
+  } catch (error) {
+    console.error("Error deleting unit:", error);
+    return { success: false, error: "DELETE_FAILED" };
+  }
+}
+

@@ -10,7 +10,10 @@ datasource db {
   provider = "postgresql"
 }
 
-// PRD Enums
+// ─────────────────────────────────────────────
+// ENUMS — match PRD §4 Data Model Enums exactly
+// ─────────────────────────────────────────────
+
 enum Role {
   OWNER
   ADMIN
@@ -63,15 +66,20 @@ enum NotificationType {
   GENERAL
 }
 
-// Core Entities
+// ─────────────────────────────────────────────
+// CORE ENTITIES
+// ─────────────────────────────────────────────
+
 model Plan {
   id                 String         @id @default(cuid())
-  name               String
+  // FIX: @unique — two plans with the same name is a data error
+  name               String         @unique
   maxUnits           Int?
   maxProjects        Int?
   maxTasksPerProject Int?
   maxMembers         Int?
-  priceDA            Float
+  // FIX: Decimal instead of Float — financial value, avoids floating-point precision issues
+  priceDA            Decimal        @db.Decimal(12, 2)
   subscriptions      Subscription[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
@@ -80,23 +88,32 @@ model Plan {
 model Company {
   id                       String         @id @default(cuid())
   name                     String
+  // ownerId is the Clerk user ID of the OWNER — unique and immutable (PRD COMP-04)
   ownerId                  String         @unique
   logo                     String?
-  NIF                      String
-  RC                       String
-  NIS                      String?
-  AI                       String?
+  // FIX: @unique — NIF and RC are legal business identifiers, must be globally unique
+  NIF                      String         @unique
+  RC                       String         @unique
+  // NIS and AI are optional but also unique when present
+  NIS                      String?        @unique
+  AI                       String?        @unique
   formJur                  String
   sector                   String
   wilaya                   String
   address                  String
   phone                    String
-  email                    String
+  // FIX: @unique — one company per email
+  email                    String         @unique
+  // Configurable by OWNER only, range 1–100 (PRD BR-15)
   productionAlertThreshold Float          @default(80)
   subscription             Subscription?
   units                    Unit[]
   users                    User[]
   invitations              Invitation[]
+  // FIX: Added back-relations for Lane, Task, TimeEntry (were missing FK integrity)
+  lanes                    Lane[]
+  tasks                    Task[]
+  timeEntries              TimeEntry[]
   taskComments             TaskComment[]
   taskMentions             TaskMention[]
   notifications            Notification[]
@@ -122,24 +139,30 @@ model Subscription {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  clerkId       String         @unique
-  name          String
-  email         String
-  role          Role
-  companyId     String?
-  company       Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  unitId        String?
-  unit          Unit?          @relation(fields: [unitId], references: [id], onDelete: SetNull)
-  teamMembers   TeamMember[]
-  tasks         Task[]
-  taskComments  TaskComment[]  @relation("AuthorComments")
-  taskMentions  TaskMention[]
-  timeEntries   TimeEntry[]
-  notifications Notification[]
-  activityLogs  ActivityLog[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id             String         @id @default(cuid())
+  clerkId        String         @unique
+  name           String
+  // FIX: @unique — Clerk syncs one user per email, DB must enforce this
+  email          String         @unique
+  role           Role
+  companyId      String?
+  company        Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  unitId         String?
+  // FIX: Named relation "UnitMembers" to disambiguate from the "UnitAdmin" relation below
+  unit           Unit?          @relation("UnitMembers", fields: [unitId], references: [id], onDelete: SetNull)
+  // FIX: Back-relation for Unit.admin (UnitAdmin)
+  adminOfUnits   Unit[]         @relation("UnitAdmin")
+  teamMembers    TeamMember[]
+  tasks          Task[]
+  taskComments   TaskComment[]  @relation("AuthorComments")
+  taskMentions   TaskMention[]
+  timeEntries    TimeEntry[]
+  // FIX: Named relation to disambiguate userId vs targetUserId on Notification
+  notifications  Notification[] @relation("UserNotifications")
+  targetedNotifs Notification[] @relation("TargetNotifications")
+  activityLogs   ActivityLog[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
   @@index([companyId])
   @@index([unitId])
@@ -150,12 +173,14 @@ model Unit {
   id            String         @id @default(cuid())
   companyId     String
   company       Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  adminId       String
+  // FIX: adminId is nullable — a unit can exist without an admin until the OWNER invites someone with ADMIN role
+  adminId       String?
+  admin         User?          @relation("UnitAdmin", fields: [adminId], references: [id])
   name          String
   address       String
   phone         String
   email         String
-  users         User[]
+  users         User[]         @relation("UnitMembers")
   invitations   Invitation[]
   clients       Client[]
   projects      Project[]
@@ -178,6 +203,8 @@ model Invitation {
   unitId    String
   unit      Unit             @relation(fields: [unitId], references: [id], onDelete: Cascade)
   email     String
+  // NOTE: OWNER role assignment via invitation is forbidden — must be enforced
+  // at the Server Action layer with Zod (PRD COMP-03). DB cannot restrict an enum value.
   role      Role
   token     String           @unique
   status    InvitationStatus @default(PENDING)
@@ -190,7 +217,10 @@ model Invitation {
   @@index([token])
 }
 
-// Operational Entities
+// ─────────────────────────────────────────────
+// OPERATIONAL ENTITIES
+// ─────────────────────────────────────────────
+
 model Client {
   id        String    @id @default(cuid())
   unitId    String
@@ -204,6 +234,7 @@ model Client {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
+  // Client name and email must be unique within a unit (PRD BR-19)
   @@unique([unitId, name])
   @@unique([unitId, email])
   @@index([unitId])
@@ -220,12 +251,17 @@ model Project {
   name         String
   code         String
   type         String
-  montantHT    Float
-  montantTTC   Float
+  // FIX: Decimal instead of Float — core financial fields (PRD §14 Glossary: HT/TTC)
+  montantHT    Decimal       @db.Decimal(15, 2)
+  montantTTC   Decimal       @db.Decimal(15, 2)
   ods          DateTime
+  // PRD BR-18: deadline stored as two integers, displayed as "X mois Y jours"
   delaiMonths  Int           @default(0)
   delaiDays    Int           @default(0)
   status       ProjectStatus @default(New)
+  // FIX: Added progress field — PRD BR-17: weighted average of Phase.progress
+  // Recalculated server-side whenever any Phase.progress changes
+  progress     Float         @default(0)
   signe        Boolean       @default(false)
   team         Team?
   phases       Phase[]
@@ -235,6 +271,7 @@ model Project {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
+  // Project code must be unique within a unit
   @@unique([unitId, code])
   @@index([unitId])
   @@index([companyId])
@@ -273,16 +310,19 @@ model Phase {
   project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   name         String
   code         String
-  montantHT    Float
+  // FIX: Decimal — phase budget, must not exceed Project.montantHT (PRD BR-phase budget rule)
+  montantHT    Decimal      @db.Decimal(15, 2)
   startDate    DateTime
   endDate      DateTime
-  duration     Int // duration in days
+  duration     Int // duration in days — derived from startDate/endDate but stored for Gantt performance
   status       PhaseStatus  @default(TODO)
   progress     Float        @default(0)
   observations String?
   subPhases    SubPhase[]
   product      Product?
   tasks        Task[]
+  // Shortcut relation for production alert queries (PRD BR-14)
+  // Canonical path is Phase → Product → Production; this avoids an extra join
   productions  Production[]
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
@@ -324,10 +364,13 @@ model GanttMarker {
 
 model Product {
   id          String       @id @default(cuid())
+  // One Product per Phase — the planned production baseline
   phaseId     String       @unique
   phase       Phase        @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  // taux is a percentage (0–100), Float is appropriate here
   taux        Float
-  montantProd Float
+  // FIX: Decimal — mntProd = Phase.montantHT × (taux / 100), PRD §14 Glossary
+  montantProd Decimal      @db.Decimal(15, 2)
   date        DateTime
   productions Production[]
   createdAt   DateTime     @default(now())
@@ -340,8 +383,10 @@ model Production {
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   phaseId   String
   phase     Phase    @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  // taux is a percentage (0–100), Float is appropriate
   taux      Float
-  mntProd   Float
+  // FIX: Decimal — actual produced monetary amount
+  mntProd   Decimal  @db.Decimal(15, 2)
   date      DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -350,12 +395,17 @@ model Production {
   @@index([phaseId])
 }
 
-// Execution & Tracking
+// ─────────────────────────────────────────────
+// EXECUTION & TRACKING
+// ─────────────────────────────────────────────
+
 model Lane {
   id        String   @id @default(cuid())
   unitId    String
   unit      Unit     @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  // FIX: Added proper Company relation — was a bare String with no FK integrity
   companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
   name      String
   color     String?
   order     Int
@@ -371,15 +421,21 @@ model Task {
   id             String        @id @default(cuid())
   unitId         String
   unit           Unit          @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  // FIX: Added proper Company relation — was a bare String with no FK integrity
   companyId      String
+  company        Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
   projectId      String
   project        Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  // phaseId is required — tasks must belong to a Phase (PRD §10 Task model)
   phaseId        String
   phase          Phase         @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  // subPhaseId is optional — tasks can be at phase or sub-phase level
   subPhaseId     String?
   subPhase       SubPhase?     @relation(fields: [subPhaseId], references: [id], onDelete: SetNull)
+  // laneId is nullable — task may exist without a Kanban column
   laneId         String?
   lane           Lane?         @relation(fields: [laneId], references: [id], onDelete: SetNull)
+  // PRD BR-16: on user removal, assignedUserId retained (SetNull on membership delete, not here)
   assignedUserId String?
   assignedUser   User?         @relation(fields: [assignedUserId], references: [id], onDelete: SetNull)
   title          String
@@ -467,7 +523,9 @@ model TaskMention {
 
 model TimeEntry {
   id          String    @id @default(cuid())
+  // FIX: Added proper Company relation — was a bare String with no FK integrity
   companyId   String
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
   userId      String
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   projectId   String
@@ -493,13 +551,16 @@ model Notification {
   company      Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
   unitId       String?
   unit         Unit?            @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  // FIX: Named relation "UserNotifications" — disambiguates from targetUserId relation
   userId       String?
-  user         User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User?            @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
   type         NotificationType
   message      String
   read         Boolean          @default(false)
   targetRole   Role?
+  // FIX: Added proper relation for targetUserId — was a bare String with no FK integrity
   targetUserId String?
+  targetUser   User?            @relation("TargetNotifications", fields: [targetUserId], references: [id], onDelete: SetNull)
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
@@ -520,7 +581,8 @@ model ActivityLog {
   action     String
   entityType String
   entityId   String
-  metadata   String? // JSON string
+  // FIX: Json? instead of String? — PRD §10 defines metadata as JSON, Prisma has native Json type
+  metadata   Json?
   createdAt  DateTime @default(now())
 
   @@index([companyId])

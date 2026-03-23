@@ -27,17 +27,19 @@ export type AggregateProject = {
 }
 
 export type ProjectAvgAggregateOutputType = {
-  montantHT: number | null
-  montantTTC: number | null
+  montantHT: runtime.Decimal | null
+  montantTTC: runtime.Decimal | null
   delaiMonths: number | null
   delaiDays: number | null
+  progress: number | null
 }
 
 export type ProjectSumAggregateOutputType = {
-  montantHT: number | null
-  montantTTC: number | null
+  montantHT: runtime.Decimal | null
+  montantTTC: runtime.Decimal | null
   delaiMonths: number | null
   delaiDays: number | null
+  progress: number | null
 }
 
 export type ProjectMinAggregateOutputType = {
@@ -48,12 +50,13 @@ export type ProjectMinAggregateOutputType = {
   name: string | null
   code: string | null
   type: string | null
-  montantHT: number | null
-  montantTTC: number | null
+  montantHT: runtime.Decimal | null
+  montantTTC: runtime.Decimal | null
   ods: Date | null
   delaiMonths: number | null
   delaiDays: number | null
   status: $Enums.ProjectStatus | null
+  progress: number | null
   signe: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,12 +70,13 @@ export type ProjectMaxAggregateOutputType = {
   name: string | null
   code: string | null
   type: string | null
-  montantHT: number | null
-  montantTTC: number | null
+  montantHT: runtime.Decimal | null
+  montantTTC: runtime.Decimal | null
   ods: Date | null
   delaiMonths: number | null
   delaiDays: number | null
   status: $Enums.ProjectStatus | null
+  progress: number | null
   signe: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -92,6 +96,7 @@ export type ProjectCountAggregateOutputType = {
   delaiMonths: number
   delaiDays: number
   status: number
+  progress: number
   signe: number
   createdAt: number
   updatedAt: number
@@ -104,6 +109,7 @@ export type ProjectAvgAggregateInputType = {
   montantTTC?: true
   delaiMonths?: true
   delaiDays?: true
+  progress?: true
 }
 
 export type ProjectSumAggregateInputType = {
@@ -111,6 +117,7 @@ export type ProjectSumAggregateInputType = {
   montantTTC?: true
   delaiMonths?: true
   delaiDays?: true
+  progress?: true
 }
 
 export type ProjectMinAggregateInputType = {
@@ -127,6 +134,7 @@ export type ProjectMinAggregateInputType = {
   delaiMonths?: true
   delaiDays?: true
   status?: true
+  progress?: true
   signe?: true
   createdAt?: true
   updatedAt?: true
@@ -146,6 +154,7 @@ export type ProjectMaxAggregateInputType = {
   delaiMonths?: true
   delaiDays?: true
   status?: true
+  progress?: true
   signe?: true
   createdAt?: true
   updatedAt?: true
@@ -165,6 +174,7 @@ export type ProjectCountAggregateInputType = {
   delaiMonths?: true
   delaiDays?: true
   status?: true
+  progress?: true
   signe?: true
   createdAt?: true
   updatedAt?: true
@@ -265,12 +275,13 @@ export type ProjectGroupByOutputType = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal
+  montantTTC: runtime.Decimal
   ods: Date
   delaiMonths: number
   delaiDays: number
   status: $Enums.ProjectStatus
+  progress: number
   signe: boolean
   createdAt: Date
   updatedAt: Date
@@ -307,12 +318,13 @@ export type ProjectWhereInput = {
   name?: Prisma.StringFilter<"Project"> | string
   code?: Prisma.StringFilter<"Project"> | string
   type?: Prisma.StringFilter<"Project"> | string
-  montantHT?: Prisma.FloatFilter<"Project"> | number
-  montantTTC?: Prisma.FloatFilter<"Project"> | number
+  montantHT?: Prisma.DecimalFilter<"Project"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFilter<"Project"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFilter<"Project"> | Date | string
   delaiMonths?: Prisma.IntFilter<"Project"> | number
   delaiDays?: Prisma.IntFilter<"Project"> | number
   status?: Prisma.EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
+  progress?: Prisma.FloatFilter<"Project"> | number
   signe?: Prisma.BoolFilter<"Project"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
@@ -339,6 +351,7 @@ export type ProjectOrderByWithRelationInput = {
   delaiMonths?: Prisma.SortOrder
   delaiDays?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  progress?: Prisma.SortOrder
   signe?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -363,12 +376,13 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Project"> | string
   code?: Prisma.StringFilter<"Project"> | string
   type?: Prisma.StringFilter<"Project"> | string
-  montantHT?: Prisma.FloatFilter<"Project"> | number
-  montantTTC?: Prisma.FloatFilter<"Project"> | number
+  montantHT?: Prisma.DecimalFilter<"Project"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFilter<"Project"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFilter<"Project"> | Date | string
   delaiMonths?: Prisma.IntFilter<"Project"> | number
   delaiDays?: Prisma.IntFilter<"Project"> | number
   status?: Prisma.EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
+  progress?: Prisma.FloatFilter<"Project"> | number
   signe?: Prisma.BoolFilter<"Project"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
@@ -395,6 +409,7 @@ export type ProjectOrderByWithAggregationInput = {
   delaiMonths?: Prisma.SortOrder
   delaiDays?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  progress?: Prisma.SortOrder
   signe?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -416,12 +431,13 @@ export type ProjectScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Project"> | string
   code?: Prisma.StringWithAggregatesFilter<"Project"> | string
   type?: Prisma.StringWithAggregatesFilter<"Project"> | string
-  montantHT?: Prisma.FloatWithAggregatesFilter<"Project"> | number
-  montantTTC?: Prisma.FloatWithAggregatesFilter<"Project"> | number
+  montantHT?: Prisma.DecimalWithAggregatesFilter<"Project"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalWithAggregatesFilter<"Project"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
   delaiMonths?: Prisma.IntWithAggregatesFilter<"Project"> | number
   delaiDays?: Prisma.IntWithAggregatesFilter<"Project"> | number
   status?: Prisma.EnumProjectStatusWithAggregatesFilter<"Project"> | $Enums.ProjectStatus
+  progress?: Prisma.FloatWithAggregatesFilter<"Project"> | number
   signe?: Prisma.BoolWithAggregatesFilter<"Project"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
@@ -433,12 +449,13 @@ export type ProjectCreateInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -459,12 +476,13 @@ export type ProjectUncheckedCreateInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -481,12 +499,13 @@ export type ProjectUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -507,12 +526,13 @@ export type ProjectUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -531,12 +551,13 @@ export type ProjectCreateManyInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -548,12 +569,13 @@ export type ProjectUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -567,12 +589,13 @@ export type ProjectUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -607,6 +630,7 @@ export type ProjectCountOrderByAggregateInput = {
   delaiMonths?: Prisma.SortOrder
   delaiDays?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  progress?: Prisma.SortOrder
   signe?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -617,6 +641,7 @@ export type ProjectAvgOrderByAggregateInput = {
   montantTTC?: Prisma.SortOrder
   delaiMonths?: Prisma.SortOrder
   delaiDays?: Prisma.SortOrder
+  progress?: Prisma.SortOrder
 }
 
 export type ProjectMaxOrderByAggregateInput = {
@@ -633,6 +658,7 @@ export type ProjectMaxOrderByAggregateInput = {
   delaiMonths?: Prisma.SortOrder
   delaiDays?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  progress?: Prisma.SortOrder
   signe?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -652,6 +678,7 @@ export type ProjectMinOrderByAggregateInput = {
   delaiMonths?: Prisma.SortOrder
   delaiDays?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  progress?: Prisma.SortOrder
   signe?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -662,6 +689,7 @@ export type ProjectSumOrderByAggregateInput = {
   montantTTC?: Prisma.SortOrder
   delaiMonths?: Prisma.SortOrder
   delaiDays?: Prisma.SortOrder
+  progress?: Prisma.SortOrder
 }
 
 export type ProjectScalarRelationFilter = {
@@ -845,12 +873,13 @@ export type ProjectCreateWithoutUnitInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -869,12 +898,13 @@ export type ProjectUncheckedCreateWithoutUnitInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -922,12 +952,13 @@ export type ProjectScalarWhereInput = {
   name?: Prisma.StringFilter<"Project"> | string
   code?: Prisma.StringFilter<"Project"> | string
   type?: Prisma.StringFilter<"Project"> | string
-  montantHT?: Prisma.FloatFilter<"Project"> | number
-  montantTTC?: Prisma.FloatFilter<"Project"> | number
+  montantHT?: Prisma.DecimalFilter<"Project"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFilter<"Project"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFilter<"Project"> | Date | string
   delaiMonths?: Prisma.IntFilter<"Project"> | number
   delaiDays?: Prisma.IntFilter<"Project"> | number
   status?: Prisma.EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
+  progress?: Prisma.FloatFilter<"Project"> | number
   signe?: Prisma.BoolFilter<"Project"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
@@ -939,12 +970,13 @@ export type ProjectCreateWithoutClientInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -963,12 +995,13 @@ export type ProjectUncheckedCreateWithoutClientInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1011,12 +1044,13 @@ export type ProjectCreateWithoutTeamInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1036,12 +1070,13 @@ export type ProjectUncheckedCreateWithoutTeamInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1073,12 +1108,13 @@ export type ProjectUpdateWithoutTeamInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1098,12 +1134,13 @@ export type ProjectUncheckedUpdateWithoutTeamInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1119,12 +1156,13 @@ export type ProjectCreateWithoutPhasesInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1144,12 +1182,13 @@ export type ProjectUncheckedCreateWithoutPhasesInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1181,12 +1220,13 @@ export type ProjectUpdateWithoutPhasesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1206,12 +1246,13 @@ export type ProjectUncheckedUpdateWithoutPhasesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1227,12 +1268,13 @@ export type ProjectCreateWithoutGanttMarkersInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1252,12 +1294,13 @@ export type ProjectUncheckedCreateWithoutGanttMarkersInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1289,12 +1332,13 @@ export type ProjectUpdateWithoutGanttMarkersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1314,12 +1358,13 @@ export type ProjectUncheckedUpdateWithoutGanttMarkersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1335,12 +1380,13 @@ export type ProjectCreateWithoutTasksInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1360,12 +1406,13 @@ export type ProjectUncheckedCreateWithoutTasksInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1397,12 +1444,13 @@ export type ProjectUpdateWithoutTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1422,12 +1470,13 @@ export type ProjectUncheckedUpdateWithoutTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1443,12 +1492,13 @@ export type ProjectCreateWithoutTimeEntriesInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1468,12 +1518,13 @@ export type ProjectUncheckedCreateWithoutTimeEntriesInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1505,12 +1556,13 @@ export type ProjectUpdateWithoutTimeEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1530,12 +1582,13 @@ export type ProjectUncheckedUpdateWithoutTimeEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1552,12 +1605,13 @@ export type ProjectCreateManyUnitInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1569,12 +1623,13 @@ export type ProjectUpdateWithoutUnitInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1593,12 +1648,13 @@ export type ProjectUncheckedUpdateWithoutUnitInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1616,12 +1672,13 @@ export type ProjectUncheckedUpdateManyWithoutUnitInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1634,12 +1691,13 @@ export type ProjectCreateManyClientInput = {
   name: string
   code: string
   type: string
-  montantHT: number
-  montantTTC: number
+  montantHT: runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC: runtime.Decimal | runtime.DecimalJsLike | number | string
   ods: Date | string
   delaiMonths?: number
   delaiDays?: number
   status?: $Enums.ProjectStatus
+  progress?: number
   signe?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1651,12 +1709,13 @@ export type ProjectUpdateWithoutClientInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1675,12 +1734,13 @@ export type ProjectUncheckedUpdateWithoutClientInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1698,12 +1758,13 @@ export type ProjectUncheckedUpdateManyWithoutClientInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  montantHT?: Prisma.FloatFieldUpdateOperationsInput | number
-  montantTTC?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantHT?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  montantTTC?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   ods?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delaiMonths?: Prisma.IntFieldUpdateOperationsInput | number
   delaiDays?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  progress?: Prisma.FloatFieldUpdateOperationsInput | number
   signe?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1781,6 +1842,7 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   delaiMonths?: boolean
   delaiDays?: boolean
   status?: boolean
+  progress?: boolean
   signe?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1808,6 +1870,7 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   delaiMonths?: boolean
   delaiDays?: boolean
   status?: boolean
+  progress?: boolean
   signe?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1829,6 +1892,7 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   delaiMonths?: boolean
   delaiDays?: boolean
   status?: boolean
+  progress?: boolean
   signe?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1850,12 +1914,13 @@ export type ProjectSelectScalar = {
   delaiMonths?: boolean
   delaiDays?: boolean
   status?: boolean
+  progress?: boolean
   signe?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "unitId" | "companyId" | "clientId" | "name" | "code" | "type" | "montantHT" | "montantTTC" | "ods" | "delaiMonths" | "delaiDays" | "status" | "signe" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "unitId" | "companyId" | "clientId" | "name" | "code" | "type" | "montantHT" | "montantTTC" | "ods" | "delaiMonths" | "delaiDays" | "status" | "progress" | "signe" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
   client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
@@ -1894,12 +1959,13 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     name: string
     code: string
     type: string
-    montantHT: number
-    montantTTC: number
+    montantHT: runtime.Decimal
+    montantTTC: runtime.Decimal
     ods: Date
     delaiMonths: number
     delaiDays: number
     status: $Enums.ProjectStatus
+    progress: number
     signe: boolean
     createdAt: Date
     updatedAt: Date
@@ -2340,12 +2406,13 @@ export interface ProjectFieldRefs {
   readonly name: Prisma.FieldRef<"Project", 'String'>
   readonly code: Prisma.FieldRef<"Project", 'String'>
   readonly type: Prisma.FieldRef<"Project", 'String'>
-  readonly montantHT: Prisma.FieldRef<"Project", 'Float'>
-  readonly montantTTC: Prisma.FieldRef<"Project", 'Float'>
+  readonly montantHT: Prisma.FieldRef<"Project", 'Decimal'>
+  readonly montantTTC: Prisma.FieldRef<"Project", 'Decimal'>
   readonly ods: Prisma.FieldRef<"Project", 'DateTime'>
   readonly delaiMonths: Prisma.FieldRef<"Project", 'Int'>
   readonly delaiDays: Prisma.FieldRef<"Project", 'Int'>
   readonly status: Prisma.FieldRef<"Project", 'ProjectStatus'>
+  readonly progress: Prisma.FieldRef<"Project", 'Float'>
   readonly signe: Prisma.FieldRef<"Project", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Project", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Project", 'DateTime'>

@@ -8,7 +8,6 @@ import { StepIndicator } from "@/components/onboarding/StepIndicator"
 import { consolidateOnboarding } from "@/lib/queries"
 import { toast } from "sonner"
 import { type CompanyInput, type UnitInput } from "@/lib/types"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@clerk/nextjs"
 
 const steps = [
@@ -18,7 +17,6 @@ const steps = [
 ]
 
 export default function OnboardingPage() {
-  const router = useRouter()
   const { userId } = useAuth()
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -59,12 +57,12 @@ export default function OnboardingPage() {
       const response = await consolidateOnboarding(userId, {
         company: formData.company,
         unit: formData.unit,
-        invitations: invitations as Array<{ email: string; role: any }>, // This any is because Role enum might be slightly different in types.ts vs DB
+        invitations: invitations as any, // Simple cast to skip deep enum comparison in this client component
       })
 
       if (response.success) {
         toast.success("Configuration terminée avec succès !")
-        router.push("/dashboard")
+        window.location.href = `/company/${response.data.companyId}`
       } else {
         toast.error(`Erreur: ${response.error}`)
       }

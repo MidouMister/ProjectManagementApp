@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { format, formatDistanceToNow, differenceInDays } from "date-fns"
 import { fr } from "date-fns/locale"
+import { Prisma } from "@/generated/prisma/client"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Class Utilities
@@ -12,14 +13,31 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Decimal Conversion Helper
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Convert Prisma Decimal or any value to a number
+ */
+export function toNumber(value: number | string | Prisma.Decimal | null | undefined): number {
+  if (value === null || value === undefined) return 0
+  if (typeof value === "number") return value
+  if (typeof value === "string") return parseFloat(value) || 0
+  if (value && typeof value === "object" && "toNumber" in value) {
+    return (value as Prisma.Decimal).toNumber()
+  }
+  return 0
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Currency Formatting (Algerian Dinar)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Format amount as Algerian Dinar: 1 234 567,89 DA
  */
-export function formatAmount(amount: number | string): string {
-  const num = typeof amount === "string" ? parseFloat(amount) : amount
+export function formatAmount(amount: number | string | Prisma.Decimal | null | undefined): string {
+  const num = toNumber(amount)
   
   if (isNaN(num)) return "0,00 DA"
   
@@ -32,8 +50,8 @@ export function formatAmount(amount: number | string): string {
 /**
  * Format amount without currency suffix
  */
-export function formatNumber(num: number | string): string {
-  const n = typeof num === "string" ? parseFloat(num) : num
+export function formatNumber(num: number | string | Prisma.Decimal | null | undefined): string {
+  const n = toNumber(num)
   
   if (isNaN(n)) return "0"
   
@@ -151,14 +169,22 @@ export function formatDecimalPercent(value: number): string {
 /**
  * Calculate TVA amount from HT and TTC
  */
-export function calculateTVA(montantHT: number, montantTTC: number): number {
-  return montantTTC - montantHT
+export function calculateTVA(
+  montantHT: number | string | Prisma.Decimal | null | undefined,
+  montantTTC: number | string | Prisma.Decimal | null | undefined
+): number {
+  return toNumber(montantTTC) - toNumber(montantHT)
 }
 
 /**
  * Calculate TVA percentage: ((TTC - HT) / HT) × 100
  */
-export function calculateTVAPercent(montantHT: number, montantTTC: number): number {
-  if (montantHT === 0) return 0
-  return ((montantTTC - montantHT) / montantHT) * 100
+export function calculateTVAPercent(
+  montantHT: number | string | Prisma.Decimal | null | undefined,
+  montantTTC: number | string | Prisma.Decimal | null | undefined
+): number {
+  const ht = toNumber(montantHT)
+  const ttc = toNumber(montantTTC)
+  if (ht === 0) return 0
+  return ((ttc - ht) / ht) * 100
 }

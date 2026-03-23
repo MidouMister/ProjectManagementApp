@@ -1,4 +1,4 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser, createClerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export default async function DashboardRedirectHub({
@@ -19,9 +19,20 @@ export default async function DashboardRedirectHub({
   const tokenRaw = params.token || params.__clerk_ticket;
   const token = Array.isArray(tokenRaw) ? tokenRaw[0] : tokenRaw;
 
-  const role = user.publicMetadata?.role as "OWNER" | "ADMIN" | "USER" | undefined;
-  const companyId = user.publicMetadata?.companyId as string | undefined;
-  const unitId = user.publicMetadata?.unitId as string | undefined;
+  let role = user.publicMetadata?.role as "OWNER" | "ADMIN" | "USER" | undefined;
+  let companyId = user.publicMetadata?.companyId as string | undefined;
+  let unitId = user.publicMetadata?.unitId as string | undefined;
+
+  // 1.5 Fresh check if metadata might be stale
+  if (!companyId) {
+    const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+    const freshUser = await clerk.users.getUser(userId);
+    if (freshUser.publicMetadata?.companyId) {
+      role = freshUser.publicMetadata.role as "OWNER" | "ADMIN" | "USER" | undefined;
+      companyId = freshUser.publicMetadata.companyId as string;
+      unitId = freshUser.publicMetadata.unitId as string;
+    }
+  }
 
   // 2. No company ID -> Onboarding
   if (!companyId) {

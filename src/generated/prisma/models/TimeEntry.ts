@@ -264,6 +264,7 @@ export type TimeEntryWhereInput = {
   duration?: Prisma.IntNullableFilter<"TimeEntry"> | number | null
   createdAt?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
   task?: Prisma.XOR<Prisma.TaskNullableScalarRelationFilter, Prisma.TaskWhereInput> | null
@@ -281,6 +282,7 @@ export type TimeEntryOrderByWithRelationInput = {
   duration?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  company?: Prisma.CompanyOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   project?: Prisma.ProjectOrderByWithRelationInput
   task?: Prisma.TaskOrderByWithRelationInput
@@ -301,6 +303,7 @@ export type TimeEntryWhereUniqueInput = Prisma.AtLeast<{
   duration?: Prisma.IntNullableFilter<"TimeEntry"> | number | null
   createdAt?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
   task?: Prisma.XOR<Prisma.TaskNullableScalarRelationFilter, Prisma.TaskWhereInput> | null
@@ -344,13 +347,13 @@ export type TimeEntryScalarWhereWithAggregatesInput = {
 
 export type TimeEntryCreateInput = {
   id?: string
-  companyId: string
   description?: string | null
   startTime: Date | string
   endTime?: Date | string | null
   duration?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutTimeEntriesInput
   user: Prisma.UserCreateNestedOneWithoutTimeEntriesInput
   project: Prisma.ProjectCreateNestedOneWithoutTimeEntriesInput
   task?: Prisma.TaskCreateNestedOneWithoutTimeEntriesInput
@@ -372,13 +375,13 @@ export type TimeEntryUncheckedCreateInput = {
 
 export type TimeEntryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTimeEntriesNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTimeEntriesNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTimeEntriesNestedInput
   task?: Prisma.TaskUpdateOneWithoutTimeEntriesNestedInput
@@ -414,7 +417,6 @@ export type TimeEntryCreateManyInput = {
 
 export type TimeEntryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -495,6 +497,48 @@ export type TimeEntryMinOrderByAggregateInput = {
 
 export type TimeEntrySumOrderByAggregateInput = {
   duration?: Prisma.SortOrder
+}
+
+export type TimeEntryCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.TimeEntryCreateWithoutCompanyInput, Prisma.TimeEntryUncheckedCreateWithoutCompanyInput> | Prisma.TimeEntryCreateWithoutCompanyInput[] | Prisma.TimeEntryUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TimeEntryCreateOrConnectWithoutCompanyInput | Prisma.TimeEntryCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.TimeEntryCreateManyCompanyInputEnvelope
+  connect?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+}
+
+export type TimeEntryUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.TimeEntryCreateWithoutCompanyInput, Prisma.TimeEntryUncheckedCreateWithoutCompanyInput> | Prisma.TimeEntryCreateWithoutCompanyInput[] | Prisma.TimeEntryUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TimeEntryCreateOrConnectWithoutCompanyInput | Prisma.TimeEntryCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.TimeEntryCreateManyCompanyInputEnvelope
+  connect?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+}
+
+export type TimeEntryUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.TimeEntryCreateWithoutCompanyInput, Prisma.TimeEntryUncheckedCreateWithoutCompanyInput> | Prisma.TimeEntryCreateWithoutCompanyInput[] | Prisma.TimeEntryUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TimeEntryCreateOrConnectWithoutCompanyInput | Prisma.TimeEntryCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.TimeEntryUpsertWithWhereUniqueWithoutCompanyInput | Prisma.TimeEntryUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.TimeEntryCreateManyCompanyInputEnvelope
+  set?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+  disconnect?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+  delete?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+  connect?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+  update?: Prisma.TimeEntryUpdateWithWhereUniqueWithoutCompanyInput | Prisma.TimeEntryUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.TimeEntryUpdateManyWithWhereWithoutCompanyInput | Prisma.TimeEntryUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.TimeEntryScalarWhereInput | Prisma.TimeEntryScalarWhereInput[]
+}
+
+export type TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.TimeEntryCreateWithoutCompanyInput, Prisma.TimeEntryUncheckedCreateWithoutCompanyInput> | Prisma.TimeEntryCreateWithoutCompanyInput[] | Prisma.TimeEntryUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TimeEntryCreateOrConnectWithoutCompanyInput | Prisma.TimeEntryCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.TimeEntryUpsertWithWhereUniqueWithoutCompanyInput | Prisma.TimeEntryUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.TimeEntryCreateManyCompanyInputEnvelope
+  set?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+  disconnect?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+  delete?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+  connect?: Prisma.TimeEntryWhereUniqueInput | Prisma.TimeEntryWhereUniqueInput[]
+  update?: Prisma.TimeEntryUpdateWithWhereUniqueWithoutCompanyInput | Prisma.TimeEntryUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.TimeEntryUpdateManyWithWhereWithoutCompanyInput | Prisma.TimeEntryUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.TimeEntryScalarWhereInput | Prisma.TimeEntryScalarWhereInput[]
 }
 
 export type TimeEntryCreateNestedManyWithoutUserInput = {
@@ -623,15 +667,84 @@ export type TimeEntryUncheckedUpdateManyWithoutTaskNestedInput = {
   deleteMany?: Prisma.TimeEntryScalarWhereInput | Prisma.TimeEntryScalarWhereInput[]
 }
 
-export type TimeEntryCreateWithoutUserInput = {
+export type TimeEntryCreateWithoutCompanyInput = {
   id?: string
-  companyId: string
   description?: string | null
   startTime: Date | string
   endTime?: Date | string | null
   duration?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTimeEntriesInput
+  project: Prisma.ProjectCreateNestedOneWithoutTimeEntriesInput
+  task?: Prisma.TaskCreateNestedOneWithoutTimeEntriesInput
+}
+
+export type TimeEntryUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  userId: string
+  projectId: string
+  taskId?: string | null
+  description?: string | null
+  startTime: Date | string
+  endTime?: Date | string | null
+  duration?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TimeEntryCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.TimeEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.TimeEntryCreateWithoutCompanyInput, Prisma.TimeEntryUncheckedCreateWithoutCompanyInput>
+}
+
+export type TimeEntryCreateManyCompanyInputEnvelope = {
+  data: Prisma.TimeEntryCreateManyCompanyInput | Prisma.TimeEntryCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type TimeEntryUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.TimeEntryWhereUniqueInput
+  update: Prisma.XOR<Prisma.TimeEntryUpdateWithoutCompanyInput, Prisma.TimeEntryUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.TimeEntryCreateWithoutCompanyInput, Prisma.TimeEntryUncheckedCreateWithoutCompanyInput>
+}
+
+export type TimeEntryUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.TimeEntryWhereUniqueInput
+  data: Prisma.XOR<Prisma.TimeEntryUpdateWithoutCompanyInput, Prisma.TimeEntryUncheckedUpdateWithoutCompanyInput>
+}
+
+export type TimeEntryUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.TimeEntryScalarWhereInput
+  data: Prisma.XOR<Prisma.TimeEntryUpdateManyMutationInput, Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type TimeEntryScalarWhereInput = {
+  AND?: Prisma.TimeEntryScalarWhereInput | Prisma.TimeEntryScalarWhereInput[]
+  OR?: Prisma.TimeEntryScalarWhereInput[]
+  NOT?: Prisma.TimeEntryScalarWhereInput | Prisma.TimeEntryScalarWhereInput[]
+  id?: Prisma.StringFilter<"TimeEntry"> | string
+  companyId?: Prisma.StringFilter<"TimeEntry"> | string
+  userId?: Prisma.StringFilter<"TimeEntry"> | string
+  projectId?: Prisma.StringFilter<"TimeEntry"> | string
+  taskId?: Prisma.StringNullableFilter<"TimeEntry"> | string | null
+  description?: Prisma.StringNullableFilter<"TimeEntry"> | string | null
+  startTime?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
+  endTime?: Prisma.DateTimeNullableFilter<"TimeEntry"> | Date | string | null
+  duration?: Prisma.IntNullableFilter<"TimeEntry"> | number | null
+  createdAt?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
+}
+
+export type TimeEntryCreateWithoutUserInput = {
+  id?: string
+  description?: string | null
+  startTime: Date | string
+  endTime?: Date | string | null
+  duration?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutTimeEntriesInput
   project: Prisma.ProjectCreateNestedOneWithoutTimeEntriesInput
   task?: Prisma.TaskCreateNestedOneWithoutTimeEntriesInput
 }
@@ -675,32 +788,15 @@ export type TimeEntryUpdateManyWithWhereWithoutUserInput = {
   data: Prisma.XOR<Prisma.TimeEntryUpdateManyMutationInput, Prisma.TimeEntryUncheckedUpdateManyWithoutUserInput>
 }
 
-export type TimeEntryScalarWhereInput = {
-  AND?: Prisma.TimeEntryScalarWhereInput | Prisma.TimeEntryScalarWhereInput[]
-  OR?: Prisma.TimeEntryScalarWhereInput[]
-  NOT?: Prisma.TimeEntryScalarWhereInput | Prisma.TimeEntryScalarWhereInput[]
-  id?: Prisma.StringFilter<"TimeEntry"> | string
-  companyId?: Prisma.StringFilter<"TimeEntry"> | string
-  userId?: Prisma.StringFilter<"TimeEntry"> | string
-  projectId?: Prisma.StringFilter<"TimeEntry"> | string
-  taskId?: Prisma.StringNullableFilter<"TimeEntry"> | string | null
-  description?: Prisma.StringNullableFilter<"TimeEntry"> | string | null
-  startTime?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
-  endTime?: Prisma.DateTimeNullableFilter<"TimeEntry"> | Date | string | null
-  duration?: Prisma.IntNullableFilter<"TimeEntry"> | number | null
-  createdAt?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"TimeEntry"> | Date | string
-}
-
 export type TimeEntryCreateWithoutProjectInput = {
   id?: string
-  companyId: string
   description?: string | null
   startTime: Date | string
   endTime?: Date | string | null
   duration?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutTimeEntriesInput
   user: Prisma.UserCreateNestedOneWithoutTimeEntriesInput
   task?: Prisma.TaskCreateNestedOneWithoutTimeEntriesInput
 }
@@ -746,13 +842,13 @@ export type TimeEntryUpdateManyWithWhereWithoutProjectInput = {
 
 export type TimeEntryCreateWithoutTaskInput = {
   id?: string
-  companyId: string
   description?: string | null
   startTime: Date | string
   endTime?: Date | string | null
   duration?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutTimeEntriesInput
   user: Prisma.UserCreateNestedOneWithoutTimeEntriesInput
   project: Prisma.ProjectCreateNestedOneWithoutTimeEntriesInput
 }
@@ -796,6 +892,58 @@ export type TimeEntryUpdateManyWithWhereWithoutTaskInput = {
   data: Prisma.XOR<Prisma.TimeEntryUpdateManyMutationInput, Prisma.TimeEntryUncheckedUpdateManyWithoutTaskInput>
 }
 
+export type TimeEntryCreateManyCompanyInput = {
+  id?: string
+  userId: string
+  projectId: string
+  taskId?: string | null
+  description?: string | null
+  startTime: Date | string
+  endTime?: Date | string | null
+  duration?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TimeEntryUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTimeEntriesNestedInput
+  project?: Prisma.ProjectUpdateOneRequiredWithoutTimeEntriesNestedInput
+  task?: Prisma.TaskUpdateOneWithoutTimeEntriesNestedInput
+}
+
+export type TimeEntryUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TimeEntryUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  taskId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type TimeEntryCreateManyUserInput = {
   id?: string
   companyId: string
@@ -811,13 +959,13 @@ export type TimeEntryCreateManyUserInput = {
 
 export type TimeEntryUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTimeEntriesNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTimeEntriesNestedInput
   task?: Prisma.TaskUpdateOneWithoutTimeEntriesNestedInput
 }
@@ -863,13 +1011,13 @@ export type TimeEntryCreateManyProjectInput = {
 
 export type TimeEntryUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTimeEntriesNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTimeEntriesNestedInput
   task?: Prisma.TaskUpdateOneWithoutTimeEntriesNestedInput
 }
@@ -915,13 +1063,13 @@ export type TimeEntryCreateManyTaskInput = {
 
 export type TimeEntryUpdateWithoutTaskInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endTime?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTimeEntriesNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTimeEntriesNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTimeEntriesNestedInput
 }
@@ -966,6 +1114,7 @@ export type TimeEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   duration?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   task?: boolean | Prisma.TimeEntry$taskArgs<ExtArgs>
@@ -983,6 +1132,7 @@ export type TimeEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   duration?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   task?: boolean | Prisma.TimeEntry$taskArgs<ExtArgs>
@@ -1000,6 +1150,7 @@ export type TimeEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   duration?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   task?: boolean | Prisma.TimeEntry$taskArgs<ExtArgs>
@@ -1021,16 +1172,19 @@ export type TimeEntrySelectScalar = {
 
 export type TimeEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "userId" | "projectId" | "taskId" | "description" | "startTime" | "endTime" | "duration" | "createdAt" | "updatedAt", ExtArgs["result"]["timeEntry"]>
 export type TimeEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   task?: boolean | Prisma.TimeEntry$taskArgs<ExtArgs>
 }
 export type TimeEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   task?: boolean | Prisma.TimeEntry$taskArgs<ExtArgs>
 }
 export type TimeEntryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   task?: boolean | Prisma.TimeEntry$taskArgs<ExtArgs>
@@ -1039,6 +1193,7 @@ export type TimeEntryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
 export type $TimeEntryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TimeEntry"
   objects: {
+    company: Prisma.$CompanyPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
     project: Prisma.$ProjectPayload<ExtArgs>
     task: Prisma.$TaskPayload<ExtArgs> | null
@@ -1449,6 +1604,7 @@ readonly fields: TimeEntryFieldRefs;
  */
 export interface Prisma__TimeEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   project<T extends Prisma.ProjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProjectDefaultArgs<ExtArgs>>): Prisma.Prisma__ProjectClient<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   task<T extends Prisma.TimeEntry$taskArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TimeEntry$taskArgs<ExtArgs>>): Prisma.Prisma__TaskClient<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>

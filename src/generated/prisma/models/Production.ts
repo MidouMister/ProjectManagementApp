@@ -28,12 +28,12 @@ export type AggregateProduction = {
 
 export type ProductionAvgAggregateOutputType = {
   taux: number | null
-  mntProd: number | null
+  mntProd: runtime.Decimal | null
 }
 
 export type ProductionSumAggregateOutputType = {
   taux: number | null
-  mntProd: number | null
+  mntProd: runtime.Decimal | null
 }
 
 export type ProductionMinAggregateOutputType = {
@@ -41,7 +41,7 @@ export type ProductionMinAggregateOutputType = {
   productId: string | null
   phaseId: string | null
   taux: number | null
-  mntProd: number | null
+  mntProd: runtime.Decimal | null
   date: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -52,7 +52,7 @@ export type ProductionMaxAggregateOutputType = {
   productId: string | null
   phaseId: string | null
   taux: number | null
-  mntProd: number | null
+  mntProd: runtime.Decimal | null
   date: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -206,7 +206,7 @@ export type ProductionGroupByOutputType = {
   productId: string
   phaseId: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal
   date: Date
   createdAt: Date
   updatedAt: Date
@@ -240,7 +240,7 @@ export type ProductionWhereInput = {
   productId?: Prisma.StringFilter<"Production"> | string
   phaseId?: Prisma.StringFilter<"Production"> | string
   taux?: Prisma.FloatFilter<"Production"> | number
-  mntProd?: Prisma.FloatFilter<"Production"> | number
+  mntProd?: Prisma.DecimalFilter<"Production"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFilter<"Production"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Production"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Production"> | Date | string
@@ -269,7 +269,7 @@ export type ProductionWhereUniqueInput = Prisma.AtLeast<{
   productId?: Prisma.StringFilter<"Production"> | string
   phaseId?: Prisma.StringFilter<"Production"> | string
   taux?: Prisma.FloatFilter<"Production"> | number
-  mntProd?: Prisma.FloatFilter<"Production"> | number
+  mntProd?: Prisma.DecimalFilter<"Production"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFilter<"Production"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Production"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Production"> | Date | string
@@ -301,7 +301,7 @@ export type ProductionScalarWhereWithAggregatesInput = {
   productId?: Prisma.StringWithAggregatesFilter<"Production"> | string
   phaseId?: Prisma.StringWithAggregatesFilter<"Production"> | string
   taux?: Prisma.FloatWithAggregatesFilter<"Production"> | number
-  mntProd?: Prisma.FloatWithAggregatesFilter<"Production"> | number
+  mntProd?: Prisma.DecimalWithAggregatesFilter<"Production"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeWithAggregatesFilter<"Production"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Production"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Production"> | Date | string
@@ -310,7 +310,7 @@ export type ProductionScalarWhereWithAggregatesInput = {
 export type ProductionCreateInput = {
   id?: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -323,7 +323,7 @@ export type ProductionUncheckedCreateInput = {
   productId: string
   phaseId: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -332,7 +332,7 @@ export type ProductionUncheckedCreateInput = {
 export type ProductionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -345,7 +345,7 @@ export type ProductionUncheckedUpdateInput = {
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   phaseId?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -356,7 +356,7 @@ export type ProductionCreateManyInput = {
   productId: string
   phaseId: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -365,7 +365,7 @@ export type ProductionCreateManyInput = {
 export type ProductionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -376,7 +376,7 @@ export type ProductionUncheckedUpdateManyInput = {
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   phaseId?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -522,7 +522,7 @@ export type ProductionUncheckedUpdateManyWithoutProductNestedInput = {
 export type ProductionCreateWithoutPhaseInput = {
   id?: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -533,7 +533,7 @@ export type ProductionUncheckedCreateWithoutPhaseInput = {
   id?: string
   productId: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -573,7 +573,7 @@ export type ProductionScalarWhereInput = {
   productId?: Prisma.StringFilter<"Production"> | string
   phaseId?: Prisma.StringFilter<"Production"> | string
   taux?: Prisma.FloatFilter<"Production"> | number
-  mntProd?: Prisma.FloatFilter<"Production"> | number
+  mntProd?: Prisma.DecimalFilter<"Production"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFilter<"Production"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Production"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Production"> | Date | string
@@ -582,7 +582,7 @@ export type ProductionScalarWhereInput = {
 export type ProductionCreateWithoutProductInput = {
   id?: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -593,7 +593,7 @@ export type ProductionUncheckedCreateWithoutProductInput = {
   id?: string
   phaseId: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -629,7 +629,7 @@ export type ProductionCreateManyPhaseInput = {
   id?: string
   productId: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -638,7 +638,7 @@ export type ProductionCreateManyPhaseInput = {
 export type ProductionUpdateWithoutPhaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -649,7 +649,7 @@ export type ProductionUncheckedUpdateWithoutPhaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -659,7 +659,7 @@ export type ProductionUncheckedUpdateManyWithoutPhaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -669,7 +669,7 @@ export type ProductionCreateManyProductInput = {
   id?: string
   phaseId: string
   taux: number
-  mntProd: number
+  mntProd: runtime.Decimal | runtime.DecimalJsLike | number | string
   date: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -678,7 +678,7 @@ export type ProductionCreateManyProductInput = {
 export type ProductionUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -689,7 +689,7 @@ export type ProductionUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phaseId?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -699,7 +699,7 @@ export type ProductionUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   phaseId?: Prisma.StringFieldUpdateOperationsInput | string
   taux?: Prisma.FloatFieldUpdateOperationsInput | number
-  mntProd?: Prisma.FloatFieldUpdateOperationsInput | number
+  mntProd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -782,7 +782,7 @@ export type $ProductionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     productId: string
     phaseId: string
     taux: number
-    mntProd: number
+    mntProd: runtime.Decimal
     date: Date
     createdAt: Date
     updatedAt: Date
@@ -1215,7 +1215,7 @@ export interface ProductionFieldRefs {
   readonly productId: Prisma.FieldRef<"Production", 'String'>
   readonly phaseId: Prisma.FieldRef<"Production", 'String'>
   readonly taux: Prisma.FieldRef<"Production", 'Float'>
-  readonly mntProd: Prisma.FieldRef<"Production", 'Float'>
+  readonly mntProd: Prisma.FieldRef<"Production", 'Decimal'>
   readonly date: Prisma.FieldRef<"Production", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Production", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Production", 'DateTime'>

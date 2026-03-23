@@ -174,7 +174,7 @@ export type UnitGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UnitGroupByOutputType = {
   id: string
   companyId: string
-  adminId: string
+  adminId: string | null
   name: string
   address: string
   phone: string
@@ -207,7 +207,7 @@ export type UnitWhereInput = {
   NOT?: Prisma.UnitWhereInput | Prisma.UnitWhereInput[]
   id?: Prisma.StringFilter<"Unit"> | string
   companyId?: Prisma.StringFilter<"Unit"> | string
-  adminId?: Prisma.StringFilter<"Unit"> | string
+  adminId?: Prisma.StringNullableFilter<"Unit"> | string | null
   name?: Prisma.StringFilter<"Unit"> | string
   address?: Prisma.StringFilter<"Unit"> | string
   phone?: Prisma.StringFilter<"Unit"> | string
@@ -215,6 +215,7 @@ export type UnitWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Unit"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Unit"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  admin?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   users?: Prisma.UserListRelationFilter
   invitations?: Prisma.InvitationListRelationFilter
   clients?: Prisma.ClientListRelationFilter
@@ -229,7 +230,7 @@ export type UnitWhereInput = {
 export type UnitOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
-  adminId?: Prisma.SortOrder
+  adminId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -237,6 +238,7 @@ export type UnitOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
+  admin?: Prisma.UserOrderByWithRelationInput
   users?: Prisma.UserOrderByRelationAggregateInput
   invitations?: Prisma.InvitationOrderByRelationAggregateInput
   clients?: Prisma.ClientOrderByRelationAggregateInput
@@ -254,7 +256,7 @@ export type UnitWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UnitWhereInput[]
   NOT?: Prisma.UnitWhereInput | Prisma.UnitWhereInput[]
   companyId?: Prisma.StringFilter<"Unit"> | string
-  adminId?: Prisma.StringFilter<"Unit"> | string
+  adminId?: Prisma.StringNullableFilter<"Unit"> | string | null
   name?: Prisma.StringFilter<"Unit"> | string
   address?: Prisma.StringFilter<"Unit"> | string
   phone?: Prisma.StringFilter<"Unit"> | string
@@ -262,6 +264,7 @@ export type UnitWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Unit"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Unit"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  admin?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   users?: Prisma.UserListRelationFilter
   invitations?: Prisma.InvitationListRelationFilter
   clients?: Prisma.ClientListRelationFilter
@@ -276,7 +279,7 @@ export type UnitWhereUniqueInput = Prisma.AtLeast<{
 export type UnitOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
-  adminId?: Prisma.SortOrder
+  adminId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
@@ -294,7 +297,7 @@ export type UnitScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UnitScalarWhereWithAggregatesInput | Prisma.UnitScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Unit"> | string
   companyId?: Prisma.StringWithAggregatesFilter<"Unit"> | string
-  adminId?: Prisma.StringWithAggregatesFilter<"Unit"> | string
+  adminId?: Prisma.StringNullableWithAggregatesFilter<"Unit"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Unit"> | string
   address?: Prisma.StringWithAggregatesFilter<"Unit"> | string
   phone?: Prisma.StringWithAggregatesFilter<"Unit"> | string
@@ -305,7 +308,6 @@ export type UnitScalarWhereWithAggregatesInput = {
 
 export type UnitCreateInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -313,6 +315,7 @@ export type UnitCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
@@ -327,7 +330,7 @@ export type UnitCreateInput = {
 export type UnitUncheckedCreateInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -347,7 +350,6 @@ export type UnitUncheckedCreateInput = {
 
 export type UnitUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -355,6 +357,7 @@ export type UnitUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
@@ -369,7 +372,7 @@ export type UnitUpdateInput = {
 export type UnitUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -390,7 +393,7 @@ export type UnitUncheckedUpdateInput = {
 export type UnitCreateManyInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -401,7 +404,6 @@ export type UnitCreateManyInput = {
 
 export type UnitUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -413,7 +415,7 @@ export type UnitUpdateManyMutationInput = {
 export type UnitUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -526,6 +528,20 @@ export type UnitCreateNestedOneWithoutUsersInput = {
   connect?: Prisma.UnitWhereUniqueInput
 }
 
+export type UnitCreateNestedManyWithoutAdminInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutAdminInput, Prisma.UnitUncheckedCreateWithoutAdminInput> | Prisma.UnitCreateWithoutAdminInput[] | Prisma.UnitUncheckedCreateWithoutAdminInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutAdminInput | Prisma.UnitCreateOrConnectWithoutAdminInput[]
+  createMany?: Prisma.UnitCreateManyAdminInputEnvelope
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+}
+
+export type UnitUncheckedCreateNestedManyWithoutAdminInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutAdminInput, Prisma.UnitUncheckedCreateWithoutAdminInput> | Prisma.UnitCreateWithoutAdminInput[] | Prisma.UnitUncheckedCreateWithoutAdminInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutAdminInput | Prisma.UnitCreateOrConnectWithoutAdminInput[]
+  createMany?: Prisma.UnitCreateManyAdminInputEnvelope
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+}
+
 export type UnitUpdateOneWithoutUsersNestedInput = {
   create?: Prisma.XOR<Prisma.UnitCreateWithoutUsersInput, Prisma.UnitUncheckedCreateWithoutUsersInput>
   connectOrCreate?: Prisma.UnitCreateOrConnectWithoutUsersInput
@@ -534,6 +550,34 @@ export type UnitUpdateOneWithoutUsersNestedInput = {
   delete?: Prisma.UnitWhereInput | boolean
   connect?: Prisma.UnitWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UnitUpdateToOneWithWhereWithoutUsersInput, Prisma.UnitUpdateWithoutUsersInput>, Prisma.UnitUncheckedUpdateWithoutUsersInput>
+}
+
+export type UnitUpdateManyWithoutAdminNestedInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutAdminInput, Prisma.UnitUncheckedCreateWithoutAdminInput> | Prisma.UnitCreateWithoutAdminInput[] | Prisma.UnitUncheckedCreateWithoutAdminInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutAdminInput | Prisma.UnitCreateOrConnectWithoutAdminInput[]
+  upsert?: Prisma.UnitUpsertWithWhereUniqueWithoutAdminInput | Prisma.UnitUpsertWithWhereUniqueWithoutAdminInput[]
+  createMany?: Prisma.UnitCreateManyAdminInputEnvelope
+  set?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  disconnect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  delete?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  update?: Prisma.UnitUpdateWithWhereUniqueWithoutAdminInput | Prisma.UnitUpdateWithWhereUniqueWithoutAdminInput[]
+  updateMany?: Prisma.UnitUpdateManyWithWhereWithoutAdminInput | Prisma.UnitUpdateManyWithWhereWithoutAdminInput[]
+  deleteMany?: Prisma.UnitScalarWhereInput | Prisma.UnitScalarWhereInput[]
+}
+
+export type UnitUncheckedUpdateManyWithoutAdminNestedInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutAdminInput, Prisma.UnitUncheckedCreateWithoutAdminInput> | Prisma.UnitCreateWithoutAdminInput[] | Prisma.UnitUncheckedCreateWithoutAdminInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutAdminInput | Prisma.UnitCreateOrConnectWithoutAdminInput[]
+  upsert?: Prisma.UnitUpsertWithWhereUniqueWithoutAdminInput | Prisma.UnitUpsertWithWhereUniqueWithoutAdminInput[]
+  createMany?: Prisma.UnitCreateManyAdminInputEnvelope
+  set?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  disconnect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  delete?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  update?: Prisma.UnitUpdateWithWhereUniqueWithoutAdminInput | Prisma.UnitUpdateWithWhereUniqueWithoutAdminInput[]
+  updateMany?: Prisma.UnitUpdateManyWithWhereWithoutAdminInput | Prisma.UnitUpdateManyWithWhereWithoutAdminInput[]
+  deleteMany?: Prisma.UnitScalarWhereInput | Prisma.UnitScalarWhereInput[]
 }
 
 export type UnitCreateNestedOneWithoutInvitationsInput = {
@@ -654,13 +698,13 @@ export type UnitUpdateOneWithoutActivityLogsNestedInput = {
 
 export type UnitCreateWithoutCompanyInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
   email: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
@@ -674,7 +718,7 @@ export type UnitCreateWithoutCompanyInput = {
 
 export type UnitUncheckedCreateWithoutCompanyInput = {
   id?: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -724,7 +768,7 @@ export type UnitScalarWhereInput = {
   NOT?: Prisma.UnitScalarWhereInput | Prisma.UnitScalarWhereInput[]
   id?: Prisma.StringFilter<"Unit"> | string
   companyId?: Prisma.StringFilter<"Unit"> | string
-  adminId?: Prisma.StringFilter<"Unit"> | string
+  adminId?: Prisma.StringNullableFilter<"Unit"> | string | null
   name?: Prisma.StringFilter<"Unit"> | string
   address?: Prisma.StringFilter<"Unit"> | string
   phone?: Prisma.StringFilter<"Unit"> | string
@@ -735,7 +779,6 @@ export type UnitScalarWhereInput = {
 
 export type UnitCreateWithoutUsersInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -743,6 +786,7 @@ export type UnitCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUnitInput
@@ -756,7 +800,7 @@ export type UnitCreateWithoutUsersInput = {
 export type UnitUncheckedCreateWithoutUsersInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -778,6 +822,56 @@ export type UnitCreateOrConnectWithoutUsersInput = {
   create: Prisma.XOR<Prisma.UnitCreateWithoutUsersInput, Prisma.UnitUncheckedCreateWithoutUsersInput>
 }
 
+export type UnitCreateWithoutAdminInput = {
+  id?: string
+  name: string
+  address: string
+  phone: string
+  email: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  users?: Prisma.UserCreateNestedManyWithoutUnitInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
+  clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUnitInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutUnitInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUnitInput
+  tags?: Prisma.TagCreateNestedManyWithoutUnitInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUnitInput
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUnitInput
+}
+
+export type UnitUncheckedCreateWithoutAdminInput = {
+  id?: string
+  companyId: string
+  name: string
+  address: string
+  phone: string
+  email: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutUnitInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutUnitInput
+  clients?: Prisma.ClientUncheckedCreateNestedManyWithoutUnitInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUnitInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutUnitInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUnitInput
+  tags?: Prisma.TagUncheckedCreateNestedManyWithoutUnitInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUnitInput
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUnitInput
+}
+
+export type UnitCreateOrConnectWithoutAdminInput = {
+  where: Prisma.UnitWhereUniqueInput
+  create: Prisma.XOR<Prisma.UnitCreateWithoutAdminInput, Prisma.UnitUncheckedCreateWithoutAdminInput>
+}
+
+export type UnitCreateManyAdminInputEnvelope = {
+  data: Prisma.UnitCreateManyAdminInput | Prisma.UnitCreateManyAdminInput[]
+  skipDuplicates?: boolean
+}
+
 export type UnitUpsertWithoutUsersInput = {
   update: Prisma.XOR<Prisma.UnitUpdateWithoutUsersInput, Prisma.UnitUncheckedUpdateWithoutUsersInput>
   create: Prisma.XOR<Prisma.UnitCreateWithoutUsersInput, Prisma.UnitUncheckedCreateWithoutUsersInput>
@@ -791,7 +885,6 @@ export type UnitUpdateToOneWithWhereWithoutUsersInput = {
 
 export type UnitUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -799,6 +892,7 @@ export type UnitUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUnitNestedInput
@@ -812,7 +906,7 @@ export type UnitUpdateWithoutUsersInput = {
 export type UnitUncheckedUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -829,9 +923,24 @@ export type UnitUncheckedUpdateWithoutUsersInput = {
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUnitNestedInput
 }
 
+export type UnitUpsertWithWhereUniqueWithoutAdminInput = {
+  where: Prisma.UnitWhereUniqueInput
+  update: Prisma.XOR<Prisma.UnitUpdateWithoutAdminInput, Prisma.UnitUncheckedUpdateWithoutAdminInput>
+  create: Prisma.XOR<Prisma.UnitCreateWithoutAdminInput, Prisma.UnitUncheckedCreateWithoutAdminInput>
+}
+
+export type UnitUpdateWithWhereUniqueWithoutAdminInput = {
+  where: Prisma.UnitWhereUniqueInput
+  data: Prisma.XOR<Prisma.UnitUpdateWithoutAdminInput, Prisma.UnitUncheckedUpdateWithoutAdminInput>
+}
+
+export type UnitUpdateManyWithWhereWithoutAdminInput = {
+  where: Prisma.UnitScalarWhereInput
+  data: Prisma.XOR<Prisma.UnitUpdateManyMutationInput, Prisma.UnitUncheckedUpdateManyWithoutAdminInput>
+}
+
 export type UnitCreateWithoutInvitationsInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -839,6 +948,7 @@ export type UnitCreateWithoutInvitationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUnitInput
@@ -852,7 +962,7 @@ export type UnitCreateWithoutInvitationsInput = {
 export type UnitUncheckedCreateWithoutInvitationsInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -887,7 +997,6 @@ export type UnitUpdateToOneWithWhereWithoutInvitationsInput = {
 
 export type UnitUpdateWithoutInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -895,6 +1004,7 @@ export type UnitUpdateWithoutInvitationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUnitNestedInput
@@ -908,7 +1018,7 @@ export type UnitUpdateWithoutInvitationsInput = {
 export type UnitUncheckedUpdateWithoutInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -927,7 +1037,6 @@ export type UnitUncheckedUpdateWithoutInvitationsInput = {
 
 export type UnitCreateWithoutClientsInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -935,6 +1044,7 @@ export type UnitCreateWithoutClientsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   projects?: Prisma.ProjectCreateNestedManyWithoutUnitInput
@@ -948,7 +1058,7 @@ export type UnitCreateWithoutClientsInput = {
 export type UnitUncheckedCreateWithoutClientsInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -983,7 +1093,6 @@ export type UnitUpdateToOneWithWhereWithoutClientsInput = {
 
 export type UnitUpdateWithoutClientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -991,6 +1100,7 @@ export type UnitUpdateWithoutClientsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutUnitNestedInput
@@ -1004,7 +1114,7 @@ export type UnitUpdateWithoutClientsInput = {
 export type UnitUncheckedUpdateWithoutClientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1023,7 +1133,6 @@ export type UnitUncheckedUpdateWithoutClientsInput = {
 
 export type UnitCreateWithoutProjectsInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -1031,6 +1140,7 @@ export type UnitCreateWithoutProjectsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
@@ -1044,7 +1154,7 @@ export type UnitCreateWithoutProjectsInput = {
 export type UnitUncheckedCreateWithoutProjectsInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -1079,7 +1189,6 @@ export type UnitUpdateToOneWithWhereWithoutProjectsInput = {
 
 export type UnitUpdateWithoutProjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1087,6 +1196,7 @@ export type UnitUpdateWithoutProjectsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
@@ -1100,7 +1210,7 @@ export type UnitUpdateWithoutProjectsInput = {
 export type UnitUncheckedUpdateWithoutProjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1119,7 +1229,6 @@ export type UnitUncheckedUpdateWithoutProjectsInput = {
 
 export type UnitCreateWithoutLanesInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -1127,6 +1236,7 @@ export type UnitCreateWithoutLanesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
@@ -1140,7 +1250,7 @@ export type UnitCreateWithoutLanesInput = {
 export type UnitUncheckedCreateWithoutLanesInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -1175,7 +1285,6 @@ export type UnitUpdateToOneWithWhereWithoutLanesInput = {
 
 export type UnitUpdateWithoutLanesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1183,6 +1292,7 @@ export type UnitUpdateWithoutLanesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
@@ -1196,7 +1306,7 @@ export type UnitUpdateWithoutLanesInput = {
 export type UnitUncheckedUpdateWithoutLanesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1215,7 +1325,6 @@ export type UnitUncheckedUpdateWithoutLanesInput = {
 
 export type UnitCreateWithoutTasksInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -1223,6 +1332,7 @@ export type UnitCreateWithoutTasksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
@@ -1236,7 +1346,7 @@ export type UnitCreateWithoutTasksInput = {
 export type UnitUncheckedCreateWithoutTasksInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -1271,7 +1381,6 @@ export type UnitUpdateToOneWithWhereWithoutTasksInput = {
 
 export type UnitUpdateWithoutTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1279,6 +1388,7 @@ export type UnitUpdateWithoutTasksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
@@ -1292,7 +1402,7 @@ export type UnitUpdateWithoutTasksInput = {
 export type UnitUncheckedUpdateWithoutTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1311,7 +1421,6 @@ export type UnitUncheckedUpdateWithoutTasksInput = {
 
 export type UnitCreateWithoutTagsInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -1319,6 +1428,7 @@ export type UnitCreateWithoutTagsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
@@ -1332,7 +1442,7 @@ export type UnitCreateWithoutTagsInput = {
 export type UnitUncheckedCreateWithoutTagsInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -1367,7 +1477,6 @@ export type UnitUpdateToOneWithWhereWithoutTagsInput = {
 
 export type UnitUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1375,6 +1484,7 @@ export type UnitUpdateWithoutTagsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
@@ -1388,7 +1498,7 @@ export type UnitUpdateWithoutTagsInput = {
 export type UnitUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1407,7 +1517,6 @@ export type UnitUncheckedUpdateWithoutTagsInput = {
 
 export type UnitCreateWithoutNotificationsInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -1415,6 +1524,7 @@ export type UnitCreateWithoutNotificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
@@ -1428,7 +1538,7 @@ export type UnitCreateWithoutNotificationsInput = {
 export type UnitUncheckedCreateWithoutNotificationsInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -1463,7 +1573,6 @@ export type UnitUpdateToOneWithWhereWithoutNotificationsInput = {
 
 export type UnitUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1471,6 +1580,7 @@ export type UnitUpdateWithoutNotificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
@@ -1484,7 +1594,7 @@ export type UnitUpdateWithoutNotificationsInput = {
 export type UnitUncheckedUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1503,7 +1613,6 @@ export type UnitUncheckedUpdateWithoutNotificationsInput = {
 
 export type UnitCreateWithoutActivityLogsInput = {
   id?: string
-  adminId: string
   name: string
   address: string
   phone: string
@@ -1511,6 +1620,7 @@ export type UnitCreateWithoutActivityLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutUnitsInput
+  admin?: Prisma.UserCreateNestedOneWithoutAdminOfUnitsInput
   users?: Prisma.UserCreateNestedManyWithoutUnitInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutUnitInput
   clients?: Prisma.ClientCreateNestedManyWithoutUnitInput
@@ -1524,7 +1634,7 @@ export type UnitCreateWithoutActivityLogsInput = {
 export type UnitUncheckedCreateWithoutActivityLogsInput = {
   id?: string
   companyId: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -1559,7 +1669,6 @@ export type UnitUpdateToOneWithWhereWithoutActivityLogsInput = {
 
 export type UnitUpdateWithoutActivityLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1567,6 +1676,7 @@ export type UnitUpdateWithoutActivityLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
@@ -1580,7 +1690,7 @@ export type UnitUpdateWithoutActivityLogsInput = {
 export type UnitUncheckedUpdateWithoutActivityLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1599,7 +1709,7 @@ export type UnitUncheckedUpdateWithoutActivityLogsInput = {
 
 export type UnitCreateManyCompanyInput = {
   id?: string
-  adminId: string
+  adminId?: string | null
   name: string
   address: string
   phone: string
@@ -1610,13 +1720,13 @@ export type UnitCreateManyCompanyInput = {
 
 export type UnitUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  admin?: Prisma.UserUpdateOneWithoutAdminOfUnitsNestedInput
   users?: Prisma.UserUpdateManyWithoutUnitNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
   clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
@@ -1630,7 +1740,7 @@ export type UnitUpdateWithoutCompanyInput = {
 
 export type UnitUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1650,7 +1760,69 @@ export type UnitUncheckedUpdateWithoutCompanyInput = {
 
 export type UnitUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adminId?: Prisma.StringFieldUpdateOperationsInput | string
+  adminId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UnitCreateManyAdminInput = {
+  id?: string
+  companyId: string
+  name: string
+  address: string
+  phone: string
+  email: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UnitUpdateWithoutAdminInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutUnitsNestedInput
+  users?: Prisma.UserUpdateManyWithoutUnitNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutUnitNestedInput
+  clients?: Prisma.ClientUpdateManyWithoutUnitNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUnitNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutUnitNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUnitNestedInput
+  tags?: Prisma.TagUpdateManyWithoutUnitNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUnitNestedInput
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutUnitNestedInput
+}
+
+export type UnitUncheckedUpdateWithoutAdminInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutUnitNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutUnitNestedInput
+  clients?: Prisma.ClientUncheckedUpdateManyWithoutUnitNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUnitNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutUnitNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUnitNestedInput
+  tags?: Prisma.TagUncheckedUpdateManyWithoutUnitNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUnitNestedInput
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUnitNestedInput
+}
+
+export type UnitUncheckedUpdateManyWithoutAdminInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   phone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1773,6 +1945,7 @@ export type UnitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.Unit$adminArgs<ExtArgs>
   users?: boolean | Prisma.Unit$usersArgs<ExtArgs>
   invitations?: boolean | Prisma.Unit$invitationsArgs<ExtArgs>
   clients?: boolean | Prisma.Unit$clientsArgs<ExtArgs>
@@ -1796,6 +1969,7 @@ export type UnitSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.Unit$adminArgs<ExtArgs>
 }, ExtArgs["result"]["unit"]>
 
 export type UnitSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1809,6 +1983,7 @@ export type UnitSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.Unit$adminArgs<ExtArgs>
 }, ExtArgs["result"]["unit"]>
 
 export type UnitSelectScalar = {
@@ -1826,6 +2001,7 @@ export type UnitSelectScalar = {
 export type UnitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "adminId" | "name" | "address" | "phone" | "email" | "createdAt" | "updatedAt", ExtArgs["result"]["unit"]>
 export type UnitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.Unit$adminArgs<ExtArgs>
   users?: boolean | Prisma.Unit$usersArgs<ExtArgs>
   invitations?: boolean | Prisma.Unit$invitationsArgs<ExtArgs>
   clients?: boolean | Prisma.Unit$clientsArgs<ExtArgs>
@@ -1839,15 +2015,18 @@ export type UnitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }
 export type UnitIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.Unit$adminArgs<ExtArgs>
 }
 export type UnitIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  admin?: boolean | Prisma.Unit$adminArgs<ExtArgs>
 }
 
 export type $UnitPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Unit"
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
+    admin: Prisma.$UserPayload<ExtArgs> | null
     users: Prisma.$UserPayload<ExtArgs>[]
     invitations: Prisma.$InvitationPayload<ExtArgs>[]
     clients: Prisma.$ClientPayload<ExtArgs>[]
@@ -1861,7 +2040,7 @@ export type $UnitPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     companyId: string
-    adminId: string
+    adminId: string | null
     name: string
     address: string
     phone: string
@@ -2263,6 +2442,7 @@ readonly fields: UnitFieldRefs;
 export interface Prisma__UnitClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  admin<T extends Prisma.Unit$adminArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Unit$adminArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.Unit$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Unit$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invitations<T extends Prisma.Unit$invitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Unit$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clients<T extends Prisma.Unit$clientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Unit$clientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2708,6 +2888,25 @@ export type UnitDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Units to delete.
    */
   limit?: number
+}
+
+/**
+ * Unit.admin
+ */
+export type Unit$adminArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

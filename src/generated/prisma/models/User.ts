@@ -216,12 +216,14 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   unit?: Prisma.XOR<Prisma.UnitNullableScalarRelationFilter, Prisma.UnitWhereInput> | null
+  adminOfUnits?: Prisma.UnitListRelationFilter
   teamMembers?: Prisma.TeamMemberListRelationFilter
   tasks?: Prisma.TaskListRelationFilter
   taskComments?: Prisma.TaskCommentListRelationFilter
   taskMentions?: Prisma.TaskMentionListRelationFilter
   timeEntries?: Prisma.TimeEntryListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  targetedNotifs?: Prisma.NotificationListRelationFilter
   activityLogs?: Prisma.ActivityLogListRelationFilter
 }
 
@@ -237,23 +239,25 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   unit?: Prisma.UnitOrderByWithRelationInput
+  adminOfUnits?: Prisma.UnitOrderByRelationAggregateInput
   teamMembers?: Prisma.TeamMemberOrderByRelationAggregateInput
   tasks?: Prisma.TaskOrderByRelationAggregateInput
   taskComments?: Prisma.TaskCommentOrderByRelationAggregateInput
   taskMentions?: Prisma.TaskMentionOrderByRelationAggregateInput
   timeEntries?: Prisma.TimeEntryOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  targetedNotifs?: Prisma.NotificationOrderByRelationAggregateInput
   activityLogs?: Prisma.ActivityLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   clerkId?: string
+  email?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
-  email?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   companyId?: Prisma.StringNullableFilter<"User"> | string | null
   unitId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -261,14 +265,16 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyNullableScalarRelationFilter, Prisma.CompanyWhereInput> | null
   unit?: Prisma.XOR<Prisma.UnitNullableScalarRelationFilter, Prisma.UnitWhereInput> | null
+  adminOfUnits?: Prisma.UnitListRelationFilter
   teamMembers?: Prisma.TeamMemberListRelationFilter
   tasks?: Prisma.TaskListRelationFilter
   taskComments?: Prisma.TaskCommentListRelationFilter
   taskMentions?: Prisma.TaskMentionListRelationFilter
   timeEntries?: Prisma.TimeEntryListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  targetedNotifs?: Prisma.NotificationListRelationFilter
   activityLogs?: Prisma.ActivityLogListRelationFilter
-}, "id" | "clerkId">
+}, "id" | "clerkId" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -310,12 +316,14 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -329,12 +337,14 @@ export type UserUncheckedCreateInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -348,12 +358,14 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -367,12 +379,14 @@ export type UserUncheckedUpdateInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -456,14 +470,14 @@ export type UserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
-}
-
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
+}
+
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
 }
 
 export type UserCreateNestedManyWithoutCompanyInput = {
@@ -512,6 +526,12 @@ export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
+export type UserCreateNestedOneWithoutAdminOfUnitsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdminOfUnitsInput, Prisma.UserUncheckedCreateWithoutAdminOfUnitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminOfUnitsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserCreateNestedManyWithoutUnitInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutUnitInput, Prisma.UserUncheckedCreateWithoutUnitInput> | Prisma.UserCreateWithoutUnitInput[] | Prisma.UserUncheckedCreateWithoutUnitInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutUnitInput | Prisma.UserCreateOrConnectWithoutUnitInput[]
@@ -524,6 +544,16 @@ export type UserUncheckedCreateNestedManyWithoutUnitInput = {
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutUnitInput | Prisma.UserCreateOrConnectWithoutUnitInput[]
   createMany?: Prisma.UserCreateManyUnitInputEnvelope
   connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateOneWithoutAdminOfUnitsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdminOfUnitsInput, Prisma.UserUncheckedCreateWithoutAdminOfUnitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminOfUnitsInput
+  upsert?: Prisma.UserUpsertWithoutAdminOfUnitsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAdminOfUnitsInput, Prisma.UserUpdateWithoutAdminOfUnitsInput>, Prisma.UserUncheckedUpdateWithoutAdminOfUnitsInput>
 }
 
 export type UserUpdateManyWithoutUnitNestedInput = {
@@ -632,6 +662,12 @@ export type UserCreateNestedOneWithoutNotificationsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutTargetedNotifsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTargetedNotifsInput, Prisma.UserUncheckedCreateWithoutTargetedNotifsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTargetedNotifsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneWithoutNotificationsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
@@ -640,6 +676,16 @@ export type UserUpdateOneWithoutNotificationsNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateOneWithoutTargetedNotifsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTargetedNotifsInput, Prisma.UserUncheckedCreateWithoutTargetedNotifsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTargetedNotifsInput
+  upsert?: Prisma.UserUpsertWithoutTargetedNotifsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTargetedNotifsInput, Prisma.UserUpdateWithoutTargetedNotifsInput>, Prisma.UserUncheckedUpdateWithoutTargetedNotifsInput>
 }
 
 export type UserCreateNestedOneWithoutActivityLogsInput = {
@@ -665,12 +711,14 @@ export type UserCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -683,12 +731,14 @@ export type UserUncheckedCreateWithoutCompanyInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -733,6 +783,51 @@ export type UserScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
+export type UserCreateWithoutAdminOfUnitsInput = {
+  id?: string
+  clerkId: string
+  name: string
+  email: string
+  role: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
+  taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
+  taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAdminOfUnitsInput = {
+  id?: string
+  clerkId: string
+  name: string
+  email: string
+  role: $Enums.Role
+  companyId?: string | null
+  unitId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
+  taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAdminOfUnitsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdminOfUnitsInput, Prisma.UserUncheckedCreateWithoutAdminOfUnitsInput>
+}
+
 export type UserCreateWithoutUnitInput = {
   id?: string
   clerkId: string
@@ -742,12 +837,14 @@ export type UserCreateWithoutUnitInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -760,12 +857,14 @@ export type UserUncheckedCreateWithoutUnitInput = {
   companyId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -777,6 +876,57 @@ export type UserCreateOrConnectWithoutUnitInput = {
 export type UserCreateManyUnitInputEnvelope = {
   data: Prisma.UserCreateManyUnitInput | Prisma.UserCreateManyUnitInput[]
   skipDuplicates?: boolean
+}
+
+export type UserUpsertWithoutAdminOfUnitsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAdminOfUnitsInput, Prisma.UserUncheckedUpdateWithoutAdminOfUnitsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdminOfUnitsInput, Prisma.UserUncheckedCreateWithoutAdminOfUnitsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAdminOfUnitsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAdminOfUnitsInput, Prisma.UserUncheckedUpdateWithoutAdminOfUnitsInput>
+}
+
+export type UserUpdateWithoutAdminOfUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
+  taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
+  taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAdminOfUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
+  taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutUnitInput = {
@@ -805,11 +955,13 @@ export type UserCreateWithoutTeamMembersInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -823,11 +975,13 @@ export type UserUncheckedCreateWithoutTeamMembersInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -857,11 +1011,13 @@ export type UserUpdateWithoutTeamMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -875,11 +1031,13 @@ export type UserUncheckedUpdateWithoutTeamMembersInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -893,11 +1051,13 @@ export type UserCreateWithoutTasksInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -911,11 +1071,13 @@ export type UserUncheckedCreateWithoutTasksInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -945,11 +1107,13 @@ export type UserUpdateWithoutTasksInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -963,11 +1127,13 @@ export type UserUncheckedUpdateWithoutTasksInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -981,11 +1147,13 @@ export type UserCreateWithoutTaskCommentsInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -999,11 +1167,13 @@ export type UserUncheckedCreateWithoutTaskCommentsInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1033,11 +1203,13 @@ export type UserUpdateWithoutTaskCommentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1051,11 +1223,13 @@ export type UserUncheckedUpdateWithoutTaskCommentsInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1069,11 +1243,13 @@ export type UserCreateWithoutTaskMentionsInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -1087,11 +1263,13 @@ export type UserUncheckedCreateWithoutTaskMentionsInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1121,11 +1299,13 @@ export type UserUpdateWithoutTaskMentionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1139,11 +1319,13 @@ export type UserUncheckedUpdateWithoutTaskMentionsInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1157,11 +1339,13 @@ export type UserCreateWithoutTimeEntriesInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -1175,11 +1359,13 @@ export type UserUncheckedCreateWithoutTimeEntriesInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1209,11 +1395,13 @@ export type UserUpdateWithoutTimeEntriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1227,11 +1415,13 @@ export type UserUncheckedUpdateWithoutTimeEntriesInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1245,11 +1435,13 @@ export type UserCreateWithoutNotificationsInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
 }
 
@@ -1263,17 +1455,64 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserCreateWithoutTargetedNotifsInput = {
+  id?: string
+  clerkId: string
+  name: string
+  email: string
+  role: $Enums.Role
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
+  unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
+  teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
+  taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
+  taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTargetedNotifsInput = {
+  id?: string
+  clerkId: string
+  name: string
+  email: string
+  role: $Enums.Role
+  companyId?: string | null
+  unitId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
+  teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
+  taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
+  taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTargetedNotifsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTargetedNotifsInput, Prisma.UserUncheckedCreateWithoutTargetedNotifsInput>
 }
 
 export type UserUpsertWithoutNotificationsInput = {
@@ -1297,11 +1536,13 @@ export type UserUpdateWithoutNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1315,11 +1556,64 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutTargetedNotifsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTargetedNotifsInput, Prisma.UserUncheckedUpdateWithoutTargetedNotifsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTargetedNotifsInput, Prisma.UserUncheckedCreateWithoutTargetedNotifsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTargetedNotifsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTargetedNotifsInput, Prisma.UserUncheckedUpdateWithoutTargetedNotifsInput>
+}
+
+export type UserUpdateWithoutTargetedNotifsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
+  teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
+  taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
+  taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTargetedNotifsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
+  teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
+  taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1333,12 +1627,14 @@ export type UserCreateWithoutActivityLogsInput = {
   updatedAt?: Date | string
   company?: Prisma.CompanyCreateNestedOneWithoutUsersInput
   unit?: Prisma.UnitCreateNestedOneWithoutUsersInput
+  adminOfUnits?: Prisma.UnitCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserUncheckedCreateWithoutActivityLogsInput = {
@@ -1351,12 +1647,14 @@ export type UserUncheckedCreateWithoutActivityLogsInput = {
   unitId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminOfUnits?: Prisma.UnitUncheckedCreateNestedManyWithoutAdminInput
   teamMembers?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedUserInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutAuthorInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutMentionedUserInput
   timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  targetedNotifs?: Prisma.NotificationUncheckedCreateNestedManyWithoutTargetUserInput
 }
 
 export type UserCreateOrConnectWithoutActivityLogsInput = {
@@ -1385,12 +1683,14 @@ export type UserUpdateWithoutActivityLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActivityLogsInput = {
@@ -1403,12 +1703,14 @@ export type UserUncheckedUpdateWithoutActivityLogsInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
 }
 
 export type UserCreateManyCompanyInput = {
@@ -1431,12 +1733,14 @@ export type UserUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1449,12 +1753,14 @@ export type UserUncheckedUpdateWithoutCompanyInput = {
   unitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1489,12 +1795,14 @@ export type UserUpdateWithoutUnitInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneWithoutUsersNestedInput
+  adminOfUnits?: Prisma.UnitUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1507,12 +1815,14 @@ export type UserUncheckedUpdateWithoutUnitInput = {
   companyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminOfUnits?: Prisma.UnitUncheckedUpdateManyWithoutAdminNestedInput
   teamMembers?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   tasks?: Prisma.TaskUncheckedUpdateManyWithoutAssignedUserNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutAuthorNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutMentionedUserNestedInput
   timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  targetedNotifs?: Prisma.NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1533,22 +1843,26 @@ export type UserUncheckedUpdateManyWithoutUnitInput = {
  */
 
 export type UserCountOutputType = {
+  adminOfUnits: number
   teamMembers: number
   tasks: number
   taskComments: number
   taskMentions: number
   timeEntries: number
   notifications: number
+  targetedNotifs: number
   activityLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  adminOfUnits?: boolean | UserCountOutputTypeCountAdminOfUnitsArgs
   teamMembers?: boolean | UserCountOutputTypeCountTeamMembersArgs
   tasks?: boolean | UserCountOutputTypeCountTasksArgs
   taskComments?: boolean | UserCountOutputTypeCountTaskCommentsArgs
   taskMentions?: boolean | UserCountOutputTypeCountTaskMentionsArgs
   timeEntries?: boolean | UserCountOutputTypeCountTimeEntriesArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  targetedNotifs?: boolean | UserCountOutputTypeCountTargetedNotifsArgs
   activityLogs?: boolean | UserCountOutputTypeCountActivityLogsArgs
 }
 
@@ -1560,6 +1874,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAdminOfUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UnitWhereInput
 }
 
 /**
@@ -1607,6 +1928,13 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountTargetedNotifsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountActivityLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ActivityLogWhereInput
 }
@@ -1624,12 +1952,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   company?: boolean | Prisma.User$companyArgs<ExtArgs>
   unit?: boolean | Prisma.User$unitArgs<ExtArgs>
+  adminOfUnits?: boolean | Prisma.User$adminOfUnitsArgs<ExtArgs>
   teamMembers?: boolean | Prisma.User$teamMembersArgs<ExtArgs>
   tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>
   taskComments?: boolean | Prisma.User$taskCommentsArgs<ExtArgs>
   taskMentions?: boolean | Prisma.User$taskMentionsArgs<ExtArgs>
   timeEntries?: boolean | Prisma.User$timeEntriesArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  targetedNotifs?: boolean | Prisma.User$targetedNotifsArgs<ExtArgs>
   activityLogs?: boolean | Prisma.User$activityLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1678,12 +2008,14 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.User$companyArgs<ExtArgs>
   unit?: boolean | Prisma.User$unitArgs<ExtArgs>
+  adminOfUnits?: boolean | Prisma.User$adminOfUnitsArgs<ExtArgs>
   teamMembers?: boolean | Prisma.User$teamMembersArgs<ExtArgs>
   tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>
   taskComments?: boolean | Prisma.User$taskCommentsArgs<ExtArgs>
   taskMentions?: boolean | Prisma.User$taskMentionsArgs<ExtArgs>
   timeEntries?: boolean | Prisma.User$timeEntriesArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  targetedNotifs?: boolean | Prisma.User$targetedNotifsArgs<ExtArgs>
   activityLogs?: boolean | Prisma.User$activityLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1701,12 +2033,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs> | null
     unit: Prisma.$UnitPayload<ExtArgs> | null
+    adminOfUnits: Prisma.$UnitPayload<ExtArgs>[]
     teamMembers: Prisma.$TeamMemberPayload<ExtArgs>[]
     tasks: Prisma.$TaskPayload<ExtArgs>[]
     taskComments: Prisma.$TaskCommentPayload<ExtArgs>[]
     taskMentions: Prisma.$TaskMentionPayload<ExtArgs>[]
     timeEntries: Prisma.$TimeEntryPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    targetedNotifs: Prisma.$NotificationPayload<ExtArgs>[]
     activityLogs: Prisma.$ActivityLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2115,12 +2449,14 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.User$companyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$companyArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   unit<T extends Prisma.User$unitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$unitArgs<ExtArgs>>): Prisma.Prisma__UnitClient<runtime.Types.Result.GetResult<Prisma.$UnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  adminOfUnits<T extends Prisma.User$adminOfUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adminOfUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   teamMembers<T extends Prisma.User$teamMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$teamMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tasks<T extends Prisma.User$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   taskComments<T extends Prisma.User$taskCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$taskCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   taskMentions<T extends Prisma.User$taskMentionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$taskMentionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskMentionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   timeEntries<T extends Prisma.User$timeEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$timeEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimeEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  targetedNotifs<T extends Prisma.User$targetedNotifsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$targetedNotifsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activityLogs<T extends Prisma.User$activityLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2599,6 +2935,30 @@ export type User$unitArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 }
 
 /**
+ * User.adminOfUnits
+ */
+export type User$adminOfUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Unit
+   */
+  select?: Prisma.UnitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Unit
+   */
+  omit?: Prisma.UnitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UnitInclude<ExtArgs> | null
+  where?: Prisma.UnitWhereInput
+  orderBy?: Prisma.UnitOrderByWithRelationInput | Prisma.UnitOrderByWithRelationInput[]
+  cursor?: Prisma.UnitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UnitScalarFieldEnum | Prisma.UnitScalarFieldEnum[]
+}
+
+/**
  * User.teamMembers
  */
 export type User$teamMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2722,6 +3082,30 @@ export type User$timeEntriesArgs<ExtArgs extends runtime.Types.Extensions.Intern
  * User.notifications
  */
 export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.targetedNotifs
+ */
+export type User$targetedNotifsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Notification
    */

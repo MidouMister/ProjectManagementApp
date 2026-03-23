@@ -31,7 +31,7 @@ export type PlanAvgAggregateOutputType = {
   maxProjects: number | null
   maxTasksPerProject: number | null
   maxMembers: number | null
-  priceDA: number | null
+  priceDA: runtime.Decimal | null
 }
 
 export type PlanSumAggregateOutputType = {
@@ -39,7 +39,7 @@ export type PlanSumAggregateOutputType = {
   maxProjects: number | null
   maxTasksPerProject: number | null
   maxMembers: number | null
-  priceDA: number | null
+  priceDA: runtime.Decimal | null
 }
 
 export type PlanMinAggregateOutputType = {
@@ -49,7 +49,7 @@ export type PlanMinAggregateOutputType = {
   maxProjects: number | null
   maxTasksPerProject: number | null
   maxMembers: number | null
-  priceDA: number | null
+  priceDA: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -61,7 +61,7 @@ export type PlanMaxAggregateOutputType = {
   maxProjects: number | null
   maxTasksPerProject: number | null
   maxMembers: number | null
-  priceDA: number | null
+  priceDA: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -226,7 +226,7 @@ export type PlanGroupByOutputType = {
   maxProjects: number | null
   maxTasksPerProject: number | null
   maxMembers: number | null
-  priceDA: number
+  priceDA: runtime.Decimal
   createdAt: Date
   updatedAt: Date
   _count: PlanCountAggregateOutputType | null
@@ -261,7 +261,7 @@ export type PlanWhereInput = {
   maxProjects?: Prisma.IntNullableFilter<"Plan"> | number | null
   maxTasksPerProject?: Prisma.IntNullableFilter<"Plan"> | number | null
   maxMembers?: Prisma.IntNullableFilter<"Plan"> | number | null
-  priceDA?: Prisma.FloatFilter<"Plan"> | number
+  priceDA?: Prisma.DecimalFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   subscriptions?: Prisma.SubscriptionListRelationFilter
@@ -282,19 +282,19 @@ export type PlanOrderByWithRelationInput = {
 
 export type PlanWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  name?: string
   AND?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
   OR?: Prisma.PlanWhereInput[]
   NOT?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
-  name?: Prisma.StringFilter<"Plan"> | string
   maxUnits?: Prisma.IntNullableFilter<"Plan"> | number | null
   maxProjects?: Prisma.IntNullableFilter<"Plan"> | number | null
   maxTasksPerProject?: Prisma.IntNullableFilter<"Plan"> | number | null
   maxMembers?: Prisma.IntNullableFilter<"Plan"> | number | null
-  priceDA?: Prisma.FloatFilter<"Plan"> | number
+  priceDA?: Prisma.DecimalFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   subscriptions?: Prisma.SubscriptionListRelationFilter
-}, "id">
+}, "id" | "name">
 
 export type PlanOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -323,7 +323,7 @@ export type PlanScalarWhereWithAggregatesInput = {
   maxProjects?: Prisma.IntNullableWithAggregatesFilter<"Plan"> | number | null
   maxTasksPerProject?: Prisma.IntNullableWithAggregatesFilter<"Plan"> | number | null
   maxMembers?: Prisma.IntNullableWithAggregatesFilter<"Plan"> | number | null
-  priceDA?: Prisma.FloatWithAggregatesFilter<"Plan"> | number
+  priceDA?: Prisma.DecimalWithAggregatesFilter<"Plan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
 }
@@ -335,7 +335,7 @@ export type PlanCreateInput = {
   maxProjects?: number | null
   maxTasksPerProject?: number | null
   maxMembers?: number | null
-  priceDA: number
+  priceDA: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutPlanInput
@@ -348,7 +348,7 @@ export type PlanUncheckedCreateInput = {
   maxProjects?: number | null
   maxTasksPerProject?: number | null
   maxMembers?: number | null
-  priceDA: number
+  priceDA: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutPlanInput
@@ -361,7 +361,7 @@ export type PlanUpdateInput = {
   maxProjects?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxTasksPerProject?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  priceDA?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceDA?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutPlanNestedInput
@@ -374,7 +374,7 @@ export type PlanUncheckedUpdateInput = {
   maxProjects?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxTasksPerProject?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  priceDA?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceDA?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutPlanNestedInput
@@ -387,7 +387,7 @@ export type PlanCreateManyInput = {
   maxProjects?: number | null
   maxTasksPerProject?: number | null
   maxMembers?: number | null
-  priceDA: number
+  priceDA: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -399,7 +399,7 @@ export type PlanUpdateManyMutationInput = {
   maxProjects?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxTasksPerProject?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  priceDA?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceDA?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -411,7 +411,7 @@ export type PlanUncheckedUpdateManyInput = {
   maxProjects?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxTasksPerProject?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  priceDA?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceDA?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -485,12 +485,12 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -518,7 +518,7 @@ export type PlanCreateWithoutSubscriptionsInput = {
   maxProjects?: number | null
   maxTasksPerProject?: number | null
   maxMembers?: number | null
-  priceDA: number
+  priceDA: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -530,7 +530,7 @@ export type PlanUncheckedCreateWithoutSubscriptionsInput = {
   maxProjects?: number | null
   maxTasksPerProject?: number | null
   maxMembers?: number | null
-  priceDA: number
+  priceDA: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -558,7 +558,7 @@ export type PlanUpdateWithoutSubscriptionsInput = {
   maxProjects?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxTasksPerProject?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  priceDA?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceDA?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -570,7 +570,7 @@ export type PlanUncheckedUpdateWithoutSubscriptionsInput = {
   maxProjects?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxTasksPerProject?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxMembers?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  priceDA?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceDA?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -676,7 +676,7 @@ export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     maxProjects: number | null
     maxTasksPerProject: number | null
     maxMembers: number | null
-    priceDA: number
+    priceDA: runtime.Decimal
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["plan"]>
@@ -1109,7 +1109,7 @@ export interface PlanFieldRefs {
   readonly maxProjects: Prisma.FieldRef<"Plan", 'Int'>
   readonly maxTasksPerProject: Prisma.FieldRef<"Plan", 'Int'>
   readonly maxMembers: Prisma.FieldRef<"Plan", 'Int'>
-  readonly priceDA: Prisma.FieldRef<"Plan", 'Float'>
+  readonly priceDA: Prisma.FieldRef<"Plan", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"Plan", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Plan", 'DateTime'>
 }

@@ -316,6 +316,9 @@ export type CompanyWhereInput = {
   units?: Prisma.UnitListRelationFilter
   users?: Prisma.UserListRelationFilter
   invitations?: Prisma.InvitationListRelationFilter
+  lanes?: Prisma.LaneListRelationFilter
+  tasks?: Prisma.TaskListRelationFilter
+  timeEntries?: Prisma.TimeEntryListRelationFilter
   taskComments?: Prisma.TaskCommentListRelationFilter
   taskMentions?: Prisma.TaskMentionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
@@ -344,6 +347,9 @@ export type CompanyOrderByWithRelationInput = {
   units?: Prisma.UnitOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
   invitations?: Prisma.InvitationOrderByRelationAggregateInput
+  lanes?: Prisma.LaneOrderByRelationAggregateInput
+  tasks?: Prisma.TaskOrderByRelationAggregateInput
+  timeEntries?: Prisma.TimeEntryOrderByRelationAggregateInput
   taskComments?: Prisma.TaskCommentOrderByRelationAggregateInput
   taskMentions?: Prisma.TaskMentionOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
@@ -353,21 +359,21 @@ export type CompanyOrderByWithRelationInput = {
 export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   ownerId?: string
+  NIF?: string
+  RC?: string
+  NIS?: string
+  AI?: string
+  email?: string
   AND?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   OR?: Prisma.CompanyWhereInput[]
   NOT?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   name?: Prisma.StringFilter<"Company"> | string
   logo?: Prisma.StringNullableFilter<"Company"> | string | null
-  NIF?: Prisma.StringFilter<"Company"> | string
-  RC?: Prisma.StringFilter<"Company"> | string
-  NIS?: Prisma.StringNullableFilter<"Company"> | string | null
-  AI?: Prisma.StringNullableFilter<"Company"> | string | null
   formJur?: Prisma.StringFilter<"Company"> | string
   sector?: Prisma.StringFilter<"Company"> | string
   wilaya?: Prisma.StringFilter<"Company"> | string
   address?: Prisma.StringFilter<"Company"> | string
   phone?: Prisma.StringFilter<"Company"> | string
-  email?: Prisma.StringFilter<"Company"> | string
   productionAlertThreshold?: Prisma.FloatFilter<"Company"> | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -375,11 +381,14 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   units?: Prisma.UnitListRelationFilter
   users?: Prisma.UserListRelationFilter
   invitations?: Prisma.InvitationListRelationFilter
+  lanes?: Prisma.LaneListRelationFilter
+  tasks?: Prisma.TaskListRelationFilter
+  timeEntries?: Prisma.TimeEntryListRelationFilter
   taskComments?: Prisma.TaskCommentListRelationFilter
   taskMentions?: Prisma.TaskMentionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   activityLogs?: Prisma.ActivityLogListRelationFilter
-}, "id" | "ownerId">
+}, "id" | "ownerId" | "NIF" | "RC" | "NIS" | "AI" | "email">
 
 export type CompanyOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -451,6 +460,9 @@ export type CompanyCreateInput = {
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
@@ -479,6 +491,9 @@ export type CompanyUncheckedCreateInput = {
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
@@ -507,6 +522,9 @@ export type CompanyUpdateInput = {
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
@@ -535,6 +553,9 @@ export type CompanyUncheckedUpdateInput = {
   units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
@@ -683,6 +704,14 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type CompanyCreateNestedOneWithoutSubscriptionInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutSubscriptionInput, Prisma.CompanyUncheckedCreateWithoutSubscriptionInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutSubscriptionInput
@@ -741,6 +770,34 @@ export type CompanyUpdateOneRequiredWithoutInvitationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutInvitationsInput, Prisma.CompanyUpdateWithoutInvitationsInput>, Prisma.CompanyUncheckedUpdateWithoutInvitationsInput>
 }
 
+export type CompanyCreateNestedOneWithoutLanesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutLanesInput, Prisma.CompanyUncheckedCreateWithoutLanesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutLanesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutLanesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutLanesInput, Prisma.CompanyUncheckedCreateWithoutLanesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutLanesInput
+  upsert?: Prisma.CompanyUpsertWithoutLanesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutLanesInput, Prisma.CompanyUpdateWithoutLanesInput>, Prisma.CompanyUncheckedUpdateWithoutLanesInput>
+}
+
+export type CompanyCreateNestedOneWithoutTasksInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutTasksInput, Prisma.CompanyUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutTasksInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutTasksNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutTasksInput, Prisma.CompanyUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutTasksInput
+  upsert?: Prisma.CompanyUpsertWithoutTasksInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutTasksInput, Prisma.CompanyUpdateWithoutTasksInput>, Prisma.CompanyUncheckedUpdateWithoutTasksInput>
+}
+
 export type CompanyCreateNestedOneWithoutTaskCommentsInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutTaskCommentsInput, Prisma.CompanyUncheckedCreateWithoutTaskCommentsInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutTaskCommentsInput
@@ -767,6 +824,20 @@ export type CompanyUpdateOneRequiredWithoutTaskMentionsNestedInput = {
   upsert?: Prisma.CompanyUpsertWithoutTaskMentionsInput
   connect?: Prisma.CompanyWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutTaskMentionsInput, Prisma.CompanyUpdateWithoutTaskMentionsInput>, Prisma.CompanyUncheckedUpdateWithoutTaskMentionsInput>
+}
+
+export type CompanyCreateNestedOneWithoutTimeEntriesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutTimeEntriesInput, Prisma.CompanyUncheckedCreateWithoutTimeEntriesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutTimeEntriesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutTimeEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutTimeEntriesInput, Prisma.CompanyUncheckedCreateWithoutTimeEntriesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutTimeEntriesInput
+  upsert?: Prisma.CompanyUpsertWithoutTimeEntriesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutTimeEntriesInput, Prisma.CompanyUpdateWithoutTimeEntriesInput>, Prisma.CompanyUncheckedUpdateWithoutTimeEntriesInput>
 }
 
 export type CompanyCreateNestedOneWithoutNotificationsInput = {
@@ -818,6 +889,9 @@ export type CompanyCreateWithoutSubscriptionInput = {
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
@@ -845,6 +919,9 @@ export type CompanyUncheckedCreateWithoutSubscriptionInput = {
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
@@ -888,6 +965,9 @@ export type CompanyUpdateWithoutSubscriptionInput = {
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
@@ -915,6 +995,9 @@ export type CompanyUncheckedUpdateWithoutSubscriptionInput = {
   units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
@@ -942,6 +1025,9 @@ export type CompanyCreateWithoutUsersInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
@@ -969,6 +1055,9 @@ export type CompanyUncheckedCreateWithoutUsersInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
@@ -1012,6 +1101,9 @@ export type CompanyUpdateWithoutUsersInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
@@ -1039,6 +1131,9 @@ export type CompanyUncheckedUpdateWithoutUsersInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1066,6 +1161,9 @@ export type CompanyCreateWithoutUnitsInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
@@ -1093,6 +1191,9 @@ export type CompanyUncheckedCreateWithoutUnitsInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutCompanyInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
@@ -1136,6 +1237,9 @@ export type CompanyUpdateWithoutUnitsInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
@@ -1163,6 +1267,9 @@ export type CompanyUncheckedUpdateWithoutUnitsInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutCompanyNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1190,6 +1297,9 @@ export type CompanyCreateWithoutInvitationsInput = {
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
@@ -1217,6 +1327,9 @@ export type CompanyUncheckedCreateWithoutInvitationsInput = {
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
@@ -1260,6 +1373,9 @@ export type CompanyUpdateWithoutInvitationsInput = {
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
@@ -1287,6 +1403,281 @@ export type CompanyUncheckedUpdateWithoutInvitationsInput = {
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
+  taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutLanesInput = {
+  id?: string
+  name: string
+  ownerId: string
+  logo?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+  productionAlertThreshold?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
+  units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
+  taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
+  taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutLanesInput = {
+  id?: string
+  name: string
+  ownerId: string
+  logo?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+  productionAlertThreshold?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutCompanyInput
+  units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
+  taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
+  taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutLanesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutLanesInput, Prisma.CompanyUncheckedCreateWithoutLanesInput>
+}
+
+export type CompanyUpsertWithoutLanesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutLanesInput, Prisma.CompanyUncheckedUpdateWithoutLanesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutLanesInput, Prisma.CompanyUncheckedCreateWithoutLanesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutLanesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutLanesInput, Prisma.CompanyUncheckedUpdateWithoutLanesInput>
+}
+
+export type CompanyUpdateWithoutLanesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
+  units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
+  taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
+  taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutLanesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutCompanyNestedInput
+  units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
+  taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutTasksInput = {
+  id?: string
+  name: string
+  ownerId: string
+  logo?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+  productionAlertThreshold?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
+  units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
+  taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
+  taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutTasksInput = {
+  id?: string
+  name: string
+  ownerId: string
+  logo?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+  productionAlertThreshold?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutCompanyInput
+  units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
+  taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
+  taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutTasksInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutTasksInput, Prisma.CompanyUncheckedCreateWithoutTasksInput>
+}
+
+export type CompanyUpsertWithoutTasksInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutTasksInput, Prisma.CompanyUncheckedUpdateWithoutTasksInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutTasksInput, Prisma.CompanyUncheckedCreateWithoutTasksInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutTasksInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutTasksInput, Prisma.CompanyUncheckedUpdateWithoutTasksInput>
+}
+
+export type CompanyUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
+  units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
+  taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
+  taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutCompanyNestedInput
+  units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1315,6 +1706,9 @@ export type CompanyCreateWithoutTaskCommentsInput = {
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutCompanyInput
@@ -1342,6 +1736,9 @@ export type CompanyUncheckedCreateWithoutTaskCommentsInput = {
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutCompanyInput
@@ -1385,6 +1782,9 @@ export type CompanyUpdateWithoutTaskCommentsInput = {
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutCompanyNestedInput
@@ -1412,6 +1812,9 @@ export type CompanyUncheckedUpdateWithoutTaskCommentsInput = {
   units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1439,6 +1842,9 @@ export type CompanyCreateWithoutTaskMentionsInput = {
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutCompanyInput
@@ -1466,6 +1872,9 @@ export type CompanyUncheckedCreateWithoutTaskMentionsInput = {
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutCompanyInput
@@ -1509,6 +1918,9 @@ export type CompanyUpdateWithoutTaskMentionsInput = {
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutCompanyNestedInput
@@ -1536,7 +1948,146 @@ export type CompanyUncheckedUpdateWithoutTaskMentionsInput = {
   units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutTimeEntriesInput = {
+  id?: string
+  name: string
+  ownerId: string
+  logo?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+  productionAlertThreshold?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
+  units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
+  taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutTimeEntriesInput = {
+  id?: string
+  name: string
+  ownerId: string
+  logo?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+  productionAlertThreshold?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutCompanyInput
+  units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
+  taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutTimeEntriesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutTimeEntriesInput, Prisma.CompanyUncheckedCreateWithoutTimeEntriesInput>
+}
+
+export type CompanyUpsertWithoutTimeEntriesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutTimeEntriesInput, Prisma.CompanyUncheckedUpdateWithoutTimeEntriesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutTimeEntriesInput, Prisma.CompanyUncheckedCreateWithoutTimeEntriesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutTimeEntriesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutTimeEntriesInput, Prisma.CompanyUncheckedUpdateWithoutTimeEntriesInput>
+}
+
+export type CompanyUpdateWithoutTimeEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
+  units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
+  taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutTimeEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutCompanyNestedInput
+  units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
+  taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutCompanyNestedInput
 }
@@ -1563,6 +2114,9 @@ export type CompanyCreateWithoutNotificationsInput = {
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
   activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutCompanyInput
@@ -1590,6 +2144,9 @@ export type CompanyUncheckedCreateWithoutNotificationsInput = {
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
   activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutCompanyInput
@@ -1633,6 +2190,9 @@ export type CompanyUpdateWithoutNotificationsInput = {
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
   activityLogs?: Prisma.ActivityLogUpdateManyWithoutCompanyNestedInput
@@ -1660,6 +2220,9 @@ export type CompanyUncheckedUpdateWithoutNotificationsInput = {
   units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1687,6 +2250,9 @@ export type CompanyCreateWithoutActivityLogsInput = {
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
@@ -1714,6 +2280,9 @@ export type CompanyUncheckedCreateWithoutActivityLogsInput = {
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
   taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
   taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
@@ -1757,6 +2326,9 @@ export type CompanyUpdateWithoutActivityLogsInput = {
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
@@ -1784,6 +2356,9 @@ export type CompanyUncheckedUpdateWithoutActivityLogsInput = {
   units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
   taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
   taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1798,6 +2373,9 @@ export type CompanyCountOutputType = {
   units: number
   users: number
   invitations: number
+  lanes: number
+  tasks: number
+  timeEntries: number
   taskComments: number
   taskMentions: number
   notifications: number
@@ -1808,6 +2386,9 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   units?: boolean | CompanyCountOutputTypeCountUnitsArgs
   users?: boolean | CompanyCountOutputTypeCountUsersArgs
   invitations?: boolean | CompanyCountOutputTypeCountInvitationsArgs
+  lanes?: boolean | CompanyCountOutputTypeCountLanesArgs
+  tasks?: boolean | CompanyCountOutputTypeCountTasksArgs
+  timeEntries?: boolean | CompanyCountOutputTypeCountTimeEntriesArgs
   taskComments?: boolean | CompanyCountOutputTypeCountTaskCommentsArgs
   taskMentions?: boolean | CompanyCountOutputTypeCountTaskMentionsArgs
   notifications?: boolean | CompanyCountOutputTypeCountNotificationsArgs
@@ -1843,6 +2424,27 @@ export type CompanyCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.E
  */
 export type CompanyCountOutputTypeCountInvitationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InvitationWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountLanesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LaneWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TaskWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountTimeEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TimeEntryWhereInput
 }
 
 /**
@@ -1896,6 +2498,9 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   units?: boolean | Prisma.Company$unitsArgs<ExtArgs>
   users?: boolean | Prisma.Company$usersArgs<ExtArgs>
   invitations?: boolean | Prisma.Company$invitationsArgs<ExtArgs>
+  lanes?: boolean | Prisma.Company$lanesArgs<ExtArgs>
+  tasks?: boolean | Prisma.Company$tasksArgs<ExtArgs>
+  timeEntries?: boolean | Prisma.Company$timeEntriesArgs<ExtArgs>
   taskComments?: boolean | Prisma.Company$taskCommentsArgs<ExtArgs>
   taskMentions?: boolean | Prisma.Company$taskMentionsArgs<ExtArgs>
   notifications?: boolean | Prisma.Company$notificationsArgs<ExtArgs>
@@ -1969,6 +2574,9 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   units?: boolean | Prisma.Company$unitsArgs<ExtArgs>
   users?: boolean | Prisma.Company$usersArgs<ExtArgs>
   invitations?: boolean | Prisma.Company$invitationsArgs<ExtArgs>
+  lanes?: boolean | Prisma.Company$lanesArgs<ExtArgs>
+  tasks?: boolean | Prisma.Company$tasksArgs<ExtArgs>
+  timeEntries?: boolean | Prisma.Company$timeEntriesArgs<ExtArgs>
   taskComments?: boolean | Prisma.Company$taskCommentsArgs<ExtArgs>
   taskMentions?: boolean | Prisma.Company$taskMentionsArgs<ExtArgs>
   notifications?: boolean | Prisma.Company$notificationsArgs<ExtArgs>
@@ -1985,6 +2593,9 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     units: Prisma.$UnitPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
     invitations: Prisma.$InvitationPayload<ExtArgs>[]
+    lanes: Prisma.$LanePayload<ExtArgs>[]
+    tasks: Prisma.$TaskPayload<ExtArgs>[]
+    timeEntries: Prisma.$TimeEntryPayload<ExtArgs>[]
     taskComments: Prisma.$TaskCommentPayload<ExtArgs>[]
     taskMentions: Prisma.$TaskMentionPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
@@ -2406,6 +3017,9 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   units<T extends Prisma.Company$unitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$unitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Company$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   invitations<T extends Prisma.Company$invitationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$invitationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  lanes<T extends Prisma.Company$lanesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$lanesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LanePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tasks<T extends Prisma.Company$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  timeEntries<T extends Prisma.Company$timeEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$timeEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TimeEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   taskComments<T extends Prisma.Company$taskCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$taskCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   taskMentions<T extends Prisma.Company$taskMentionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$taskMentionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskMentionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Company$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2937,6 +3551,78 @@ export type Company$invitationsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.InvitationScalarFieldEnum | Prisma.InvitationScalarFieldEnum[]
+}
+
+/**
+ * Company.lanes
+ */
+export type Company$lanesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lane
+   */
+  select?: Prisma.LaneSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lane
+   */
+  omit?: Prisma.LaneOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LaneInclude<ExtArgs> | null
+  where?: Prisma.LaneWhereInput
+  orderBy?: Prisma.LaneOrderByWithRelationInput | Prisma.LaneOrderByWithRelationInput[]
+  cursor?: Prisma.LaneWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LaneScalarFieldEnum | Prisma.LaneScalarFieldEnum[]
+}
+
+/**
+ * Company.tasks
+ */
+export type Company$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Task
+   */
+  select?: Prisma.TaskSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Task
+   */
+  omit?: Prisma.TaskOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TaskInclude<ExtArgs> | null
+  where?: Prisma.TaskWhereInput
+  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[]
+  cursor?: Prisma.TaskWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
+}
+
+/**
+ * Company.timeEntries
+ */
+export type Company$timeEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TimeEntry
+   */
+  select?: Prisma.TimeEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TimeEntry
+   */
+  omit?: Prisma.TimeEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TimeEntryInclude<ExtArgs> | null
+  where?: Prisma.TimeEntryWhereInput
+  orderBy?: Prisma.TimeEntryOrderByWithRelationInput | Prisma.TimeEntryOrderByWithRelationInput[]
+  cursor?: Prisma.TimeEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TimeEntryScalarFieldEnum | Prisma.TimeEntryScalarFieldEnum[]
 }
 
 /**

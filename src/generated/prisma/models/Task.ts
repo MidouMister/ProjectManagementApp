@@ -313,6 +313,7 @@ export type TaskWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   unit?: Prisma.XOR<Prisma.UnitScalarRelationFilter, Prisma.UnitWhereInput>
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
   phase?: Prisma.XOR<Prisma.PhaseScalarRelationFilter, Prisma.PhaseWhereInput>
   subPhase?: Prisma.XOR<Prisma.SubPhaseNullableScalarRelationFilter, Prisma.SubPhaseWhereInput> | null
@@ -342,6 +343,7 @@ export type TaskOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   unit?: Prisma.UnitOrderByWithRelationInput
+  company?: Prisma.CompanyOrderByWithRelationInput
   project?: Prisma.ProjectOrderByWithRelationInput
   phase?: Prisma.PhaseOrderByWithRelationInput
   subPhase?: Prisma.SubPhaseOrderByWithRelationInput
@@ -374,6 +376,7 @@ export type TaskWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
   unit?: Prisma.XOR<Prisma.UnitScalarRelationFilter, Prisma.UnitWhereInput>
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   project?: Prisma.XOR<Prisma.ProjectScalarRelationFilter, Prisma.ProjectWhereInput>
   phase?: Prisma.XOR<Prisma.PhaseScalarRelationFilter, Prisma.PhaseWhereInput>
   subPhase?: Prisma.XOR<Prisma.SubPhaseNullableScalarRelationFilter, Prisma.SubPhaseWhereInput> | null
@@ -434,7 +437,6 @@ export type TaskScalarWhereWithAggregatesInput = {
 
 export type TaskCreateInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -445,6 +447,7 @@ export type TaskCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
@@ -480,7 +483,6 @@ export type TaskUncheckedCreateInput = {
 
 export type TaskUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -491,6 +493,7 @@ export type TaskUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
@@ -546,7 +549,6 @@ export type TaskCreateManyInput = {
 
 export type TaskUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -664,6 +666,48 @@ export type TaskScalarRelationFilter = {
 export type TaskNullableScalarRelationFilter = {
   is?: Prisma.TaskWhereInput | null
   isNot?: Prisma.TaskWhereInput | null
+}
+
+export type TaskCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutCompanyInput, Prisma.TaskUncheckedCreateWithoutCompanyInput> | Prisma.TaskCreateWithoutCompanyInput[] | Prisma.TaskUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutCompanyInput | Prisma.TaskCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.TaskCreateManyCompanyInputEnvelope
+  connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+}
+
+export type TaskUncheckedCreateNestedManyWithoutCompanyInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutCompanyInput, Prisma.TaskUncheckedCreateWithoutCompanyInput> | Prisma.TaskCreateWithoutCompanyInput[] | Prisma.TaskUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutCompanyInput | Prisma.TaskCreateOrConnectWithoutCompanyInput[]
+  createMany?: Prisma.TaskCreateManyCompanyInputEnvelope
+  connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+}
+
+export type TaskUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutCompanyInput, Prisma.TaskUncheckedCreateWithoutCompanyInput> | Prisma.TaskCreateWithoutCompanyInput[] | Prisma.TaskUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutCompanyInput | Prisma.TaskCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutCompanyInput | Prisma.TaskUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.TaskCreateManyCompanyInputEnvelope
+  set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  update?: Prisma.TaskUpdateWithWhereUniqueWithoutCompanyInput | Prisma.TaskUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutCompanyInput | Prisma.TaskUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
+}
+
+export type TaskUncheckedUpdateManyWithoutCompanyNestedInput = {
+  create?: Prisma.XOR<Prisma.TaskCreateWithoutCompanyInput, Prisma.TaskUncheckedCreateWithoutCompanyInput> | Prisma.TaskCreateWithoutCompanyInput[] | Prisma.TaskUncheckedCreateWithoutCompanyInput[]
+  connectOrCreate?: Prisma.TaskCreateOrConnectWithoutCompanyInput | Prisma.TaskCreateOrConnectWithoutCompanyInput[]
+  upsert?: Prisma.TaskUpsertWithWhereUniqueWithoutCompanyInput | Prisma.TaskUpsertWithWhereUniqueWithoutCompanyInput[]
+  createMany?: Prisma.TaskCreateManyCompanyInputEnvelope
+  set?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  disconnect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  delete?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  connect?: Prisma.TaskWhereUniqueInput | Prisma.TaskWhereUniqueInput[]
+  update?: Prisma.TaskUpdateWithWhereUniqueWithoutCompanyInput | Prisma.TaskUpdateWithWhereUniqueWithoutCompanyInput[]
+  updateMany?: Prisma.TaskUpdateManyWithWhereWithoutCompanyInput | Prisma.TaskUpdateManyWithWhereWithoutCompanyInput[]
+  deleteMany?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
 }
 
 export type TaskCreateNestedManyWithoutAssignedUserInput = {
@@ -966,9 +1010,8 @@ export type TaskUpdateOneWithoutTimeEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TaskUpdateToOneWithWhereWithoutTimeEntriesInput, Prisma.TaskUpdateWithoutTimeEntriesInput>, Prisma.TaskUncheckedUpdateWithoutTimeEntriesInput>
 }
 
-export type TaskCreateWithoutAssignedUserInput = {
+export type TaskCreateWithoutCompanyInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -979,6 +1022,100 @@ export type TaskCreateWithoutAssignedUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  project: Prisma.ProjectCreateNestedOneWithoutTasksInput
+  phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
+  subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
+  lane?: Prisma.LaneCreateNestedOneWithoutTasksInput
+  assignedUser?: Prisma.UserCreateNestedOneWithoutTasksInput
+  tags?: Prisma.TaskTagCreateNestedManyWithoutTaskInput
+  comments?: Prisma.TaskCommentCreateNestedManyWithoutTaskInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutTaskInput
+}
+
+export type TaskUncheckedCreateWithoutCompanyInput = {
+  id?: string
+  unitId: string
+  projectId: string
+  phaseId: string
+  subPhaseId?: string | null
+  laneId?: string | null
+  assignedUserId?: string | null
+  title: string
+  description?: string | null
+  startDate?: Date | string | null
+  dueDate?: Date | string | null
+  endDate?: Date | string | null
+  complete?: boolean
+  order: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tags?: Prisma.TaskTagUncheckedCreateNestedManyWithoutTaskInput
+  comments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutTaskInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutTaskInput
+}
+
+export type TaskCreateOrConnectWithoutCompanyInput = {
+  where: Prisma.TaskWhereUniqueInput
+  create: Prisma.XOR<Prisma.TaskCreateWithoutCompanyInput, Prisma.TaskUncheckedCreateWithoutCompanyInput>
+}
+
+export type TaskCreateManyCompanyInputEnvelope = {
+  data: Prisma.TaskCreateManyCompanyInput | Prisma.TaskCreateManyCompanyInput[]
+  skipDuplicates?: boolean
+}
+
+export type TaskUpsertWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.TaskWhereUniqueInput
+  update: Prisma.XOR<Prisma.TaskUpdateWithoutCompanyInput, Prisma.TaskUncheckedUpdateWithoutCompanyInput>
+  create: Prisma.XOR<Prisma.TaskCreateWithoutCompanyInput, Prisma.TaskUncheckedCreateWithoutCompanyInput>
+}
+
+export type TaskUpdateWithWhereUniqueWithoutCompanyInput = {
+  where: Prisma.TaskWhereUniqueInput
+  data: Prisma.XOR<Prisma.TaskUpdateWithoutCompanyInput, Prisma.TaskUncheckedUpdateWithoutCompanyInput>
+}
+
+export type TaskUpdateManyWithWhereWithoutCompanyInput = {
+  where: Prisma.TaskScalarWhereInput
+  data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutCompanyInput>
+}
+
+export type TaskScalarWhereInput = {
+  AND?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
+  OR?: Prisma.TaskScalarWhereInput[]
+  NOT?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
+  id?: Prisma.StringFilter<"Task"> | string
+  unitId?: Prisma.StringFilter<"Task"> | string
+  companyId?: Prisma.StringFilter<"Task"> | string
+  projectId?: Prisma.StringFilter<"Task"> | string
+  phaseId?: Prisma.StringFilter<"Task"> | string
+  subPhaseId?: Prisma.StringNullableFilter<"Task"> | string | null
+  laneId?: Prisma.StringNullableFilter<"Task"> | string | null
+  assignedUserId?: Prisma.StringNullableFilter<"Task"> | string | null
+  title?: Prisma.StringFilter<"Task"> | string
+  description?: Prisma.StringNullableFilter<"Task"> | string | null
+  startDate?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
+  dueDate?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
+  endDate?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
+  complete?: Prisma.BoolFilter<"Task"> | boolean
+  order?: Prisma.IntFilter<"Task"> | number
+  createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
+}
+
+export type TaskCreateWithoutAssignedUserInput = {
+  id?: string
+  title: string
+  description?: string | null
+  startDate?: Date | string | null
+  dueDate?: Date | string | null
+  endDate?: Date | string | null
+  complete?: boolean
+  order: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
@@ -1036,32 +1173,8 @@ export type TaskUpdateManyWithWhereWithoutAssignedUserInput = {
   data: Prisma.XOR<Prisma.TaskUpdateManyMutationInput, Prisma.TaskUncheckedUpdateManyWithoutAssignedUserInput>
 }
 
-export type TaskScalarWhereInput = {
-  AND?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
-  OR?: Prisma.TaskScalarWhereInput[]
-  NOT?: Prisma.TaskScalarWhereInput | Prisma.TaskScalarWhereInput[]
-  id?: Prisma.StringFilter<"Task"> | string
-  unitId?: Prisma.StringFilter<"Task"> | string
-  companyId?: Prisma.StringFilter<"Task"> | string
-  projectId?: Prisma.StringFilter<"Task"> | string
-  phaseId?: Prisma.StringFilter<"Task"> | string
-  subPhaseId?: Prisma.StringNullableFilter<"Task"> | string | null
-  laneId?: Prisma.StringNullableFilter<"Task"> | string | null
-  assignedUserId?: Prisma.StringNullableFilter<"Task"> | string | null
-  title?: Prisma.StringFilter<"Task"> | string
-  description?: Prisma.StringNullableFilter<"Task"> | string | null
-  startDate?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  dueDate?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  endDate?: Prisma.DateTimeNullableFilter<"Task"> | Date | string | null
-  complete?: Prisma.BoolFilter<"Task"> | boolean
-  order?: Prisma.IntFilter<"Task"> | number
-  createdAt?: Prisma.DateTimeFilter<"Task"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Task"> | Date | string
-}
-
 export type TaskCreateWithoutUnitInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -1071,6 +1184,7 @@ export type TaskCreateWithoutUnitInput = {
   order: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
@@ -1131,7 +1245,6 @@ export type TaskUpdateManyWithWhereWithoutUnitInput = {
 
 export type TaskCreateWithoutProjectInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -1142,6 +1255,7 @@ export type TaskCreateWithoutProjectInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
   lane?: Prisma.LaneCreateNestedOneWithoutTasksInput
@@ -1201,7 +1315,6 @@ export type TaskUpdateManyWithWhereWithoutProjectInput = {
 
 export type TaskCreateWithoutPhaseInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -1212,6 +1325,7 @@ export type TaskCreateWithoutPhaseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
   lane?: Prisma.LaneCreateNestedOneWithoutTasksInput
@@ -1271,7 +1385,6 @@ export type TaskUpdateManyWithWhereWithoutPhaseInput = {
 
 export type TaskCreateWithoutSubPhaseInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -1282,6 +1395,7 @@ export type TaskCreateWithoutSubPhaseInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   lane?: Prisma.LaneCreateNestedOneWithoutTasksInput
@@ -1341,7 +1455,6 @@ export type TaskUpdateManyWithWhereWithoutSubPhaseInput = {
 
 export type TaskCreateWithoutLaneInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -1352,6 +1465,7 @@ export type TaskCreateWithoutLaneInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
@@ -1411,7 +1525,6 @@ export type TaskUpdateManyWithWhereWithoutLaneInput = {
 
 export type TaskCreateWithoutTagsInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -1422,6 +1535,7 @@ export type TaskCreateWithoutTagsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
@@ -1471,7 +1585,6 @@ export type TaskUpdateToOneWithWhereWithoutTagsInput = {
 
 export type TaskUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1482,6 +1595,7 @@ export type TaskUpdateWithoutTagsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
@@ -1515,7 +1629,6 @@ export type TaskUncheckedUpdateWithoutTagsInput = {
 
 export type TaskCreateWithoutCommentsInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -1526,6 +1639,7 @@ export type TaskCreateWithoutCommentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
@@ -1575,7 +1689,6 @@ export type TaskUpdateToOneWithWhereWithoutCommentsInput = {
 
 export type TaskUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1586,6 +1699,7 @@ export type TaskUpdateWithoutCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
@@ -1619,7 +1733,6 @@ export type TaskUncheckedUpdateWithoutCommentsInput = {
 
 export type TaskCreateWithoutTimeEntriesInput = {
   id?: string
-  companyId: string
   title: string
   description?: string | null
   startDate?: Date | string | null
@@ -1630,6 +1743,7 @@ export type TaskCreateWithoutTimeEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   unit: Prisma.UnitCreateNestedOneWithoutTasksInput
+  company: Prisma.CompanyCreateNestedOneWithoutTasksInput
   project: Prisma.ProjectCreateNestedOneWithoutTasksInput
   phase: Prisma.PhaseCreateNestedOneWithoutTasksInput
   subPhase?: Prisma.SubPhaseCreateNestedOneWithoutTasksInput
@@ -1679,7 +1793,6 @@ export type TaskUpdateToOneWithWhereWithoutTimeEntriesInput = {
 
 export type TaskUpdateWithoutTimeEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1690,6 +1803,7 @@ export type TaskUpdateWithoutTimeEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
@@ -1721,6 +1835,88 @@ export type TaskUncheckedUpdateWithoutTimeEntriesInput = {
   comments?: Prisma.TaskCommentUncheckedUpdateManyWithoutTaskNestedInput
 }
 
+export type TaskCreateManyCompanyInput = {
+  id?: string
+  unitId: string
+  projectId: string
+  phaseId: string
+  subPhaseId?: string | null
+  laneId?: string | null
+  assignedUserId?: string | null
+  title: string
+  description?: string | null
+  startDate?: Date | string | null
+  dueDate?: Date | string | null
+  endDate?: Date | string | null
+  complete?: boolean
+  order: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TaskUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  complete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
+  phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
+  subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
+  lane?: Prisma.LaneUpdateOneWithoutTasksNestedInput
+  assignedUser?: Prisma.UserUpdateOneWithoutTasksNestedInput
+  tags?: Prisma.TaskTagUpdateManyWithoutTaskNestedInput
+  comments?: Prisma.TaskCommentUpdateManyWithoutTaskNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutTaskNestedInput
+}
+
+export type TaskUncheckedUpdateWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  unitId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  phaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  subPhaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  laneId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  complete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.TaskTagUncheckedUpdateManyWithoutTaskNestedInput
+  comments?: Prisma.TaskCommentUncheckedUpdateManyWithoutTaskNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutTaskNestedInput
+}
+
+export type TaskUncheckedUpdateManyWithoutCompanyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  unitId?: Prisma.StringFieldUpdateOperationsInput | string
+  projectId?: Prisma.StringFieldUpdateOperationsInput | string
+  phaseId?: Prisma.StringFieldUpdateOperationsInput | string
+  subPhaseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  laneId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  complete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type TaskCreateManyAssignedUserInput = {
   id?: string
   unitId: string
@@ -1742,7 +1938,6 @@ export type TaskCreateManyAssignedUserInput = {
 
 export type TaskUpdateWithoutAssignedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1753,6 +1948,7 @@ export type TaskUpdateWithoutAssignedUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
@@ -1824,7 +2020,6 @@ export type TaskCreateManyUnitInput = {
 
 export type TaskUpdateWithoutUnitInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1834,6 +2029,7 @@ export type TaskUpdateWithoutUnitInput = {
   order?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
@@ -1906,7 +2102,6 @@ export type TaskCreateManyProjectInput = {
 
 export type TaskUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1917,6 +2112,7 @@ export type TaskUpdateWithoutProjectInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
   lane?: Prisma.LaneUpdateOneWithoutTasksNestedInput
@@ -1988,7 +2184,6 @@ export type TaskCreateManyPhaseInput = {
 
 export type TaskUpdateWithoutPhaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1999,6 +2194,7 @@ export type TaskUpdateWithoutPhaseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
   lane?: Prisma.LaneUpdateOneWithoutTasksNestedInput
@@ -2070,7 +2266,6 @@ export type TaskCreateManySubPhaseInput = {
 
 export type TaskUpdateWithoutSubPhaseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2081,6 +2276,7 @@ export type TaskUpdateWithoutSubPhaseInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   lane?: Prisma.LaneUpdateOneWithoutTasksNestedInput
@@ -2152,7 +2348,6 @@ export type TaskCreateManyLaneInput = {
 
 export type TaskUpdateWithoutLaneInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  companyId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2163,6 +2358,7 @@ export type TaskUpdateWithoutLaneInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   unit?: Prisma.UnitUpdateOneRequiredWithoutTasksNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutTasksNestedInput
   project?: Prisma.ProjectUpdateOneRequiredWithoutTasksNestedInput
   phase?: Prisma.PhaseUpdateOneRequiredWithoutTasksNestedInput
   subPhase?: Prisma.SubPhaseUpdateOneWithoutTasksNestedInput
@@ -2281,6 +2477,7 @@ export type TaskSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   phase?: boolean | Prisma.PhaseDefaultArgs<ExtArgs>
   subPhase?: boolean | Prisma.Task$subPhaseArgs<ExtArgs>
@@ -2311,6 +2508,7 @@ export type TaskSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   phase?: boolean | Prisma.PhaseDefaultArgs<ExtArgs>
   subPhase?: boolean | Prisma.Task$subPhaseArgs<ExtArgs>
@@ -2337,6 +2535,7 @@ export type TaskSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   phase?: boolean | Prisma.PhaseDefaultArgs<ExtArgs>
   subPhase?: boolean | Prisma.Task$subPhaseArgs<ExtArgs>
@@ -2367,6 +2566,7 @@ export type TaskSelectScalar = {
 export type TaskOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "unitId" | "companyId" | "projectId" | "phaseId" | "subPhaseId" | "laneId" | "assignedUserId" | "title" | "description" | "startDate" | "dueDate" | "endDate" | "complete" | "order" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
 export type TaskInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   phase?: boolean | Prisma.PhaseDefaultArgs<ExtArgs>
   subPhase?: boolean | Prisma.Task$subPhaseArgs<ExtArgs>
@@ -2379,6 +2579,7 @@ export type TaskInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }
 export type TaskIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   phase?: boolean | Prisma.PhaseDefaultArgs<ExtArgs>
   subPhase?: boolean | Prisma.Task$subPhaseArgs<ExtArgs>
@@ -2387,6 +2588,7 @@ export type TaskIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 }
 export type TaskIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   unit?: boolean | Prisma.UnitDefaultArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
   phase?: boolean | Prisma.PhaseDefaultArgs<ExtArgs>
   subPhase?: boolean | Prisma.Task$subPhaseArgs<ExtArgs>
@@ -2398,6 +2600,7 @@ export type $TaskPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Task"
   objects: {
     unit: Prisma.$UnitPayload<ExtArgs>
+    company: Prisma.$CompanyPayload<ExtArgs>
     project: Prisma.$ProjectPayload<ExtArgs>
     phase: Prisma.$PhasePayload<ExtArgs>
     subPhase: Prisma.$SubPhasePayload<ExtArgs> | null
@@ -2820,6 +3023,7 @@ readonly fields: TaskFieldRefs;
 export interface Prisma__TaskClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   unit<T extends Prisma.UnitDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UnitDefaultArgs<ExtArgs>>): Prisma.Prisma__UnitClient<runtime.Types.Result.GetResult<Prisma.$UnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   project<T extends Prisma.ProjectDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProjectDefaultArgs<ExtArgs>>): Prisma.Prisma__ProjectClient<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   phase<T extends Prisma.PhaseDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PhaseDefaultArgs<ExtArgs>>): Prisma.Prisma__PhaseClient<runtime.Types.Result.GetResult<Prisma.$PhasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subPhase<T extends Prisma.Task$subPhaseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Task$subPhaseArgs<ExtArgs>>): Prisma.Prisma__SubPhaseClient<runtime.Types.Result.GetResult<Prisma.$SubPhasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>

@@ -1,8 +1,10 @@
 // PMA TypeScript Types
-// Based on PRD v2.0.0
+// Based on PRD v2.0.0 and Prisma Schema
+
+import { Prisma } from "@/generated/prisma/client"
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Enums (must match Prisma schema)
+// Enums (must match Prisma schema exactly)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const Role = {
@@ -61,9 +63,21 @@ export const NotificationType = {
   LANE: "LANE",
   TAG: "TAG",
   GENERAL: "GENERAL",
-  COMMENT: "COMMENT",
 } as const
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Decimal Helper Types (Prisma Decimal → number)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Convert Prisma Decimal to number for TypeScript
+ */
+export type DecimalToNumber<T> = T extends Prisma.Decimal
+  ? number
+  : T extends Prisma.Decimal | null
+  ? number | null
+  : T
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Legal Forms (Algeria)
@@ -125,42 +139,6 @@ export type SessionUser = {
   unitId: string | null
 }
 
-export type SubscriptionWithPlan = {
-  id: string
-  companyId: string
-  planId: string
-  status: SubscriptionStatus
-  startAt: Date
-  endAt: Date
-  plan: {
-    id: string
-    name: string
-    maxUnits: number | null
-    maxProjects: number | null
-    maxTasksPerProject: number | null
-    maxMembers: number | null
-    priceDA: number
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Cache Types (for M22)
-// ─────────────────────────────────────────────────────────────────────────────
-
-export type CacheProfile = "seconds" | "minutes" | "hours" | "days" | "weeks" | "static"
-
-export const CacheTags = {
-  companies: "companies",
-  company: (id: string) => `company:${id}`,
-  units: (companyId: string) => `company:${companyId}:units`,
-  unit: (id: string) => `unit:${id}`,
-  projects: (unitId: string) => `unit:${unitId}:projects`,
-  project: (id: string) => `project:${id}`,
-  phases: (projectId: string) => `project:${projectId}:phases`,
-  clients: (unitId: string) => `unit:${unitId}:clients`,
-  members: (unitId: string) => `unit:${unitId}:members`,
-} as const
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Input Types for Server Actions
 // ─────────────────────────────────────────────────────────────────────────────
@@ -192,6 +170,155 @@ export type OnboardingInput = {
   unit: UnitInput
   invitations: Array<{ email: string; role: Role }>
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Project Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type ProjectInput = {
+  unitId: string
+  clientId: string
+  name: string
+  code: string
+  type: string
+  montantHT: string | number // String for Decimal input
+  montantTTC: string | number
+  ods: Date
+  delaiMonths?: number
+  delaiDays?: number
+  status?: ProjectStatus
+  signe?: boolean
+}
+
+export type PhaseInput = {
+  projectId: string
+  name: string
+  code: string
+  montantHT: string | number // String for Decimal input
+  startDate: Date
+  endDate: Date
+  status?: PhaseStatus
+  observations?: string | null
+}
+
+export type SubPhaseInput = {
+  phaseId: string
+  name: string
+  code: string
+  startDate: Date
+  endDate: Date
+  status?: SubPhaseStatus
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Production Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type ProductInput = {
+  phaseId: string
+  taux: number
+  montantProd: string | number // String for Decimal input
+  date: Date
+}
+
+export type ProductionInput = {
+  productId: string
+  phaseId: string
+  taux: number
+  date: Date
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Task Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type LaneInput = {
+  unitId: string
+  companyId: string
+  name: string
+  color?: string | null
+  order: number
+}
+
+export type TaskInput = {
+  unitId: string
+  companyId: string
+  projectId: string
+  phaseId: string // Required per PRD
+  subPhaseId?: string | null
+  laneId?: string | null
+  assignedUserId?: string | null
+  title: string
+  description?: string | null
+  startDate?: Date | null
+  dueDate?: Date | null
+  order: number
+}
+
+export type TagInput = {
+  unitId: string
+  name: string
+  color?: string | null
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Comment & Mention Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type CommentInput = {
+  taskId: string
+  companyId: string
+  authorId: string
+  body: string
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Time Entry Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type TimeEntryInput = {
+  companyId: string
+  userId: string
+  projectId: string
+  taskId?: string | null
+  description?: string | null
+  startTime: Date
+  endTime?: Date | null
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Notification Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type NotificationInput = {
+  companyId: string
+  unitId?: string | null
+  userId?: string | null
+  type: NotificationType
+  message: string
+  targetRole?: Role | null
+  targetUserId?: string | null
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Activity Log Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type ActivityLogInput = {
+  companyId: string
+  unitId?: string | null
+  userId: string
+  action: string
+  entityType: string
+  entityId: string
+  metadata?: Record<string, unknown> | null
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Cache Types (for M22)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type CacheProfile = "seconds" | "minutes" | "hours" | "days" | "weeks" | "static"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Wilaya (Algerian Provinces)

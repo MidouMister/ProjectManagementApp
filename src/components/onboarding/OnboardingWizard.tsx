@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -9,7 +8,7 @@ import { Building2, Briefcase, Users, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { companySchema, unitSchema } from "@/lib/validators";
 import { type CompanyInput, type UnitInput } from "@/lib/types";
-import { createCompany, inviteMember, getCompanyUnit } from "@/lib/queries";
+import { consolidateOnboarding } from "@/lib/queries";
 import { CompanyProfileStep } from "./steps/CompanyProfileStep";
 import { FirstUnitStep } from "./steps/FirstUnitStep";
 import { InviteTeamStep } from "./steps/InviteTeamStep";
@@ -30,7 +29,6 @@ const STEPS = [
 ];
 
 export function OnboardingWizard({ userId }: OnboardingWizardProps) {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
@@ -77,19 +75,28 @@ export function OnboardingWizard({ userId }: OnboardingWizardProps) {
         return;
       }
 
-      const result = await createCompany(userId, {
-        name: companyData.name!,
-        logo: companyData.logo,
-        formJur: companyData.formJur!,
-        sector: companyData.sector!,
-        NIF: companyData.NIF!,
-        RC: companyData.RC!,
-        NIS: companyData.NIS,
-        AI: companyData.AI,
-        wilaya: companyData.wilaya!,
-        address: companyData.address!,
-        phone: companyData.phone!,
-        email: companyData.email!,
+      const result = await consolidateOnboarding(userId, {
+        company: {
+          name: companyData.name!,
+          logo: companyData.logo,
+          formJur: companyData.formJur!,
+          sector: companyData.sector!,
+          NIF: companyData.NIF!,
+          RC: companyData.RC!,
+          NIS: companyData.NIS,
+          AI: companyData.AI,
+          wilaya: companyData.wilaya!,
+          address: companyData.address!,
+          phone: companyData.phone!,
+          email: companyData.email!,
+        },
+        unit: {
+          name: unitData.name || "Principal",
+          address: unitData.address!,
+          phone: unitData.phone!,
+          email: unitData.email!,
+        },
+        invitations: invitations,
       });
 
       if (!result.success) {
@@ -98,17 +105,8 @@ export function OnboardingWizard({ userId }: OnboardingWizardProps) {
         return;
       }
 
-      const companyId = result.data.id;
-
-      for (const invite of invitations) {
-        const unit = await getCompanyUnit(companyId);
-        if (unit) {
-          await inviteMember(invite.email, invite.role, unit.id, companyId);
-        }
-      }
-
       toast.success("Compte créé avec succès!");
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } catch (error) {
       console.error("Onboarding error:", error);
       toast.error("Une erreur est survenue");
@@ -184,7 +182,7 @@ export function OnboardingWizard({ userId }: OnboardingWizardProps) {
         {/* Form Card */}
         <div className="relative bg-white border border-[#E8E7E5] rounded-[2rem] shadow-2xl shadow-black/5 overflow-hidden">
           {/* Card header accent bar */}
-          <div className="h-1.5 bg-gradient-to-r from-primary/40 via-primary to-primary/40" />
+          <div className="h-1.5 bg-linear-to-r from-primary/40 via-primary to-primary/40" />
           
           <div className="p-8">
             {/* Step content */}
@@ -212,7 +210,7 @@ export function OnboardingWizard({ userId }: OnboardingWizardProps) {
                   onAdd={handleAddInvitation}
                   onRemove={handleRemoveInvitation}
                   onSubmit={handleSubmit}
-                  onSkip={() => router.push("/dashboard")}
+                  onSkip={() => window.location.href = "/dashboard"}
                   isSubmitting={isSubmitting}
                 />
               )}
