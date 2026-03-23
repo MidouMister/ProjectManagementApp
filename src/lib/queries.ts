@@ -171,7 +171,8 @@ export async function createCompany(
           name: data.name,
           ownerId: user.id,
           logo: data.logo ?? null,
-          NIF: data.NIF ?? null,
+          NIF: data.NIF,
+          RC: data.RC,
           formJur: data.formJur ?? null,
           sector: data.sector ?? null,
           wilaya: data.wilaya ?? null,
@@ -197,7 +198,6 @@ export async function createCompany(
           address: data.address ?? "",
           phone: data.phone ?? "",
           email: data.email ?? "",
-          logo: data.logo ?? null,
         },
       });
 
@@ -307,71 +307,194 @@ export async function createUnit(
 }
 
 /**
- * Invite Member - Onboarding Step 3
- * Creates an invitation with token for email-based acceptance
+ * Check if fiscal identities are already in use
  */
-export async function inviteMember(
-  email: string,
-  role: Role,
-  unitId: string,
-  companyId: string
-): Promise<Result<{ id: string; token: string }>> {
+/**
+ * Check if fiscal identities are already in use
+ */
+export async function checkFiscalIdentities(identities: { nif?: string; rc?: string; nis?: string; ai?: string }): Promise<Result<boolean>> {
   try {
-    if (role === "OWNER") {
-      return { success: false, error: "INVALID_ROLE" };
+    const { nif, rc, nis, ai } = identities;
+    
+    // Check NIF
+    if (nif) {
+      const exists = await prisma.company.findFirst({ where: { NIF: nif } });
+      if (exists) return { success: false, error: "NIF_EXISTS" };
     }
+    
+    // Check RC
+    if (rc) {
+      const exists = await prisma.company.findFirst({ where: { RC: rc } });
+      if (exists) return { success: false, error: "RC_EXISTS" };
+    }
+    
+    // Check NIS
+    if (nis) {
+      const exists = await prisma.company.findFirst({ where: { NIS: nis } });
+      if (exists) return { success: false, error: "NIS_EXISTS" };
+    }
+    
+    // Check AI
+    if (ai) {
+      const exists = await prisma.company.findFirst({ where: { AI: ai } });
+      if (exists) return { success: false, error: "AI_EXISTS" };
+    }
+    
+    return { success: true, data: false };
+  } catch (error) {
+    console.error("Error checking fiscal identities:", error);
+    return { success: false, error: "VALIDATION_FAILED" };
+  }
+}
 
-    const existingInvitation = await prisma.invitation.findFirst({
-      where: {
-        email,
-        unitId,
-        status: "PENDING",
-      },
+/**
+ * Consolidate Onboarding - Multi-step transactional setup
+ * 1. Create Company
+ * 2. Create Unit
+ * 3. Assign User as Owner
+ * 4. Create Trial Subscription
+ * 5. Create Invitations
+ */
+export async function consolidateOnboarding(
+  clerkId: string,
+  input: {
+    company: CompanyInput;
+    unit: UnitInput;
+    invitations: Array<{ email: string; role: Role }>;
+  }
+): Promise<Result<{ companyId: string }>> {
+  try {
+    let user = await prisma.user.findUnique({
+      where: { clerkId },
     });
 
-    if (existingInvitation) {
-      return { success: false, error: "DUPLICATE_INVITATION" };
+    if (!user) {
+      // Lazy Create: If user not in DB (common in local dev), fetch from Clerk
+      const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+      const clerkUser = await clerk.users.getUser(clerkId);
+      
+      if (!clerkUser) {
+        return { success: false, error: "USER_NOT_FOUND" };
+      }
+
+      const name = [clerkUser.firstName, clerkUser.lastName]
+        .filter(Boolean)
+        .join(" ") || clerkUser.username || "Unknown";
+      
+      const email = clerkUser.emailAddresses[0]?.emailAddress || "unknown@example.com";
+
+      user = await prisma.user.create({
+        data: {
+          clerkId,
+          name,
+          email,
+          role: "USER",
+        },
+      });
     }
 
-    const subscription = await prisma.subscription.findUnique({
-      where: { companyId },
-      include: { plan: true },
+    if (user.companyId) {
+      return { success: false, error: "ALREADY_HAS_COMPANY" };
+    }
+
+    let starterPlan = await prisma.plan.findFirst({
+      where: { name: "Starter" },
     });
 
-    if (!subscription) {
-      return { success: false, error: "SUBSCRIPTION_NOT_FOUND" };
+    if (!starterPlan) {
+      // Create a default plan if it doesn't exist for test purposes
+      starterPlan = await prisma.plan.create({
+        data: {
+          name: "Starter",
+          priceDA: 0,
+          maxUnits: 1,
+          maxProjects: 3,
+          maxTasksPerProject: 50,
+          maxMembers: 5,
+        }
+      });
     }
 
-    const maxMembers = subscription.plan.maxMembers;
-    if (maxMembers !== null) {
-      const memberCount = await prisma.user.count({
-        where: { companyId },
+    const now = new Date();
+    const trialEnd = addDays(now, 60);
+
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. Create Company
+      const company = await tx.company.create({
+        data: {
+          ...input.company,
+          ownerId: user.id,
+        },
       });
 
-      if (memberCount >= maxMembers) {
-        return { success: false, error: "PLAN_LIMIT_EXCEEDED" };
+      // 2. Create the Unit
+      const unit = await tx.unit.create({
+        data: {
+          ...input.unit,
+          companyId: company.id,
+          adminId: user.id, // Auto-assign owner as admin
+        },
+      });
+
+      // 3. Update User profile
+      await tx.user.update({
+        where: { id: user.id },
+        data: {
+          role: "OWNER",
+          companyId: company.id,
+          unitId: unit.id,
+        },
+      });
+
+      // 4. Create Subscription
+      await tx.subscription.create({
+        data: {
+          companyId: company.id,
+          planId: starterPlan.id,
+          status: "TRIAL",
+          startAt: now,
+          endAt: trialEnd,
+        },
+      });
+
+      // 5. Create Invitations
+      if (input.invitations.length > 0) {
+        for (const invitation of input.invitations) {
+          const token = crypto.randomUUID();
+          await tx.invitation.create({
+            data: {
+              companyId: company.id,
+              unitId: unit.id,
+              email: invitation.email,
+              role: invitation.role,
+              token,
+              expiresAt: addDays(now, 7),
+            },
+          });
+        }
       }
-    }
 
-    const token = crypto.randomUUID();
-    const expiresAt = addDays(new Date(), 7);
+      return { companyId: company.id, unitId: unit.id };
+    });
 
-    const invitation = await prisma.invitation.create({
-      data: {
-        companyId,
-        unitId,
-        email,
-        role,
-        token,
-        expiresAt,
+    // 6. Sync Clerk Data
+    const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+    await clerk.users.updateUser(clerkId, {
+      publicMetadata: {
+        role: "OWNER",
+        companyId: result.companyId,
+        unitId: result.unitId,
       },
     });
 
-    revalidateTag(CacheTags.unitMembers(unitId), "max");
+    // 7. Revalidate Cache
+    revalidateTag(CacheTags.companies(), "max");
+    revalidateTag(CacheTags.company(result.companyId), "max");
+    revalidateTag(CacheTags.unit(result.unitId), "max");
 
-    return { success: true, data: { id: invitation.id, token: invitation.token } };
+    return { success: true, data: { companyId: result.companyId } };
   } catch (error) {
-    console.error("Error inviting member:", error);
-    return { success: false, error: "INVITATION_FAILED" };
+    console.error("Consolidated onboarding failed:", error);
+    return { success: false, error: "ONBOARDING_FAILED" };
   }
 }

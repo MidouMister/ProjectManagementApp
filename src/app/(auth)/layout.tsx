@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Auth | PMA",
-  description: "Authentication pages",
+  title: "Authentification | PMA",
+  description: "Pages d'authentification",
 };
 
 export default function AuthLayout({

@@ -143,22 +143,24 @@
 
 ## M03 — Root Layout & Global Components
 
-### Dashboard Layout
+### Dashboard Layout ✅
 
-- [x] Create `src/app/(dashboard)/layout.tsx`
-- [x] Build `Sidebar` component:
-  - [x] Collapsed/expanded (Jotai atom + localStorage)
-  - [x] Role-based menu items
-  - [x] Active route indicator (left-border)
-  - [x] User footer (avatar, name, role)
-  - [x] Days-remaining countdown chip
-  - [x] Mobile: hamburger → Sheet
-  - [x] Glassmorphism styling
-- [x] Build `Navbar` component:
-  - [x] Breadcrumbs
-  - [x] Global search
-  - [x] `NotificationBell` with badge
-  - [x] `ThemeToggle`
+- [x] Create `src/app/(dashboard)/layout.tsx` 2026-03-22
+- [x] Build `Sidebar` component: 2026-03-22
+  - [x] Collapsed/expanded (Jotai atom + localStorage) 2026-03-22
+  - [x] Role-based menu items 2026-03-22
+  - [x] Active route indicator (left-border) 2026-03-22
+  - [x] User footer (avatar, name, role) 2026-03-22
+  - [x] Days-remaining countdown chip 2026-03-22
+  - [x] Mobile: hamburger → Sheet 2026-03-22
+  - [x] Glassmorphism styling 2026-03-22
+  - [x] **Stitch Rebuild:** High-density editorial aesthetic, No-Line rule 2026-03-22
+- [x] Build `Navbar` component: 2026-03-22
+  - [x] Breadcrumbs 2026-03-22
+  - [x] Global search 2026-03-22
+  - [x] `NotificationBell` with badge 2026-03-22
+  - [x] `ThemeToggle` 2026-03-22
+  - [x] **Stitch Rebuild:** Glassmorphism, architectural breadcrumbs 2026-03-22
 
 ### InfoBar
 
@@ -191,7 +193,6 @@
 ### Step 2: First Unit
 
 - [x] Unit name, address, phone, email 2026-03-21
-- [x] Admin assignment (current user auto-assigned) 2026-03-21
 
 ### Step 3: Invite Team (optional)
 
@@ -200,10 +201,11 @@
 
 ### Server Actions
 
-- [x] Implement `createCompany()` — creates Company + assigns OWNER 2026-03-21
-- [x] Implement `createUnit()` — creates Unit with admin 2026-03-21
-- [x] Implement `createSubscription()` — auto Starter trial (2 months) 2026-03-21
-- [x] Implement `inviteMember()` — creates Invitation record 2026-03-21
+- [x] Implement `consolidateOnboarding()` — Transactional action for Company + Unit + Subscription + Invitations 2026-03-23
+- [x] Implement `checkFiscalIdentities()` — Validation helper for unique legal IDs (NIF, RC, etc.) 2026-03-23
+- [x] Implement `getAuthUser()` — Fetch user with company/unit context 2026-03-23
+- [x] Implement `acceptInvitation()` — Join company/unit via token 2026-03-23
+- [x] Add `revalidateTag(CacheTags.company)` to all relevant actions 2026-03-23
 
 ### Validation
 

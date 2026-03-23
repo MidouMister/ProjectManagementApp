@@ -187,6 +187,12 @@ export type UnitInput = {
   email: string
 }
 
+export type OnboardingInput = {
+  company: CompanyInput
+  unit: UnitInput
+  invitations: Array<{ email: string; role: Role }>
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Wilaya (Algerian Provinces)
 // ─────────────────────────────────────────────────────────────────────────────

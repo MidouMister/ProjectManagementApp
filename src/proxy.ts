@@ -16,6 +16,7 @@ const isPublicRoute = createRouteMatcher([
   "/company/sign-in(.*)",
   "/company/sign-up(.*)",
   "/api/webhooks/clerk",
+  "/api/uploadthing(.*)", // Added for Uploadthing
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
@@ -42,7 +43,7 @@ export default clerkMiddleware(async (auth, req) => {
     }
 
     // A. Onboarding Check: If no company and not on onboarding, redirect to /onboarding
-    if (!companyId) {
+    if (!companyId && url.pathname !== "/onboarding") {
       return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 

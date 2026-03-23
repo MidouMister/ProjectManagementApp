@@ -2263,6 +2263,9 @@ export const CompanyScalarFieldEnum = {
   ownerId: 'ownerId',
   logo: 'logo',
   NIF: 'NIF',
+  RC: 'RC',
+  NIS: 'NIS',
+  AI: 'AI',
   formJur: 'formJur',
   sector: 'sector',
   wilaya: 'wilaya',
@@ -2314,7 +2317,6 @@ export const UnitScalarFieldEnum = {
   address: 'address',
   phone: 'phone',
   email: 'email',
-  logo: 'logo',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

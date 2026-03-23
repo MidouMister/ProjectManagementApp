@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Search, Menu, ChevronRight } from "lucide-react";
+import { Search, Menu, ChevronRight, User, Settings, LogOut, Layout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "./ThemeToggle";
@@ -10,7 +10,7 @@ import { useAtom } from "jotai";
 import { sidebarMobileOpenAtom } from "@/store/sidebar";
 import React from "react";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 interface BreadcrumbItem {
   label: string;
@@ -31,7 +32,7 @@ const getBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
   const breadcrumbs: BreadcrumbItem[] = [];
 
   const labelMap: Record<string, string> = {
-    dashboard: "Dashboard",
+    dashboard: "Tableau de bord",
     unite: "Unités",
     company: "Entreprise",
     projects: "Projets",
@@ -49,7 +50,7 @@ const getBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
 
   parts.forEach((part, idx) => {
     const isId = part.length > 20 || /^[0-9a-f]{8}-/.test(part);
-    const label = isId ? part.substring(0, 6) + "..." : labelMap[part.toLowerCase()] || part;
+    const label = isId ? part.substring(0, 6).toUpperCase() : labelMap[part.toLowerCase()] || part;
     const path = "/" + parts.slice(0, idx + 1).join("/");
     
     breadcrumbs.push({ label, href: path });
@@ -62,98 +63,138 @@ export function Navbar() {
   const pathname = usePathname();
   const [, setMobileOpen] = useAtom(sidebarMobileOpenAtom);
   const { user } = useUser();
+  const { signOut } = useClerk();
 
   const breadcrumbs = getBreadcrumbs(pathname);
 
   return (
-    <header className="sticky top-0 z-20 w-full h-14 bg-background/80 backdrop-blur-md border-b border-outline-variant flex items-center px-4 md:px-6 justify-between gap-4 transition-all">
-      {/* Left side: Mobile menu & Breadcrumbs */}
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-20 w-full h-20 bg-white/70 dark:bg-surface-container-highest/70 backdrop-blur-xl flex items-center px-6 md:px-10 justify-between gap-6 transition-all">
+      {/* Left side: Mobile menu & Architectural Breadcrumbs */}
+      <div className="flex items-center gap-6">
         <Button 
           variant="ghost" 
           size="icon" 
-          className="md:hidden w-9 h-9 rounded-lg"
+          className="md:hidden w-10 h-10 rounded-xl bg-surface-container/50 hover:bg-surface-container transition-all"
           onClick={() => setMobileOpen(true)}
         >
-          <Menu className="w-5 h-5" />
+          <Menu className="w-5 h-5 text-foreground" />
         </Button>
 
-        {/* Breadcrumbs */}
-        <nav className="flex items-center gap-1.5 text-sm">
-          <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
-            PMA
-          </Link>
+        {/* Breadcrumbs with Premium Aesthetic */}
+        <nav className="hidden sm:flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/5 dark:bg-primary/10 transition-colors">
+            <Layout className="w-4 h-4 text-primary" />
+            <span className="text-[11px] font-black uppercase tracking-widest text-primary">AGORA</span>
+          </div>
           
-          {breadcrumbs.map((crumb, idx) => (
-            <React.Fragment key={crumb.href || idx}>
-              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50" />
-              {crumb.href && idx < breadcrumbs.length - 1 ? (
-                <Link href={crumb.href} className="text-muted-foreground hover:text-foreground transition-colors font-medium">
-                  {crumb.label}
-                </Link>
-              ) : (
-                <span className="font-semibold text-foreground">{crumb.label}</span>
-              )}
-            </React.Fragment>
-          ))}
+          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/30" />
+          
+          <div className="flex items-center gap-2">
+            {breadcrumbs.map((crumb, idx) => (
+              <React.Fragment key={crumb.href || idx}>
+                {idx > 0 && <ChevronRight className="w-3 h-3 text-muted-foreground/20" />}
+                {crumb.href && idx < breadcrumbs.length - 1 ? (
+                  <Link 
+                    href={crumb.href} 
+                    className="text-xs font-bold text-muted-foreground/60 hover:text-primary transition-all hover:scale-105 active:scale-95"
+                  >
+                    {crumb.label}
+                  </Link>
+                ) : (
+                  <span className="text-xs font-extrabold text-foreground tracking-tight underline decoration-primary/20 decoration-2 underline-offset-4">
+                    {crumb.label}
+                  </span>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
         </nav>
       </div>
 
-      {/* Right actions */}
-      <div className="flex items-center gap-2">
-        {/* Search */}
-        <div className="relative hidden md:flex items-center">
-          <Search className="absolute left-3 w-4 h-4 text-muted-foreground/60" />
+      {/* Right actions with Floating Surfaces */}
+      <div className="flex items-center gap-4">
+        {/* Modern Search */}
+        <div className="relative hidden lg:flex items-center group">
+          <Search className="absolute left-4 w-4 h-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
           <Input 
             type="search" 
-            placeholder="Rechercher..." 
-            className="w-56 pl-9 h-9 rounded-lg bg-surface-container-low border-transparent hover:border-outline focus-visible:border-primary focus-visible:ring-0 transition-all text-sm"
+            placeholder="Rechercher partout..." 
+            className={cn(
+               "w-72 bg-surface-container-low/50 border-none h-11 pl-11 pr-4 rounded-xl text-xs font-medium transition-all duration-300",
+               "focus-visible:ring-1 focus-visible:ring-primary focus-visible:bg-white focus-visible:w-80 shadow-sm"
+            )}
           />
         </div>
 
-        {/* Divider */}
-        <div className="h-6 w-[1px] bg-outline-variant mx-1 hidden md:block" />
+        {/* Global Action Tools */}
+        <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-surface-container-low/50">
+          <div className="flex items-center gap-1 pr-1">
+            <ThemeToggle />
+            <NotificationBell />
+          </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-1">
-          <ThemeToggle />
-          <NotificationBell />
+          <div className="w-px h-6 bg-outline-variant/30 mx-1" />
 
-          {/* User Dropdown */}
+          {/* Premium User Trigger */}
           {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-9 px-2 gap-2 rounded-lg hover:bg-surface-container-high/50">
-                  <Avatar className="w-7 h-7 rounded-lg border border-outline-variant">
+                <button className="flex items-center gap-3 pl-1 pr-2 py-1 rounded-xl hover:bg-white dark:hover:bg-surface-container-highest transition-all group active:scale-95 border border-transparent hover:border-outline-variant shadow-none hover:shadow-sm">
+                  <Avatar className="w-8 h-8 rounded-lg border-2 border-primary/10 group-hover:border-primary transition-colors">
                     <AvatarImage src={user.imageUrl} />
-                    <AvatarFallback className="rounded-lg text-xs font-bold bg-primary-container text-primary-foreground">
+                    <AvatarFallback className="rounded-lg text-[10px] font-black bg-primary text-on-primary">
                       {user.firstName?.charAt(0) || "U"}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="hidden lg:block text-sm font-medium text-foreground">
-                    {user.fullName || user.emailAddresses[0]?.emailAddress?.split("@")[0]}
-                  </span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>
-                  <div className="flex flex-col">
-                    <span>{user.fullName || "User"}</span>
-                    <span className="text-xs font-normal text-muted-foreground">
-                      {user.emailAddresses[0]?.emailAddress}
+                  <div className="hidden lg:flex flex-col items-start leading-none pr-1">
+                    <span className="text-[11px] font-black text-foreground truncate max-w-[100px]">
+                      {user.fullName || "Utilisateur"}
+                    </span>
+                    <span className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-tighter mt-0.5">
+                      Compte Pro
                     </span>
                   </div>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-64 p-2 rounded-2xl border-none shadow-2xl glass mt-2">
+                <DropdownMenuLabel className="px-4 py-4">
+                  <div className="flex items-center gap-4">
+                    <Avatar className="w-12 h-12 rounded-xl border-2 border-primary/20">
+                      <AvatarImage src={user.imageUrl} />
+                      <AvatarFallback className="rounded-xl font-black bg-primary text-on-primary">
+                        {user.firstName?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-black leading-tight">{user.fullName}</span>
+                      <span className="text-[10px] font-medium text-muted-foreground truncate max-w-[140px]">
+                        {user.emailAddresses[0]?.emailAddress}
+                      </span>
+                    </div>
+                  </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/profile">Mon Profil</Link>
+                <DropdownMenuSeparator className="bg-outline-variant/30 my-2 mx-2" />
+                <DropdownMenuItem asChild className="rounded-xl px-4 py-3 cursor-pointer focus:bg-primary/5 focus:text-primary transition-all">
+                  <Link href="/dashboard/profile" className="flex items-center gap-3">
+                    <User className="w-4 h-4" />
+                    <span className="text-xs font-bold">Mon Profil Personnel</span>
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings">Paramètres</Link>
+                <DropdownMenuItem asChild className="rounded-xl px-4 py-3 cursor-pointer focus:bg-primary/5 focus:text-primary transition-all">
+                  <Link href="/dashboard/settings" className="flex items-center gap-3">
+                    <Settings className="w-4 h-4" />
+                    <span className="text-xs font-bold">Paramètres Système</span>
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive focus:text-destructive">
-                  Déconnexion
+                <DropdownMenuSeparator className="bg-outline-variant/30 my-2 mx-2" />
+                <DropdownMenuItem 
+                  onClick={() => signOut()}
+                  className="rounded-xl px-4 py-3 cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <LogOut className="w-4 h-4" />
+                    <span className="text-xs font-bold">Déconnexion de l&apos;application</span>
+                  </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -167,6 +167,8 @@ src/
 - **Production:** `mntProd = Phase.montantHT × (taux / 100)` — always calculate server-side
 - **Monetary format:** Use `formatAmount()` — display as `1 234 567,89 DA`
 - **Date format:** Use `formatDate()` — display as `DD MMM YYYY`
+- **UI Design (MANDATORY):** ALWAYS synchronize with **Stitch MCP** for all UI frontend work. Every component, page, form, and layout must strictly follow the architectural designs, color tokens (`#1E3A8A` navy), and "No-Line" surface philosophy defined in the **ProjectManagementApp** (ID: `4036095574208953106`) Stitch project.
+- **Language (MANDATORY):** The application is in **French (fr)**. All buttons, labels, error messages, placeholders, and tooltips MUST be written in French.
 
 ---
 
@@ -250,8 +252,10 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 ## 10. Agent Guidelines & MCP
 
 1. **Skills & MCP First:** It is **CRITICAL** to utilize installed **Skills** and **MCP servers** (like `supabase-mcp-server`) to gather context and follow established patterns **BEFORE** writing any code.
-2. **Read Before Writing:** Always read relevant skill files (e.g., `SKILL.md`) if they apply to the current task.
-3. **Verify State:** Use MCP tools to check the current state of the database or environment before proposing changes.
+2. **Stitch UI Standard:** For all frontend development (components, pages, forms), you **MUST** first query **Stitch MCP** and use the **ProjectManagementApp** design system. Any UI work that doesn't align with the Stitch design specification is considered non-compliant.
+3. **App Language:** All frontend text, labels, messages, and placeholders **MUST** be in **French**. Do not generate English UI elements.
+4. **Read Before Writing:** Always read relevant skill files (e.g., `SKILL.md`) if they apply to the current task.
+5. **Verify State:** Use MCP tools to check the current state of the database or environment before proposing changes.
 
 ## 11. When in Doubt
 

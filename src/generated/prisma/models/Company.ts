@@ -40,6 +40,9 @@ export type CompanyMinAggregateOutputType = {
   ownerId: string | null
   logo: string | null
   NIF: string | null
+  RC: string | null
+  NIS: string | null
+  AI: string | null
   formJur: string | null
   sector: string | null
   wilaya: string | null
@@ -57,6 +60,9 @@ export type CompanyMaxAggregateOutputType = {
   ownerId: string | null
   logo: string | null
   NIF: string | null
+  RC: string | null
+  NIS: string | null
+  AI: string | null
   formJur: string | null
   sector: string | null
   wilaya: string | null
@@ -74,6 +80,9 @@ export type CompanyCountAggregateOutputType = {
   ownerId: number
   logo: number
   NIF: number
+  RC: number
+  NIS: number
+  AI: number
   formJur: number
   sector: number
   wilaya: number
@@ -101,6 +110,9 @@ export type CompanyMinAggregateInputType = {
   ownerId?: true
   logo?: true
   NIF?: true
+  RC?: true
+  NIS?: true
+  AI?: true
   formJur?: true
   sector?: true
   wilaya?: true
@@ -118,6 +130,9 @@ export type CompanyMaxAggregateInputType = {
   ownerId?: true
   logo?: true
   NIF?: true
+  RC?: true
+  NIS?: true
+  AI?: true
   formJur?: true
   sector?: true
   wilaya?: true
@@ -135,6 +150,9 @@ export type CompanyCountAggregateInputType = {
   ownerId?: true
   logo?: true
   NIF?: true
+  RC?: true
+  NIS?: true
+  AI?: true
   formJur?: true
   sector?: true
   wilaya?: true
@@ -238,13 +256,16 @@ export type CompanyGroupByOutputType = {
   name: string
   ownerId: string
   logo: string | null
-  NIF: string | null
-  formJur: string | null
-  sector: string | null
-  wilaya: string | null
-  address: string | null
-  phone: string | null
-  email: string | null
+  NIF: string
+  RC: string
+  NIS: string | null
+  AI: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold: number
   createdAt: Date
   updatedAt: Date
@@ -278,13 +299,16 @@ export type CompanyWhereInput = {
   name?: Prisma.StringFilter<"Company"> | string
   ownerId?: Prisma.StringFilter<"Company"> | string
   logo?: Prisma.StringNullableFilter<"Company"> | string | null
-  NIF?: Prisma.StringNullableFilter<"Company"> | string | null
-  formJur?: Prisma.StringNullableFilter<"Company"> | string | null
-  sector?: Prisma.StringNullableFilter<"Company"> | string | null
-  wilaya?: Prisma.StringNullableFilter<"Company"> | string | null
-  address?: Prisma.StringNullableFilter<"Company"> | string | null
-  phone?: Prisma.StringNullableFilter<"Company"> | string | null
-  email?: Prisma.StringNullableFilter<"Company"> | string | null
+  NIF?: Prisma.StringFilter<"Company"> | string
+  RC?: Prisma.StringFilter<"Company"> | string
+  NIS?: Prisma.StringNullableFilter<"Company"> | string | null
+  AI?: Prisma.StringNullableFilter<"Company"> | string | null
+  formJur?: Prisma.StringFilter<"Company"> | string
+  sector?: Prisma.StringFilter<"Company"> | string
+  wilaya?: Prisma.StringFilter<"Company"> | string
+  address?: Prisma.StringFilter<"Company"> | string
+  phone?: Prisma.StringFilter<"Company"> | string
+  email?: Prisma.StringFilter<"Company"> | string
   productionAlertThreshold?: Prisma.FloatFilter<"Company"> | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -303,13 +327,16 @@ export type CompanyOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
-  NIF?: Prisma.SortOrderInput | Prisma.SortOrder
-  formJur?: Prisma.SortOrderInput | Prisma.SortOrder
-  sector?: Prisma.SortOrderInput | Prisma.SortOrder
-  wilaya?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  NIF?: Prisma.SortOrder
+  RC?: Prisma.SortOrder
+  NIS?: Prisma.SortOrderInput | Prisma.SortOrder
+  AI?: Prisma.SortOrderInput | Prisma.SortOrder
+  formJur?: Prisma.SortOrder
+  sector?: Prisma.SortOrder
+  wilaya?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   productionAlertThreshold?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -331,13 +358,16 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CompanyWhereInput | Prisma.CompanyWhereInput[]
   name?: Prisma.StringFilter<"Company"> | string
   logo?: Prisma.StringNullableFilter<"Company"> | string | null
-  NIF?: Prisma.StringNullableFilter<"Company"> | string | null
-  formJur?: Prisma.StringNullableFilter<"Company"> | string | null
-  sector?: Prisma.StringNullableFilter<"Company"> | string | null
-  wilaya?: Prisma.StringNullableFilter<"Company"> | string | null
-  address?: Prisma.StringNullableFilter<"Company"> | string | null
-  phone?: Prisma.StringNullableFilter<"Company"> | string | null
-  email?: Prisma.StringNullableFilter<"Company"> | string | null
+  NIF?: Prisma.StringFilter<"Company"> | string
+  RC?: Prisma.StringFilter<"Company"> | string
+  NIS?: Prisma.StringNullableFilter<"Company"> | string | null
+  AI?: Prisma.StringNullableFilter<"Company"> | string | null
+  formJur?: Prisma.StringFilter<"Company"> | string
+  sector?: Prisma.StringFilter<"Company"> | string
+  wilaya?: Prisma.StringFilter<"Company"> | string
+  address?: Prisma.StringFilter<"Company"> | string
+  phone?: Prisma.StringFilter<"Company"> | string
+  email?: Prisma.StringFilter<"Company"> | string
   productionAlertThreshold?: Prisma.FloatFilter<"Company"> | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -356,13 +386,16 @@ export type CompanyOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   logo?: Prisma.SortOrderInput | Prisma.SortOrder
-  NIF?: Prisma.SortOrderInput | Prisma.SortOrder
-  formJur?: Prisma.SortOrderInput | Prisma.SortOrder
-  sector?: Prisma.SortOrderInput | Prisma.SortOrder
-  wilaya?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrderInput | Prisma.SortOrder
-  phone?: Prisma.SortOrderInput | Prisma.SortOrder
-  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  NIF?: Prisma.SortOrder
+  RC?: Prisma.SortOrder
+  NIS?: Prisma.SortOrderInput | Prisma.SortOrder
+  AI?: Prisma.SortOrderInput | Prisma.SortOrder
+  formJur?: Prisma.SortOrder
+  sector?: Prisma.SortOrder
+  wilaya?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
   productionAlertThreshold?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -381,13 +414,16 @@ export type CompanyScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Company"> | string
   ownerId?: Prisma.StringWithAggregatesFilter<"Company"> | string
   logo?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
-  NIF?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
-  formJur?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
-  sector?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
-  wilaya?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
-  address?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
-  phone?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
-  email?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  NIF?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  RC?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  NIS?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  AI?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  formJur?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  sector?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  wilaya?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  address?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  phone?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  email?: Prisma.StringWithAggregatesFilter<"Company"> | string
   productionAlertThreshold?: Prisma.FloatWithAggregatesFilter<"Company"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
@@ -398,13 +434,16 @@ export type CompanyCreateInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -423,13 +462,16 @@ export type CompanyUncheckedCreateInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -448,13 +490,16 @@ export type CompanyUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -473,13 +518,16 @@ export type CompanyUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -498,13 +546,16 @@ export type CompanyCreateManyInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -515,13 +566,16 @@ export type CompanyUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -532,13 +586,16 @@ export type CompanyUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -550,6 +607,9 @@ export type CompanyCountOrderByAggregateInput = {
   ownerId?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   NIF?: Prisma.SortOrder
+  RC?: Prisma.SortOrder
+  NIS?: Prisma.SortOrder
+  AI?: Prisma.SortOrder
   formJur?: Prisma.SortOrder
   sector?: Prisma.SortOrder
   wilaya?: Prisma.SortOrder
@@ -571,6 +631,9 @@ export type CompanyMaxOrderByAggregateInput = {
   ownerId?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   NIF?: Prisma.SortOrder
+  RC?: Prisma.SortOrder
+  NIS?: Prisma.SortOrder
+  AI?: Prisma.SortOrder
   formJur?: Prisma.SortOrder
   sector?: Prisma.SortOrder
   wilaya?: Prisma.SortOrder
@@ -588,6 +651,9 @@ export type CompanyMinOrderByAggregateInput = {
   ownerId?: Prisma.SortOrder
   logo?: Prisma.SortOrder
   NIF?: Prisma.SortOrder
+  RC?: Prisma.SortOrder
+  NIS?: Prisma.SortOrder
+  AI?: Prisma.SortOrder
   formJur?: Prisma.SortOrder
   sector?: Prisma.SortOrder
   wilaya?: Prisma.SortOrder
@@ -736,13 +802,16 @@ export type CompanyCreateWithoutSubscriptionInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -760,13 +829,16 @@ export type CompanyUncheckedCreateWithoutSubscriptionInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -800,13 +872,16 @@ export type CompanyUpdateWithoutSubscriptionInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -824,13 +899,16 @@ export type CompanyUncheckedUpdateWithoutSubscriptionInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -848,13 +926,16 @@ export type CompanyCreateWithoutUsersInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -872,13 +953,16 @@ export type CompanyUncheckedCreateWithoutUsersInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -912,13 +996,16 @@ export type CompanyUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -936,13 +1023,16 @@ export type CompanyUncheckedUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -960,13 +1050,16 @@ export type CompanyCreateWithoutUnitsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -984,13 +1077,16 @@ export type CompanyUncheckedCreateWithoutUnitsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1024,13 +1120,16 @@ export type CompanyUpdateWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1048,13 +1147,16 @@ export type CompanyUncheckedUpdateWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1072,13 +1174,16 @@ export type CompanyCreateWithoutInvitationsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1096,13 +1201,16 @@ export type CompanyUncheckedCreateWithoutInvitationsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1136,13 +1244,16 @@ export type CompanyUpdateWithoutInvitationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1160,13 +1271,16 @@ export type CompanyUncheckedUpdateWithoutInvitationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1184,13 +1298,16 @@ export type CompanyCreateWithoutTaskCommentsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1208,13 +1325,16 @@ export type CompanyUncheckedCreateWithoutTaskCommentsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1248,13 +1368,16 @@ export type CompanyUpdateWithoutTaskCommentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1272,13 +1395,16 @@ export type CompanyUncheckedUpdateWithoutTaskCommentsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1296,13 +1422,16 @@ export type CompanyCreateWithoutTaskMentionsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1320,13 +1449,16 @@ export type CompanyUncheckedCreateWithoutTaskMentionsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1360,13 +1492,16 @@ export type CompanyUpdateWithoutTaskMentionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1384,13 +1519,16 @@ export type CompanyUncheckedUpdateWithoutTaskMentionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1408,13 +1546,16 @@ export type CompanyCreateWithoutNotificationsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1432,13 +1573,16 @@ export type CompanyUncheckedCreateWithoutNotificationsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1472,13 +1616,16 @@ export type CompanyUpdateWithoutNotificationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1496,13 +1643,16 @@ export type CompanyUncheckedUpdateWithoutNotificationsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1520,13 +1670,16 @@ export type CompanyCreateWithoutActivityLogsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1544,13 +1697,16 @@ export type CompanyUncheckedCreateWithoutActivityLogsInput = {
   name: string
   ownerId: string
   logo?: string | null
-  NIF?: string | null
-  formJur?: string | null
-  sector?: string | null
-  wilaya?: string | null
-  address?: string | null
-  phone?: string | null
-  email?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1584,13 +1740,16 @@ export type CompanyUpdateWithoutActivityLogsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1608,13 +1767,16 @@ export type CompanyUncheckedUpdateWithoutActivityLogsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  NIF?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  formJur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sector?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  wilaya?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1718,6 +1880,9 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ownerId?: boolean
   logo?: boolean
   NIF?: boolean
+  RC?: boolean
+  NIS?: boolean
+  AI?: boolean
   formJur?: boolean
   sector?: boolean
   wilaya?: boolean
@@ -1744,6 +1909,9 @@ export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ownerId?: boolean
   logo?: boolean
   NIF?: boolean
+  RC?: boolean
+  NIS?: boolean
+  AI?: boolean
   formJur?: boolean
   sector?: boolean
   wilaya?: boolean
@@ -1761,6 +1929,9 @@ export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ownerId?: boolean
   logo?: boolean
   NIF?: boolean
+  RC?: boolean
+  NIS?: boolean
+  AI?: boolean
   formJur?: boolean
   sector?: boolean
   wilaya?: boolean
@@ -1778,6 +1949,9 @@ export type CompanySelectScalar = {
   ownerId?: boolean
   logo?: boolean
   NIF?: boolean
+  RC?: boolean
+  NIS?: boolean
+  AI?: boolean
   formJur?: boolean
   sector?: boolean
   wilaya?: boolean
@@ -1789,7 +1963,7 @@ export type CompanySelectScalar = {
   updatedAt?: boolean
 }
 
-export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ownerId" | "logo" | "NIF" | "formJur" | "sector" | "wilaya" | "address" | "phone" | "email" | "productionAlertThreshold" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ownerId" | "logo" | "NIF" | "RC" | "NIS" | "AI" | "formJur" | "sector" | "wilaya" | "address" | "phone" | "email" | "productionAlertThreshold" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subscription?: boolean | Prisma.Company$subscriptionArgs<ExtArgs>
   units?: boolean | Prisma.Company$unitsArgs<ExtArgs>
@@ -1821,13 +1995,16 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     name: string
     ownerId: string
     logo: string | null
-    NIF: string | null
-    formJur: string | null
-    sector: string | null
-    wilaya: string | null
-    address: string | null
-    phone: string | null
-    email: string | null
+    NIF: string
+    RC: string
+    NIS: string | null
+    AI: string | null
+    formJur: string
+    sector: string
+    wilaya: string
+    address: string
+    phone: string
+    email: string
     productionAlertThreshold: number
     createdAt: Date
     updatedAt: Date
@@ -2267,6 +2444,9 @@ export interface CompanyFieldRefs {
   readonly ownerId: Prisma.FieldRef<"Company", 'String'>
   readonly logo: Prisma.FieldRef<"Company", 'String'>
   readonly NIF: Prisma.FieldRef<"Company", 'String'>
+  readonly RC: Prisma.FieldRef<"Company", 'String'>
+  readonly NIS: Prisma.FieldRef<"Company", 'String'>
+  readonly AI: Prisma.FieldRef<"Company", 'String'>
   readonly formJur: Prisma.FieldRef<"Company", 'String'>
   readonly sector: Prisma.FieldRef<"Company", 'String'>
   readonly wilaya: Prisma.FieldRef<"Company", 'String'>
