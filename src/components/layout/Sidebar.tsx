@@ -8,317 +8,725 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
-  CheckCircle2,
-  Inbox,
-  BarChart3,
+  Briefcase,
+  Kanban,
   Users,
-  Target,
-  Settings,
-  LogOut,
-  Star,
-  PanelLeftClose,
-  PanelLeft,
-  LucideIcon,
-  ChevronRight,
+  Users2,
+  UserPlus,
   CreditCard,
   Building2,
   Bell,
-  Kanban,
-  Users2,
-  Briefcase
+  Settings,
+  LogOut,
+  PanelLeftClose,
+  PanelLeft,
+  CheckSquare,
+  ChevronDown,
+  ChevronRight,
+  type LucideIcon,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
-interface SidebarUser {
-  imageUrl: string;
-  firstName: string | null;
-  fullName: string | null;
-  emailAddresses: Array<{ emailAddress: string }>;
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface NavSection {
+  type: "section";
+  label: string;
+  id: string;
 }
 
-interface NavItem {
-  icon?: LucideIcon;
-  label?: string;
-  href?: string;
-  section?: string;
-  badge?: number;
-  isFavourite?: boolean;
-  favouriteColor?: string;
+interface NavLink {
+  type: "link";
+  icon: LucideIcon;
+  label: string;
+  href: string;
+  badge?: string | number;
 }
 
-const SidebarContent = ({
-  collapsed,
-  setCollapsed,
-  pathname,
-  user,
-  role,
-  companyId,
-  unitId,
-  handleSignOut,
-}: {
+interface CollapsibleSection {
+  type: "collapsible";
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  items: NavLink[];
+}
+
+type NavItem = NavSection | NavLink | CollapsibleSection;
+
+// ─── Subscription Status Badge ────────────────────────────────────────────────
+
+interface SubscriptionBadgeProps {
+  status: string;
+  endAt: Date | null;
   collapsed: boolean;
-  setCollapsed: (v: boolean) => void;
-  pathname: string;
-  user: SidebarUser;
-  role: string | undefined;
-  companyId: string | undefined;
-  unitId: string | undefined;
-  handleSignOut: () => void;
-}) => {
-  const getNavItems = (): NavItem[] => {
-    const items: NavItem[] = [];
+}
 
-    // Enterprise Section (OWNER only)
-    if (role === "OWNER" && companyId) {
-      items.push({ section: "Entreprise" });
-      items.push({ icon: LayoutDashboard, label: "Vue d'ensemble", href: `/company/${companyId}` });
-      items.push({ icon: Building2, label: "Unités", href: `/company/${companyId}/units` });
-      items.push({ icon: Users2, label: "Équipe globale", href: `/company/${companyId}/team` });
-      items.push({ icon: CreditCard, label: "Facturation", href: `/company/${companyId}/settings/billing` });
+function SubscriptionBadge({ status, endAt, collapsed }: SubscriptionBadgeProps) {
+  if (status === "ACTIVE") {
+    return collapsed ? (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Badge variant="default" className="bg-green-500/10 text-green-600 border-green-500/20 h-5 px-1.5 text-[10px]">
+            ✓
+          </Badge>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="text-xs">
+          Abonnement actif
+        </TooltipContent>
+      </Tooltip>
+    ) : (
+      <Badge variant="default" className="bg-green-500/10 text-green-600 border-green-500/20 text-[10px]">
+        ✓ Abonnement actif
+      </Badge>
+    );
+  }
+
+  if (status === "TRIAL" && endAt) {
+    const daysRemaining = Math.max(
+      0,
+      Math.ceil((new Date(endAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    );
+
+    if (daysRemaining === 0) {
+      return collapsed ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Badge variant="destructive" className="h-5 px-1.5 text-[10px] animate-pulse">
+              !
+            </Badge>
+          </TooltipTrigger>
+          <TooltipContent side="right" className="text-xs">
+            Essai expiré
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        <Badge variant="destructive" className="text-[10px] animate-pulse">
+          ⚠ Essai expiré
+        </Badge>
+      );
     }
 
-    // Unit Section (OWNER or ADMIN)
-    if ((role === "OWNER" || role === "ADMIN") && unitId) {
-      items.push({ section: "Unité Opérationnelle" });
-      items.push({ icon: LayoutDashboard, label: "Tableau de bord", href: `/unite/${unitId}` });
-      items.push({ icon: Briefcase, label: "Projets", href: `/unite/${unitId}/projects` });
-      items.push({ icon: Kanban, label: "Kanban", href: `/unite/${unitId}/kanban` });
-      items.push({ icon: Users, label: "Clients", href: `/unite/${unitId}/clients` });
-      items.push({ icon: Users2, label: "Membres", href: `/unite/${unitId}/members` });
-      items.push({ icon: Bell, label: "Notifications", href: `/unite/${unitId}/notifications`, badge: 3 });
-      items.push({ icon: Settings, label: "Paramètres", href: `/unite/${unitId}/settings` });
+    if (daysRemaining <= 7) {
+      return collapsed ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Badge variant="destructive" className="h-5 px-1.5 text-[10px]">
+              {daysRemaining}
+            </Badge>
+          </TooltipTrigger>
+          <TooltipContent side="right" className="text-xs">
+            {daysRemaining} jours restants
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        <Badge variant="destructive" className="text-[10px]">
+          ⚠ {daysRemaining}j restants
+        </Badge>
+      );
     }
 
-    // User/Collaborator Section
-    if (role === "USER") {
-      items.push({ section: "Mon Espace" });
-      items.push({ icon: LayoutDashboard, label: "Tableau de bord", href: `/dashboard` });
-      items.push({ icon: CheckCircle2, label: "Mes Tâches", href: `/dashboard/tasks` });
-      items.push({ icon: Inbox, label: "Messages", href: `/dashboard/messages`, badge: 5 });
-      items.push({ icon: BarChart3, label: "Reporting", href: `/dashboard/reporting` });
+    return collapsed ? (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 h-5 px-1.5 text-[10px]">
+            {daysRemaining}
+          </Badge>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="text-xs">
+          {daysRemaining} jours d&apos;essai restants
+        </TooltipContent>
+      </Tooltip>
+    ) : (
+      <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-[10px]">
+        ⏱ {daysRemaining}j restants
+      </Badge>
+    );
+  }
+
+  if (status === "GRACE") {
+    return collapsed ? (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Badge variant="destructive" className="h-5 px-1.5 text-[10px]">
+            !
+          </Badge>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="text-xs">
+          Période de grâce
+        </TooltipContent>
+      </Tooltip>
+    ) : (
+      <Badge variant="destructive" className="text-[10px]">
+        ⚠ Période de grâce
+      </Badge>
+    );
+  }
+
+  return null;
+}
+
+// ─── Company Logo ─────────────────────────────────────────────────────────────
+
+interface CompanyLogoProps {
+  logoUrl?: string | null;
+  companyName?: string;
+  collapsed: boolean;
+}
+
+function CompanyLogo({ logoUrl, companyName, collapsed }: CompanyLogoProps) {
+  const logoSize = collapsed ? "w-9 h-9" : "w-10 h-10";
+  
+  if (collapsed) {
+    if (logoUrl) {
+      return (
+        <div className={cn(logoSize, "rounded-xl overflow-hidden bg-surface-container-low shrink-0")}>
+          <img src={logoUrl} alt={companyName || "Logo"} className="w-full h-full object-cover" />
+        </div>
+      );
     }
-
-    // Recent Projects Section (if not collapsed)
-    if (!collapsed) {
-      items.push({ section: "Projets Récents" });
-      items.push({ 
-        icon: Star, 
-        label: "Neo-Brutalist HQ", 
-        href: `/unite/${unitId}/p-neo`, 
-        isFavourite: true, 
-        favouriteColor: "primary" 
-      });
-      items.push({ 
-        icon: Star, 
-        label: "Vertical Garden", 
-        href: `/unite/${unitId}/p-garden`, 
-        isFavourite: true, 
-        favouriteColor: "secondary" 
-      });
-    }
-
-    return items;
-  };
-
-  const navItems = getNavItems();
-  const isActive = (href?: string) => {
-    if (!href) return false;
-    return pathname === href || (pathname.startsWith(href) && href !== "/dashboard");
-  };
+    return (
+      <div className={cn(logoSize, "bg-primary rounded-xl flex items-center justify-center shrink-0")}>
+        <span className="text-white text-sm font-black tracking-tight">
+          {(companyName || "PMA").charAt(0).toUpperCase()}
+        </span>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col h-full bg-surface-container-low text-sidebar-foreground overflow-hidden">
-      {/* Header section with brand and toggle */}
-      <div className="flex items-center gap-3 px-6 h-20 shrink-0">
-        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-primary/20 transition-transform hover:rotate-3">
-          <Target className="w-6 h-6 text-on-primary" />
+    <div className="flex items-center gap-3 min-w-0">
+      {logoUrl ? (
+        <div className={cn(logoSize, "rounded-xl overflow-hidden bg-surface-container-low shrink-0")}>
+          <img src={logoUrl} alt={companyName || "Logo"} className="w-full h-full object-cover" />
         </div>
-        <div className={cn(
-          "flex flex-col leading-tight transition-all duration-500",
-          collapsed ? "opacity-0 invisible w-0" : "opacity-100 visible"
-        )}>
-          <span className="text-lg font-extrabold tracking-tighter text-foreground">AGORA</span>
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">Gestion Pro</span>
+      ) : (
+        <div className={cn(logoSize, "bg-primary rounded-xl flex items-center justify-center shrink-0")}>
+          <span className="text-white text-sm font-black tracking-tight">
+            {(companyName || "PMA").charAt(0).toUpperCase()}
+          </span>
         </div>
-      </div>
-
-      {/* Navigation section */}
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden pt-2 pb-6 px-4 flex flex-col gap-1 scrollbar-hide">
-        {navItems.map((item, idx) => {
-          if (item.section) {
-            if (collapsed) return <div key={idx} className="h-px bg-outline-variant/30 my-4 mx-4" />;
-            return (
-              <div
-                key={idx}
-                className="text-label text-muted-foreground/40 mt-6 mb-2 px-4 transition-all"
-              >
-                {item.section}
-              </div>
-            );
-          }
-
-          const active = isActive(item.href);
-
-          return (
-            <Link
-              key={item.href || idx}
-              href={item.href || "#"}
-              title={collapsed ? item.label : undefined}
-              className={cn(
-                "group relative flex items-center gap-3 px-4 py-3 rounded-sidebar transition-all duration-300",
-                active 
-                  ? "bg-surface-container-lowest text-foreground shadow-sm font-bold" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-surface-container/50"
-              )}
-            >
-              {/* Active Indicator Bar */}
-              {active && !collapsed && (
-                <div className="absolute left-0 top-3 bottom-3 w-1.5 bg-primary rounded-r-full" />
-              )}
-              
-              {item.isFavourite ? (
-                <div className={cn(
-                  "w-2.5 h-2.5 rounded-full shrink-0 transition-transform group-hover:scale-125",
-                  active ? "ring-4 ring-primary/10" : "",
-                  item.favouriteColor === "secondary" ? "bg-amber-400" : "bg-primary"
-                )} />
-              ) : (
-                item.icon && (
-                  <item.icon
-                    className={cn(
-                      "w-5 h-5 shrink-0 transition-all group-hover:scale-110",
-                      active ? "text-primary" : "text-muted-foreground/60 group-hover:text-primary"
-                    )}
-                  />
-                )
-              )}
-
-              <span className={cn(
-                "text-[13px] font-medium whitespace-nowrap transition-all duration-500",
-                collapsed ? "opacity-0 invisible w-0" : "opacity-100 visible"
-              )}>
-                {item.label}
-              </span>
-
-              {!collapsed && active && (
-                <ChevronRight className="ml-auto w-4 h-4 text-primary/40" />
-              )}
-              
-              {item.badge && !collapsed && (
-                <span className="ml-auto bg-primary text-on-primary text-[10px] font-black px-2 py-0.5 rounded-full">
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          );
-        })}
-      </nav>
-
-      {/* Footer quick actions */}
-      <div className="p-4 flex flex-col gap-2 shrink-0">
-        <div className="bg-surface-container rounded-2xl p-2 flex flex-col gap-1">
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-muted-foreground hover:text-foreground hover:bg-surface-container-high group"
-          >
-            {collapsed ? (
-              <PanelLeft className="w-5 h-5 shrink-0 transition-transform group-hover:rotate-12" />
-            ) : (
-              <PanelLeftClose className="w-5 h-5 shrink-0 transition-transform group-hover:-rotate-12" />
-            )}
-            {!collapsed && <span className="text-xs font-bold uppercase tracking-wider transition-all">Réduire</span>}
-          </button>
-        </div>
-
-        {/* User profile section */}
-        <div className={cn(
-          "relative flex items-center gap-3 p-3 rounded-2xl transition-all duration-500 overflow-hidden group",
-          "bg-white dark:bg-surface-container-highest shadow-sm",
-          collapsed ? "justify-center" : "px-4"
-        )}>
-          <Avatar className="w-10 h-10 rounded-xl shrink-0 transition-transform group-hover:scale-105">
-            <AvatarImage src={user.imageUrl} />
-            <AvatarFallback className="rounded-xl bg-primary text-on-primary font-black text-xs">
-              {user.firstName?.charAt(0) || "U"}
-            </AvatarFallback>
-          </Avatar>
-
-          {!collapsed && (
-            <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-xs font-black truncate text-foreground leading-tight">
-                {user.fullName || "Utilisateur"}
-              </span>
-              <span className="text-[10px] font-bold text-primary tracking-widest uppercase mt-0.5">
-                {role || "Collaborateur"}
-              </span>
-            </div>
-          )}
-
-          {!collapsed && (
-            <button
-              onClick={handleSignOut}
-              className="p-2 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors ml-1"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+      )}
+      <div className="flex flex-col leading-none min-w-0">
+        <span className="text-base font-bold text-foreground truncate tracking-tight">
+          {companyName || "AGORA"}
+        </span>
+        <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider mt-0.5">
+          Gestion Pro
+        </span>
       </div>
     </div>
   );
-};
+}
 
-export function Sidebar() {
-  const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom);
-  const [mobileOpen, setMobileOpen] = useAtom(sidebarMobileOpenAtom);
+// ─── Collapsible Nav Section ─────────────────────────────────────────────────
 
-  const { user, isLoaded } = useUser();
+interface CollapsibleNavSectionProps {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  items: NavLink[];
+  collapsed: boolean;
+  pathname: string;
+  onClose?: () => void;
+}
+
+function CollapsibleNavSection({
+  id,
+  label,
+  icon: SectionIcon,
+  items,
+  collapsed,
+  pathname,
+  onClose,
+}: CollapsibleNavSectionProps) {
+  const [isOpen, setIsOpen] = useState(true);
+  const Icon = SectionIcon;
+
+  const hasActiveChild = items.some((item) => {
+    if (item.href === "/dashboard") return pathname === "/dashboard";
+    return pathname === item.href || pathname.startsWith(item.href + "/");
+  });
+
+  if (collapsed) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div
+            className={cn(
+              "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-150",
+              hasActiveChild
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-surface-container-low hover:text-foreground"
+            )}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <Icon className="w-4 h-4 shrink-0" />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="text-xs">
+          <div className="font-semibold mb-1">{label}</div>
+          {items.map((item) => (
+            <div key={item.href} className="text-muted-foreground">
+              {item.label}
+            </div>
+          ))}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return (
+    <div className="space-y-0.5">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150",
+          hasActiveChild
+            ? "bg-primary/10 text-primary"
+            : "text-muted-foreground hover:bg-surface-container-low hover:text-foreground"
+        )}
+      >
+        <Icon className="w-4 h-4 shrink-0" />
+        <span className="flex-1 text-left truncate">{label}</span>
+        {isOpen ? (
+          <ChevronDown className="w-3 h-3 shrink-0 opacity-60" />
+        ) : (
+          <ChevronRight className="w-3 h-3 shrink-0 opacity-60" />
+        )}
+      </button>
+
+      {isOpen && (
+        <div className="ml-4 pl-3 border-l border-border/50 space-y-0.5">
+          {items.map((item) => {
+            const active = item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname === item.href || pathname.startsWith(item.href + "/");
+            const ItemIcon = item.icon;
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                className={cn(
+                  "relative flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150 group",
+                  active
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-surface-container-low hover:text-foreground"
+                )}
+              >
+                {active && (
+                  <span className="absolute left-0 top-2 bottom-2 w-[3px] bg-primary rounded-r-full" />
+                )}
+                <ItemIcon className="w-4 h-4 shrink-0" />
+                <span className="truncate">{item.label}</span>
+                {item.badge !== undefined && (
+                  <Badge variant="secondary" className="ml-auto text-[10px] h-5 px-1.5">
+                    {item.badge}
+                  </Badge>
+                )}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Role-based navigation builder ───────────────────────────────────────────
+
+function buildNavItems(
+  role: string | undefined,
+  companyId: string | undefined,
+  unitId: string | undefined,
+): NavItem[] {
+  const items: NavItem[] = [];
+
+  if (role === "OWNER" && companyId) {
+    // Entreprise section
+    items.push({ type: "section", label: "Entreprise", id: "entreprise" });
+    items.push({ type: "collapsible", id: "entreprise-nav", label: "Entreprise", icon: Building2, items: [
+      { type: "link", icon: LayoutDashboard, label: "Vue d'ensemble", href: `/company/${companyId}` },
+      { type: "link", icon: Building2, label: "Unités", href: `/company/${companyId}/units` },
+      { type: "link", icon: Users2, label: "Équipe", href: `/company/${companyId}/team` },
+    ]});
+    items.push({ type: "link", icon: CreditCard, label: "Facturation", href: `/company/${companyId}/settings/billing` });
+    items.push({ type: "link", icon: Settings, label: "Paramètres", href: `/company/${companyId}/settings` });
+    
+    // Unités section (for unit selector) - AFTER Paramètres
+    items.push({ type: "section", label: "Unités", id: "unites" });
+  }
+
+  if ((role === "OWNER" || role === "ADMIN") && unitId) {
+    // Unité section
+    items.push({ type: "section", label: "Unité", id: "unite" });
+    items.push({ type: "collapsible", id: "unite-nav", label: "Opérations", icon: Briefcase, items: [
+      { type: "link", icon: LayoutDashboard, label: "Tableau de bord", href: `/unite/${unitId}` },
+      { type: "link", icon: Briefcase, label: "Projets", href: `/unite/${unitId}/projects` },
+      { type: "link", icon: Kanban, label: "Kanban", href: `/unite/${unitId}/kanban` },
+      { type: "link", icon: Users, label: "Clients", href: `/unite/${unitId}/clients` },
+    ]});
+    items.push({ type: "link", icon: Bell, label: "Notifications", href: `/unite/${unitId}/notifications` });
+    items.push({ type: "link", icon: Settings, label: "Paramètres", href: `/unite/${unitId}/settings` });
+  }
+
+  if (role === "USER") {
+    items.push({ type: "section", label: "Mon espace", id: "mon-espace" });
+    items.push({ type: "link", icon: LayoutDashboard, label: "Tableau de bord", href: `/dashboard` });
+    items.push({ type: "link", icon: CheckSquare, label: "Mes tâches", href: `/dashboard/tasks` });
+    items.push({ type: "link", icon: Bell, label: "Notifications", href: `/dashboard/notifications` });
+  }
+
+  return items;
+}
+
+// ─── SidebarCore ─────────────────────────────────────────────────────────────
+
+interface SidebarCoreProps {
+  collapsed: boolean;
+  setCollapsed: (v: boolean) => void;
+  onClose?: () => void;
+  companyLogo?: string | null;
+  companyName?: string;
+  subscriptionStatus?: string;
+  subscriptionEndAt?: Date | null;
+  units?: Array<{ id: string; name: string }>;
+  currentUnitId?: string | null;
+}
+
+function SidebarCore({
+  collapsed,
+  setCollapsed,
+  onClose,
+  companyLogo,
+  companyName,
+  subscriptionStatus = "TRIAL",
+  subscriptionEndAt,
+  units = [],
+  currentUnitId,
+}: SidebarCoreProps) {
+  const { user } = useUser();
   const { signOut } = useClerk();
   const pathname = usePathname();
   const router = useRouter();
 
-  if (!isLoaded || !user) return null;
+  const role      = user?.publicMetadata?.role      as string | undefined;
+  const companyId = user?.publicMetadata?.companyId as string | undefined;
+  const unitId    = user?.publicMetadata?.unitId    as string | undefined;
 
-  const role = user.publicMetadata?.role as "OWNER" | "ADMIN" | "USER" | undefined;
-  const companyId = user.publicMetadata?.companyId as string | undefined;
-  const unitId = user.publicMetadata?.unitId as string | undefined;
+  const navItems = buildNavItems(role, companyId, unitId);
 
-  const handleSignOut = async () => {
+  async function handleSignOut() {
     await signOut();
     router.push("/");
+  }
+
+  const getRoleLabel = (r: string | undefined) => {
+    if (r === "OWNER") return "Propriétaire";
+    if (r === "ADMIN") return "Administrateur";
+    return "Collaborateur";
   };
 
-  const sharedProps = {
-    collapsed,
-    setCollapsed,
-    pathname,
-    user,
-    role,
-    companyId,
-    unitId,
-    handleSignOut,
+  const getInitials = (name: string | null | undefined) => {
+    if (!name) return "U";
+    const parts = name.split(" ");
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
   };
 
   return (
+    <TooltipProvider delayDuration={0}>
+      <div
+        className={cn(
+          "flex flex-col h-full bg-sidebar border-r border-sidebar-border transition-all duration-300",
+          collapsed ? "w-[64px]" : "w-[260px]"
+        )}
+      >
+        {/* ── Brand header ── */}
+        <div className={cn(
+          "flex items-center h-[64px] border-b border-sidebar-border shrink-0 px-4",
+          collapsed ? "justify-center" : "justify-between"
+        )}>
+          <CompanyLogo
+            logoUrl={companyLogo}
+            companyName={companyName}
+            collapsed={collapsed}
+          />
+          
+          {/* Collapse toggle - always visible */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setCollapsed(!collapsed)}
+                className="p-2 rounded-lg text-muted-foreground hover:bg-surface-container-low hover:text-foreground transition-colors"
+              >
+                {collapsed
+                  ? <PanelLeft className="w-4 h-4" />
+                  : <PanelLeftClose className="w-4 h-4" />
+                }
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="text-xs">
+              {collapsed ? "Développer" : "Réduire"}
+            </TooltipContent>
+          </Tooltip>
+        </div>
+
+        {/* ── Subscription Status (OWNER only) ── */}
+        {role === "OWNER" && !collapsed && (
+          <div className="mx-3 my-2 p-3 rounded-xl bg-surface-container-low">
+            <SubscriptionBadge
+              status={subscriptionStatus}
+              endAt={subscriptionEndAt || null}
+              collapsed={false}
+            />
+          </div>
+        )}
+
+        {/* ── Navigation ── */}
+        <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 px-2 flex flex-col gap-0.5 scrollbar-hide">
+          {navItems.map((item, idx) => {
+            if (item.type === "section") {
+              // Special handling for "Unités" section - renders unit selector
+              if (item.id === "unites" && role === "OWNER") {
+                if (collapsed) {
+                  return <div key={idx} className="h-px bg-sidebar-border/50 my-2 mx-2" />;
+                }
+                return (
+                  <div key={idx} className="px-3 pt-4 pb-2 first:pt-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-2">
+                      {item.label}
+                    </p>
+                    <div className="relative">
+                      <select
+                        className="w-full h-10 pl-3 pr-8 rounded-lg bg-surface-container-low text-[13px] font-medium text-foreground border-0 focus:ring-2 focus:ring-primary/20 appearance-none cursor-pointer"
+                        value={unitId || ""}
+                        onChange={(e) => {
+                          const newUnitId = e.target.value;
+                          if (newUnitId) {
+                            router.push(`/unite/${newUnitId}`);
+                          }
+                        }}
+                      >
+                        {units.map((unit) => (
+                          <option key={unit.id} value={unit.id}>
+                            {unit.name}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    </div>
+                  </div>
+                );
+              }
+
+              if (collapsed) {
+                return <div key={idx} className="h-px bg-sidebar-border/50 my-2 mx-2" />;
+              }
+              return (
+                <p
+                  key={idx}
+                  className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 px-3 pt-4 pb-1.5 first:pt-0"
+                >
+                  {item.label}
+                </p>
+              );
+            }
+
+            if (item.type === "collapsible") {
+              return (
+                <CollapsibleNavSection
+                  key={item.id}
+                  id={item.id}
+                  label={item.label}
+                  icon={item.icon}
+                  items={item.items}
+                  collapsed={collapsed}
+                  pathname={pathname}
+                  onClose={onClose}
+                />
+              );
+            }
+
+            const active = item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname === item.href || pathname.startsWith(item.href + "/");
+            const Icon = item.icon;
+
+            const linkContent = (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                className={cn(
+                  "relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150 group overflow-hidden",
+                  collapsed && "justify-center px-0 w-10 h-10 mx-auto",
+                  active
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-surface-container-low hover:text-foreground"
+                )}
+              >
+                {/* Active left bar */}
+                {active && !collapsed && (
+                  <span className="absolute left-0 top-2 bottom-2 w-[3px] bg-primary rounded-r-full" />
+                )}
+
+                <Icon
+                  className={cn(
+                    "w-4 h-4 shrink-0 transition-colors",
+                    active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                  )}
+                />
+
+                {!collapsed && (
+                  <span className="truncate">{item.label}</span>
+                )}
+
+                {!collapsed && item.badge !== undefined && (
+                  <Badge variant="secondary" className="ml-auto text-[10px] h-5 px-1.5">
+                    {item.badge}
+                  </Badge>
+                )}
+              </Link>
+            );
+
+            if (collapsed) {
+              return (
+                <Tooltip key={item.href}>
+                  <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
+                  <TooltipContent side="right" className="text-xs flex items-center gap-2">
+                    {item.label}
+                    {item.badge !== undefined && (
+                      <Badge variant="secondary" className="text-[10px] h-5 px-1">
+                        {item.badge}
+                      </Badge>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
+              );
+            }
+
+            return linkContent;
+          })}
+        </nav>
+
+        {/* ── Footer ── */}
+        <div className="shrink-0 border-t border-sidebar-border p-3 flex flex-col gap-3">
+          {/* Membres Section (OWNER only) */}
+          {role === "OWNER" && !collapsed && (
+            <div className="space-y-2">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 px-1">
+                Membres
+              </p>
+              <Link
+                href={`/company/${companyId}/team`}
+                className="flex items-center justify-center gap-2 h-10 w-full px-3 rounded-lg bg-primary text-primary-foreground text-[13px] font-medium hover:bg-primary/90 transition-colors"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Inviter des membres</span>
+              </Link>
+            </div>
+          )}
+
+          {/* User profile */}
+          {user && (
+            <div
+              className={cn(
+                "flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-surface-container-low transition-colors",
+                collapsed && "justify-center"
+              )}
+            >
+              <Avatar className="w-9 h-9 rounded-xl shrink-0">
+                <AvatarImage src={user.imageUrl} />
+                <AvatarFallback className="rounded-xl bg-primary text-primary-foreground text-xs font-bold">
+                  {getInitials(user.firstName)}
+                </AvatarFallback>
+              </Avatar>
+
+              {!collapsed && (
+                <>
+                  <div className="flex flex-col min-w-0 flex-1 leading-none">
+                    <span className="text-sm font-semibold text-foreground truncate">
+                      {user.fullName ?? "Utilisateur"}
+                    </span>
+                    <span className="text-[11px] text-primary font-medium mt-0.5">
+                      {getRoleLabel(role)}
+                    </span>
+                  </div>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={handleSignOut}
+                        className="p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="text-xs">
+                      Se déconnecter
+                    </TooltipContent>
+                  </Tooltip>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </TooltipProvider>
+  );
+}
+
+// ─── Sidebar (exported) ───────────────────────────────────────────────────────
+
+interface SidebarProps {
+  companyLogo?: string | null;
+  companyName?: string;
+  subscriptionStatus?: string;
+  subscriptionEndAt?: Date | null;
+  units?: Array<{ id: string; name: string }>;
+  currentUnitId?: string | null;
+}
+
+export function Sidebar(props: SidebarProps) {
+  const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom);
+  const [mobileOpen, setMobileOpen] = useAtom(sidebarMobileOpenAtom);
+  const { isLoaded, user } = useUser();
+
+  if (!isLoaded || !user) return null;
+
+  return (
     <>
+      {/* Mobile sheet */}
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="p-0 w-[280px] bg-transparent border-0 shadow-none">
+        <SheetContent side="left" className="p-0 w-[260px] border-0">
           <SheetTitle className="sr-only">Menu principal</SheetTitle>
-          <SheetDescription className="sr-only">Naviguer dans l&apos;application agora</SheetDescription>
-          <div className="h-full w-full rounded-r-2xl overflow-hidden shadow-2xl">
-            <SidebarContent {...sharedProps} />
+          <SheetDescription className="sr-only">Navigation PMA</SheetDescription>
+          <div className="h-full">
+            <SidebarCore
+              {...props}
+              collapsed={false}
+              setCollapsed={() => {}}
+              onClose={() => setMobileOpen(false)}
+            />
           </div>
         </SheetContent>
       </Sheet>
 
-      <aside
-        className={cn(
-          "hidden md:flex h-screen sticky top-0 z-30 shrink-0 flex-col transition-all duration-500 ease-in-out",
-          collapsed ? "w-[80px]" : "w-[260px]"
-        )}
-      >
-        <SidebarContent {...sharedProps} />
+      {/* Desktop sidebar */}
+      <aside className="hidden md:block h-screen sticky top-0 shrink-0 z-30">
+        <SidebarCore
+          {...props}
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
+        />
       </aside>
     </>
   );

@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { InfoBar } from "@/components/layout/InfoBar";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { getAuthUser, getCompanyById, getUnits } from "@/lib/queries";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const { userId } = await auth();
@@ -12,19 +13,39 @@ export default async function DashboardLayout({ children }: { children: ReactNod
     redirect("/company/sign-in");
   }
 
-  return (
-    <div className="flex bg-background text-foreground min-h-screen font-sans antialiased overflow-hidden">
-      <Sidebar />
+  // Fetch auth user and company data for sidebar
+  const authUser = await getAuthUser(userId);
+  const companyId = authUser?.companyId;
+  
+  let companyData = null;
+  let units: Array<{ id: string; name: string }> = [];
+  
+  if (companyId) {
+    companyData = await getCompanyById(companyId);
+    const allUnits = await getUnits(companyId);
+    units = allUnits.map(u => ({ id: u.id, name: u.name }));
+  }
 
-      <div className="flex flex-col flex-1 min-w-0 transition-all duration-300">
+  return (
+    <div className="flex h-screen bg-[#ECEAE8] font-sans antialiased overflow-hidden">
+      {/* Sidebar — with subscription status and company info */}
+      <Sidebar
+        companyLogo={companyData?.logo}
+        companyName={companyData?.name}
+        subscriptionStatus={companyData?.subscription?.status}
+        subscriptionEndAt={companyData?.subscription?.endAt}
+        units={units}
+        currentUnitId={authUser?.unitId}
+      />
+
+      {/* Main content column */}
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <InfoBar />
         <Navbar />
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-surface-container-low">
-          <div className="p-4 md:p-6 lg:p-8">
-            <div className="mx-auto max-w-content w-full">
-              {children}
-            </div>
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-6 lg:p-8 max-w-[1600px] mx-auto w-full">
+            {children}
           </div>
         </main>
       </div>
