@@ -8,7 +8,7 @@ export const userSchema = z.object({
   id: z.string(),
   clerkId: z.string(),
   name: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-  email: z.string().email("Email invalide"),
+  email: z.email("Email invalide"),
   role: z.enum(["OWNER", "ADMIN", "USER"]),
   companyId: z.string().nullable(),
   unitId: z.string().nullable(),
@@ -25,30 +25,36 @@ export const companySchema = z.object({
     "SARL", "EURL", "SPA", "SPA-S", "SN", "SNC", "GIE", "EI", "Auto-entrepreneur"
   ]),
   sector: z.enum([
-    "Construction", "Engineering", "Public Works", "Architecture",
-    "Consulting", "IT", "Manufacturing", "Energy", "Transport", "Other"
+    "Construction",
+  "Ingénierie",
+  "Travaux Publics",
+  "Architecture",
+  "Conseil",
+  "Informatique",
+  "Industrie",
+  "Énergie",
+  "Transport",
+  "Autre",
   ]),
-  NIF: z.string().min(5, "Le NIF est requis"),
-  RC: z.string()
-    .min(5, "Le RC est requis")
-    .regex(/^\d{5}-\d{4}$/, "Le RC doit être au format XXXXX-XXXX"),
-  NIS: z.string().optional().nullable(),
-  AI: z.string().optional().nullable(),
+  NIF: z.string().regex(/^\d{15,20}$/, "Le NIF doit contenir entre 15 et 20 chiffres"),
+  RC: z.string().regex(/^\d{2}[AB]\d{7}$/, "Format RC invalide (ex: 16A0123456)"),
+  NIS: z.string().regex(/^\d{15}$/, "Le NIS doit contenir exactement 15 chiffres").or(z.literal("")).optional().nullable(),
+  AI: z.string().regex(/^\d{11}$/, "L'Article d'Imposition doit contenir 11 chiffres").or(z.literal("")).optional().nullable(),
   wilaya: z.string().min(1, "La wilaya est requise"),
   address: z.string().min(5, "L'adresse est requise"),
   phone: z.string().min(10, "Le numéro de téléphone est requis"),
-  email: z.string().email("Email invalide"),
+  email: z.email("Email invalide"),
 })
 
 export const unitSchema = z.object({
   name: z.string().min(2, "Le nom de l'unité est requis"),
   address: z.string().min(5, "L'adresse de l'unité est requise"),
   phone: z.string().min(10, "Le téléphone de l'unité est requis"),
-  email: z.string().email("Email de l'unité invalide"),
+  email: z.email("Email de l'unité invalide"),
 })
 
 export const invitationSchema = z.object({
-  email: z.string().email("Email invalide"),
+  email: z.email("Email invalide"),
   role: z.enum(["ADMIN", "USER"]), // OWNER cannot be invited
   unitId: z.string().min(1, "L'unité est requise"),
 })
@@ -67,7 +73,7 @@ export const clientSchema = z.object({
   name: z.string().min(2, "Le nom du client est requis"),
   wilaya: z.string().min(1, "La wilaya est requise"),
   phone: z.string().min(1, "Le numéro de téléphone est requis"),
-  email: z.string().email("Email invalide"),
+  email: z.email("Email invalide"),
 })
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -162,6 +168,8 @@ export const productionSchema = z.object({
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const laneSchema = z.object({
+  unitId: z.string().min(1, "L'unité est requise"),
+  companyId: z.string().min(1, "L'entreprise est requise"),
   name: z.string().min(2, "Le nom de la colonne est requis"),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Couleur hexadécimale requise").optional().nullable(),
   order: z.number().int().min(0).default(0),
@@ -177,6 +185,8 @@ export const tagSchema = z.object({
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const taskSchema = z.object({
+  unitId: z.string().min(1, "L'unité est requise"),
+  companyId: z.string().min(1, "L'entreprise est requise"),
   projectId: z.string().min(1, "Le projet est requis"),
   phaseId: z.string().min(1, "La phase est requise"), // Required per PRD
   subPhaseId: z.string().optional().nullable(),
@@ -266,7 +276,7 @@ export const activityLogSchema = z.object({
 
 export const upgradeRequestSchema = z.object({
   planName: z.enum(["Pro", "Premium"]),
-  email: z.string().email("Email invalide"),
+  email: z.email("Email invalide"),
   phone: z.string().min(10, "Le numéro de téléphone est requis"),
   paymentMethod: z.enum(["CHEQUE", "VIREMENT", "ESPECES"]),
   message: z.string().optional().nullable(),

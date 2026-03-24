@@ -90,6 +90,7 @@ model Company {
   name                     String
   // ownerId is the Clerk user ID of the OWNER — unique and immutable (PRD COMP-04)
   ownerId                  String         @unique
+  owner                    User           @relation("OwnerCompany", fields: [ownerId], references: [id])
   logo                     String?
   // FIX: @unique — NIF and RC are legal business identifiers, must be globally unique
   NIF                      String         @unique
@@ -152,6 +153,7 @@ model User {
   unit           Unit?          @relation("UnitMembers", fields: [unitId], references: [id], onDelete: SetNull)
   // FIX: Back-relation for Unit.admin (UnitAdmin)
   adminOfUnits   Unit[]         @relation("UnitAdmin")
+  ownedCompany   Company?       @relation("OwnerCompany")
   teamMembers    TeamMember[]
   tasks          Task[]
   taskComments   TaskComment[]  @relation("AuthorComments")
@@ -212,6 +214,7 @@ model Invitation {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
+  @@index([email])
   @@index([companyId])
   @@index([unitId])
   @@index([token])
@@ -273,7 +276,7 @@ model Project {
 
   // Project code must be unique within a unit
   @@unique([unitId, code])
-  @@index([unitId])
+  @@index([unitId, status])
   @@index([companyId])
   @@index([clientId])
 }
@@ -328,7 +331,7 @@ model Phase {
   updatedAt    DateTime     @updatedAt
 
   @@unique([projectId, code])
-  @@index([projectId])
+  @@index([projectId, status])
 }
 
 model SubPhase {
@@ -452,7 +455,7 @@ model Task {
   updatedAt      DateTime      @updatedAt
 
   @@index([unitId])
-  @@index([companyId])
+  @@index([companyId, complete])
   @@index([projectId])
   @@index([phaseId])
   @@index([subPhaseId])
@@ -540,7 +543,7 @@ model TimeEntry {
   updatedAt   DateTime  @updatedAt
 
   @@index([companyId])
-  @@index([userId])
+  @@index([userId, startTime])
   @@index([projectId])
   @@index([taskId])
 }
@@ -564,9 +567,9 @@ model Notification {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
-  @@index([companyId])
+  @@index([companyId, read, createdAt])
   @@index([unitId])
-  @@index([userId])
+  @@index([userId, read])
   @@index([targetUserId])
 }
 
@@ -585,7 +588,7 @@ model ActivityLog {
   metadata   Json?
   createdAt  DateTime @default(now())
 
-  @@index([companyId])
+  @@index([companyId, createdAt])
   @@index([unitId])
   @@index([userId])
   @@index([entityType, entityId])

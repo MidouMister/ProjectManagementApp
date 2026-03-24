@@ -37,14 +37,20 @@ export default clerkMiddleware(async (auth, req) => {
 
     const url = new URL(req.url);
 
+    // A. Root path redirect to /dashboard
+    if (url.pathname === "/") {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+
     // Skip redirect if already on sign-in/up routes
     if (isPublicRoute(req)) {
       return NextResponse.next();
     }
 
-    // A. Onboarding Check: If no company and not on onboarding, redirect to /onboarding
+    // B. Onboarding Check: If no company and not on onboarding, redirect to /onboarding
     // Exception: Allow access to /company/:id routes (user may have just completed onboarding)
-    if (!companyId && url.pathname !== "/onboarding" && !url.pathname.match(/^\/company\/[^/]+$/)) {
+    // and /dashboard which is the redirect hub.
+    if (!companyId && url.pathname !== "/onboarding" && !url.pathname.match(/^\/company\/[^/]+$/) && url.pathname !== "/dashboard") {
       return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 

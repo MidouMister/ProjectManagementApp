@@ -312,6 +312,7 @@ export type CompanyWhereInput = {
   productionAlertThreshold?: Prisma.FloatFilter<"Company"> | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   units?: Prisma.UnitListRelationFilter
   users?: Prisma.UserListRelationFilter
@@ -343,6 +344,7 @@ export type CompanyOrderByWithRelationInput = {
   productionAlertThreshold?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  owner?: Prisma.UserOrderByWithRelationInput
   subscription?: Prisma.SubscriptionOrderByWithRelationInput
   units?: Prisma.UnitOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
@@ -377,6 +379,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   productionAlertThreshold?: Prisma.FloatFilter<"Company"> | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
+  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
   units?: Prisma.UnitListRelationFilter
   users?: Prisma.UserListRelationFilter
@@ -441,7 +444,6 @@ export type CompanyScalarWhereWithAggregatesInput = {
 export type CompanyCreateInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -456,6 +458,7 @@ export type CompanyCreateInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -503,7 +506,6 @@ export type CompanyUncheckedCreateInput = {
 export type CompanyUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -518,6 +520,7 @@ export type CompanyUpdateInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -585,7 +588,6 @@ export type CompanyCreateManyInput = {
 export type CompanyUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -732,6 +734,18 @@ export type CompanyCreateNestedOneWithoutUsersInput = {
   connect?: Prisma.CompanyWhereUniqueInput
 }
 
+export type CompanyCreateNestedOneWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutOwnerInput, Prisma.CompanyUncheckedCreateWithoutOwnerInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutOwnerInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUncheckedCreateNestedOneWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutOwnerInput, Prisma.CompanyUncheckedCreateWithoutOwnerInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutOwnerInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
 export type CompanyUpdateOneWithoutUsersNestedInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutUsersInput
@@ -740,6 +754,26 @@ export type CompanyUpdateOneWithoutUsersNestedInput = {
   delete?: Prisma.CompanyWhereInput | boolean
   connect?: Prisma.CompanyWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutUsersInput, Prisma.CompanyUpdateWithoutUsersInput>, Prisma.CompanyUncheckedUpdateWithoutUsersInput>
+}
+
+export type CompanyUpdateOneWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutOwnerInput, Prisma.CompanyUncheckedCreateWithoutOwnerInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutOwnerInput
+  upsert?: Prisma.CompanyUpsertWithoutOwnerInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutOwnerInput, Prisma.CompanyUpdateWithoutOwnerInput>, Prisma.CompanyUncheckedUpdateWithoutOwnerInput>
+}
+
+export type CompanyUncheckedUpdateOneWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutOwnerInput, Prisma.CompanyUncheckedCreateWithoutOwnerInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutOwnerInput
+  upsert?: Prisma.CompanyUpsertWithoutOwnerInput
+  disconnect?: Prisma.CompanyWhereInput | boolean
+  delete?: Prisma.CompanyWhereInput | boolean
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutOwnerInput, Prisma.CompanyUpdateWithoutOwnerInput>, Prisma.CompanyUncheckedUpdateWithoutOwnerInput>
 }
 
 export type CompanyCreateNestedOneWithoutUnitsInput = {
@@ -871,7 +905,6 @@ export type CompanyUpdateOneRequiredWithoutActivityLogsNestedInput = {
 export type CompanyCreateWithoutSubscriptionInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -886,6 +919,7 @@ export type CompanyCreateWithoutSubscriptionInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
@@ -947,7 +981,6 @@ export type CompanyUpdateToOneWithWhereWithoutSubscriptionInput = {
 export type CompanyUpdateWithoutSubscriptionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -962,6 +995,7 @@ export type CompanyUpdateWithoutSubscriptionInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
@@ -1007,7 +1041,6 @@ export type CompanyUncheckedUpdateWithoutSubscriptionInput = {
 export type CompanyCreateWithoutUsersInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -1022,6 +1055,7 @@ export type CompanyCreateWithoutUsersInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
@@ -1069,6 +1103,71 @@ export type CompanyCreateOrConnectWithoutUsersInput = {
   create: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
 }
 
+export type CompanyCreateWithoutOwnerInput = {
+  id?: string
+  name: string
+  logo?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+  productionAlertThreshold?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
+  units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserCreateNestedManyWithoutCompanyInput
+  invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryCreateNestedManyWithoutCompanyInput
+  taskComments?: Prisma.TaskCommentCreateNestedManyWithoutCompanyInput
+  taskMentions?: Prisma.TaskMentionCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCompanyInput
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutOwnerInput = {
+  id?: string
+  name: string
+  logo?: string | null
+  NIF: string
+  RC: string
+  NIS?: string | null
+  AI?: string | null
+  formJur: string
+  sector: string
+  wilaya: string
+  address: string
+  phone: string
+  email: string
+  productionAlertThreshold?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutCompanyInput
+  units?: Prisma.UnitUncheckedCreateNestedManyWithoutCompanyInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutCompanyInput
+  invitations?: Prisma.InvitationUncheckedCreateNestedManyWithoutCompanyInput
+  lanes?: Prisma.LaneUncheckedCreateNestedManyWithoutCompanyInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutCompanyInput
+  timeEntries?: Prisma.TimeEntryUncheckedCreateNestedManyWithoutCompanyInput
+  taskComments?: Prisma.TaskCommentUncheckedCreateNestedManyWithoutCompanyInput
+  taskMentions?: Prisma.TaskMentionUncheckedCreateNestedManyWithoutCompanyInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCompanyInput
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutOwnerInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutOwnerInput, Prisma.CompanyUncheckedCreateWithoutOwnerInput>
+}
+
 export type CompanyUpsertWithoutUsersInput = {
   update: Prisma.XOR<Prisma.CompanyUpdateWithoutUsersInput, Prisma.CompanyUncheckedUpdateWithoutUsersInput>
   create: Prisma.XOR<Prisma.CompanyCreateWithoutUsersInput, Prisma.CompanyUncheckedCreateWithoutUsersInput>
@@ -1083,7 +1182,6 @@ export type CompanyUpdateToOneWithWhereWithoutUsersInput = {
 export type CompanyUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1098,6 +1196,7 @@ export type CompanyUpdateWithoutUsersInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
@@ -1140,10 +1239,80 @@ export type CompanyUncheckedUpdateWithoutUsersInput = {
   activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
+export type CompanyUpsertWithoutOwnerInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutOwnerInput, Prisma.CompanyUncheckedUpdateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutOwnerInput, Prisma.CompanyUncheckedCreateWithoutOwnerInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutOwnerInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutOwnerInput, Prisma.CompanyUncheckedUpdateWithoutOwnerInput>
+}
+
+export type CompanyUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
+  units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
+  invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUpdateManyWithoutCompanyNestedInput
+  taskComments?: Prisma.TaskCommentUpdateManyWithoutCompanyNestedInput
+  taskMentions?: Prisma.TaskMentionUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCompanyNestedInput
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  NIF?: Prisma.StringFieldUpdateOperationsInput | string
+  RC?: Prisma.StringFieldUpdateOperationsInput | string
+  NIS?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  AI?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  formJur?: Prisma.StringFieldUpdateOperationsInput | string
+  sector?: Prisma.StringFieldUpdateOperationsInput | string
+  wilaya?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutCompanyNestedInput
+  units?: Prisma.UnitUncheckedUpdateManyWithoutCompanyNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutCompanyNestedInput
+  invitations?: Prisma.InvitationUncheckedUpdateManyWithoutCompanyNestedInput
+  lanes?: Prisma.LaneUncheckedUpdateManyWithoutCompanyNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutCompanyNestedInput
+  timeEntries?: Prisma.TimeEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  taskComments?: Prisma.TaskCommentUncheckedUpdateManyWithoutCompanyNestedInput
+  taskMentions?: Prisma.TaskMentionUncheckedUpdateManyWithoutCompanyNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCompanyNestedInput
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
 export type CompanyCreateWithoutUnitsInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -1158,6 +1327,7 @@ export type CompanyCreateWithoutUnitsInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
   invitations?: Prisma.InvitationCreateNestedManyWithoutCompanyInput
@@ -1219,7 +1389,6 @@ export type CompanyUpdateToOneWithWhereWithoutUnitsInput = {
 export type CompanyUpdateWithoutUnitsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1234,6 +1403,7 @@ export type CompanyUpdateWithoutUnitsInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
   invitations?: Prisma.InvitationUpdateManyWithoutCompanyNestedInput
@@ -1279,7 +1449,6 @@ export type CompanyUncheckedUpdateWithoutUnitsInput = {
 export type CompanyCreateWithoutInvitationsInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -1294,6 +1463,7 @@ export type CompanyCreateWithoutInvitationsInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -1355,7 +1525,6 @@ export type CompanyUpdateToOneWithWhereWithoutInvitationsInput = {
 export type CompanyUpdateWithoutInvitationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1370,6 +1539,7 @@ export type CompanyUpdateWithoutInvitationsInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -1415,7 +1585,6 @@ export type CompanyUncheckedUpdateWithoutInvitationsInput = {
 export type CompanyCreateWithoutLanesInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -1430,6 +1599,7 @@ export type CompanyCreateWithoutLanesInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -1491,7 +1661,6 @@ export type CompanyUpdateToOneWithWhereWithoutLanesInput = {
 export type CompanyUpdateWithoutLanesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1506,6 +1675,7 @@ export type CompanyUpdateWithoutLanesInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -1551,7 +1721,6 @@ export type CompanyUncheckedUpdateWithoutLanesInput = {
 export type CompanyCreateWithoutTasksInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -1566,6 +1735,7 @@ export type CompanyCreateWithoutTasksInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -1627,7 +1797,6 @@ export type CompanyUpdateToOneWithWhereWithoutTasksInput = {
 export type CompanyUpdateWithoutTasksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1642,6 +1811,7 @@ export type CompanyUpdateWithoutTasksInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -1687,7 +1857,6 @@ export type CompanyUncheckedUpdateWithoutTasksInput = {
 export type CompanyCreateWithoutTaskCommentsInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -1702,6 +1871,7 @@ export type CompanyCreateWithoutTaskCommentsInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -1763,7 +1933,6 @@ export type CompanyUpdateToOneWithWhereWithoutTaskCommentsInput = {
 export type CompanyUpdateWithoutTaskCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1778,6 +1947,7 @@ export type CompanyUpdateWithoutTaskCommentsInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -1823,7 +1993,6 @@ export type CompanyUncheckedUpdateWithoutTaskCommentsInput = {
 export type CompanyCreateWithoutTaskMentionsInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -1838,6 +2007,7 @@ export type CompanyCreateWithoutTaskMentionsInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -1899,7 +2069,6 @@ export type CompanyUpdateToOneWithWhereWithoutTaskMentionsInput = {
 export type CompanyUpdateWithoutTaskMentionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1914,6 +2083,7 @@ export type CompanyUpdateWithoutTaskMentionsInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -1959,7 +2129,6 @@ export type CompanyUncheckedUpdateWithoutTaskMentionsInput = {
 export type CompanyCreateWithoutTimeEntriesInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -1974,6 +2143,7 @@ export type CompanyCreateWithoutTimeEntriesInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -2035,7 +2205,6 @@ export type CompanyUpdateToOneWithWhereWithoutTimeEntriesInput = {
 export type CompanyUpdateWithoutTimeEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2050,6 +2219,7 @@ export type CompanyUpdateWithoutTimeEntriesInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -2095,7 +2265,6 @@ export type CompanyUncheckedUpdateWithoutTimeEntriesInput = {
 export type CompanyCreateWithoutNotificationsInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -2110,6 +2279,7 @@ export type CompanyCreateWithoutNotificationsInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -2171,7 +2341,6 @@ export type CompanyUpdateToOneWithWhereWithoutNotificationsInput = {
 export type CompanyUpdateWithoutNotificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2186,6 +2355,7 @@ export type CompanyUpdateWithoutNotificationsInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -2231,7 +2401,6 @@ export type CompanyUncheckedUpdateWithoutNotificationsInput = {
 export type CompanyCreateWithoutActivityLogsInput = {
   id?: string
   name: string
-  ownerId: string
   logo?: string | null
   NIF: string
   RC: string
@@ -2246,6 +2415,7 @@ export type CompanyCreateWithoutActivityLogsInput = {
   productionAlertThreshold?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedCompanyInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutCompanyInput
   units?: Prisma.UnitCreateNestedManyWithoutCompanyInput
   users?: Prisma.UserCreateNestedManyWithoutCompanyInput
@@ -2307,7 +2477,6 @@ export type CompanyUpdateToOneWithWhereWithoutActivityLogsInput = {
 export type CompanyUpdateWithoutActivityLogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   NIF?: Prisma.StringFieldUpdateOperationsInput | string
   RC?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2322,6 +2491,7 @@ export type CompanyUpdateWithoutActivityLogsInput = {
   productionAlertThreshold?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedCompanyNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutCompanyNestedInput
   units?: Prisma.UnitUpdateManyWithoutCompanyNestedInput
   users?: Prisma.UserUpdateManyWithoutCompanyNestedInput
@@ -2494,6 +2664,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   productionAlertThreshold?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   subscription?: boolean | Prisma.Company$subscriptionArgs<ExtArgs>
   units?: boolean | Prisma.Company$unitsArgs<ExtArgs>
   users?: boolean | Prisma.Company$usersArgs<ExtArgs>
@@ -2526,6 +2697,7 @@ export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   productionAlertThreshold?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["company"]>
 
 export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2546,6 +2718,7 @@ export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   productionAlertThreshold?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["company"]>
 
 export type CompanySelectScalar = {
@@ -2570,6 +2743,7 @@ export type CompanySelectScalar = {
 
 export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ownerId" | "logo" | "NIF" | "RC" | "NIS" | "AI" | "formJur" | "sector" | "wilaya" | "address" | "phone" | "email" | "productionAlertThreshold" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   subscription?: boolean | Prisma.Company$subscriptionArgs<ExtArgs>
   units?: boolean | Prisma.Company$unitsArgs<ExtArgs>
   users?: boolean | Prisma.Company$usersArgs<ExtArgs>
@@ -2583,12 +2757,17 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   activityLogs?: boolean | Prisma.Company$activityLogsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type CompanyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type CompanyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type CompanyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type CompanyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Company"
   objects: {
+    owner: Prisma.$UserPayload<ExtArgs>
     subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
     units: Prisma.$UnitPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
@@ -3013,6 +3192,7 @@ readonly fields: CompanyFieldRefs;
  */
 export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   subscription<T extends Prisma.Company$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   units<T extends Prisma.Company$unitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$unitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Company$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3324,6 +3504,10 @@ export type CompanyCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    */
   data: Prisma.CompanyCreateManyInput | Prisma.CompanyCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -3394,6 +3578,10 @@ export type CompanyUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many Companies to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CompanyIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

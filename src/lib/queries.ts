@@ -6,6 +6,7 @@ import { revalidateTag } from "next/cache";
 import { CacheTags } from "@/lib/cache";
 import { Role, Result, CompanyInput, UnitInput } from "@/lib/types";
 import { addDays } from "date-fns";
+import { companySchema, unitSchema } from "@/lib/validators";
 
 /**
  * Get all company members across all units with their unit info
@@ -410,6 +411,13 @@ export async function createCompany(
       return { success: false, error: "USER_NOT_FOUND" };
     }
 
+    // 1. Validate Input (Server Side)
+    const valResult = companySchema.safeParse(data);
+    if (!valResult.success) {
+      console.error("Server-side validation failed:", valResult.error.flatten().fieldErrors);
+      return { success: false, error: "INVALID_INPUT_DATA" };
+    }
+
     if (user.companyId) {
       return { success: false, error: "ALREADY_HAS_COMPANY" };
     }
@@ -653,6 +661,18 @@ export async function consolidateOnboarding(
           role: "USER",
         },
       });
+    }
+
+    // 1. Validate Input (Server Side)
+    const companyVal = companySchema.safeParse(input.company);
+    const unitVal = unitSchema.safeParse(input.unit);
+    
+    if (!companyVal.success || !unitVal.success) {
+      console.error("Onboarding validation failed:", {
+        company: !companyVal.success ? companyVal.error.flatten().fieldErrors : null,
+        unit: !unitVal.success ? unitVal.error.flatten().fieldErrors : null
+      });
+      return { success: false, error: "INVALID_INPUT_DATA" };
     }
 
     if (user.companyId) {

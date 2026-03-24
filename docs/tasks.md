@@ -209,7 +209,7 @@
 
 ### Validation
 
-- [x] `companySchema` Zod validator (RC regex: `^\\d{5}-\\d{4}$`) 2026-03-21
+- [x] `companySchema` Zod validator (Algerian formats: RC, NIS, AI, NIF) 2026-03-24
 - [x] `unitSchema` Zod validator 2026-03-21
 - [x] `invitationSchema` Zod validator 2026-03-21
 - [x] Per-field unique validation for NIF/RC/NIS/AI 2026-03-21

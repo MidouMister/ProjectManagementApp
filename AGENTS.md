@@ -169,6 +169,12 @@ src/
 - **Date format:** Use `formatDate()` — display as `DD MMM YYYY`
 - **UI Design (MANDATORY):** ALWAYS synchronize with **Stitch MCP** for all UI frontend work. Every component, page, form, and layout must strictly follow the architectural designs, color tokens (`#1E3A8A` navy), and "No-Line" surface philosophy defined in the **ProjectManagementApp** (ID: `4036095574208953106`) Stitch project.
 - **Language (MANDATORY):** The application is in **French (fr)**. All buttons, labels, error messages, placeholders, and tooltips MUST be written in French.
+- **Algerian Identifiers (RC, NIS, AI, NIF):**
+  - **RC:** `^\d{2}[AB]\d{7}$` (Wilaya + A/B + Sequence)
+  - **NIS:** `^\d{15}$` (15 digits)
+  - **AI:** `^\d{11}$` (11 digits)
+  - **NIF:** `^\d{15,20}$` (15-20 digits)
+  - All must be validated both client-side and server-side using Zod.
 
 ---
 
