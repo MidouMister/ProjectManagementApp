@@ -216,30 +216,30 @@
 
 ---
 
-## M05 — Company Management (OWNER)
+## M05 — Company Management (OWNER) ✅
 
 ### Routes
 
-- [ ] Create `/company/[companyId]/page.tsx` — Company dashboard
-  - [ ] KPI cards: total projects, active projects, total TTC, members, production status
-  - [ ] Unit overview cards
-- [ ] Create `/company/[companyId]/settings/page.tsx` — Company profile + legal IDs
-- [ ] Create `/company/[companyId]/units/page.tsx` — Units CRUD
-- [ ] Create `/company/[companyId]/team/page.tsx` — Company-wide team
+- [x] Create `/company/[companyId]/page.tsx` — Company dashboard 2026-03-24
+  - [x] KPI cards: total projects, active projects, total TTC, members, production status 2026-03-24
+  - [x] Unit overview cards 2026-03-24
+- [x] Create `/company/[companyId]/settings/page.tsx` — Company profile + legal IDs 2026-03-24
+- [x] Create `/company/[companyId]/units/page.tsx` — Units CRUD 2026-03-24
+- [x] Create `/company/[companyId]/team/page.tsx` — Company-wide team 2026-03-24
 
 ### Server Actions
 
-- [ ] `getCompanyHeader()` — with `cacheLife("static")`
-- [ ] `getCompanyById()` — with `cacheLife("days")`
-- [ ] `updateCompany()` — with `revalidateTag()`
-- [ ] `deleteCompany()` — cascade delete
-- [ ] `createUnit()` / `updateUnit()` / `deleteUnit()` — with plan limit check
+- [x] `getCompanyHeader()` — with `cacheLife("static")` 2026-03-24
+- [x] `getCompanyById()` — with `cacheLife("days")` 2026-03-24
+- [x] `updateCompany()` — with `revalidateTag()` 2026-03-24
+- [x] `deleteCompany()` — cascade delete 2026-03-24
+- [x] `createUnit()` / `updateUnit()` / `deleteUnit()` — with plan limit check 2026-03-24
 
 ### Components
 
-- [ ] `CompanyForm` — edit company fields
-- [ ] `UnitCard` — unit overview with member/project counts
-- [ ] `UnitModal` — create/edit/delete unit
+- [x] `CompanyForm` — edit company fields (inline in settings page) 2026-03-24
+- [x] `UnitCard` — unit overview with member/project counts 2026-03-24
+- [x] `UnitModal` — create/edit/delete unit 2026-03-24
 
 ---
 

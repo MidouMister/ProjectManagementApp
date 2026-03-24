@@ -252,6 +252,7 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 | Prisma schema in `src/prisma/schema.prisma`         | ✅ Done (placeholder) |
 | ClerkProvider not in layout                         | 🚧 M02                |
 | `layout.tsx` uses `lang="fr"`                       | ✅ Fixed              |
+| M05 Company Management (OWNER)                      | ✅ Completed          |
 
 ---
 

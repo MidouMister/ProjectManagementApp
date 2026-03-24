@@ -48,9 +48,9 @@ export default clerkMiddleware(async (auth, req) => {
     }
 
     // B. Onboarding Check: If no company and not on onboarding, redirect to /onboarding
-    // Exception: Allow access to /company/:id routes (user may have just completed onboarding)
+    // Exception: Allow access to /company/:id/* routes (user may have just completed onboarding)
     // and /dashboard which is the redirect hub.
-    if (!companyId && url.pathname !== "/onboarding" && !url.pathname.match(/^\/company\/[^/]+$/) && url.pathname !== "/dashboard") {
+    if (!companyId && url.pathname !== "/onboarding" && !url.pathname.match(/^\/company\/[^/]+(\/.*)?$/) && url.pathname !== "/dashboard") {
       return NextResponse.redirect(new URL("/onboarding", req.url));
     }
 

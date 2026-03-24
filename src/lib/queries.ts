@@ -877,3 +877,198 @@ export async function deleteUnit(id: string) {
   }
 }
 
+/**
+ * Delete a company and all related data (cascade delete)
+ * OWNER only - must be company owner
+ * 
+ * Cascade Order:
+ * 1. Notifications
+ * 2. ActivityLogs
+ * 3. TimeEntries
+ * 4. TaskMentions
+ * 5. TaskComments
+ * 6. Tasks
+ * 7. Productions
+ * 8. Products
+ * 9. GanttMarkers
+ * 10. SubPhases
+ * 11. Phases
+ * 12. TeamMembers
+ * 13. Teams
+ * 14. Projects
+ * 15. Clients
+ * 16. Lanes
+ * 17. Tags
+ * 18. Invitations
+ * 19. Users (except owner - cleared via SetNull)
+ * 20. Units
+ * 21. Subscriptions
+ * 22. Company
+ */
+export async function deleteCompany(
+  companyId: string,
+  userId: string
+): Promise<Result<boolean>> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, role: true, companyId: true, clerkId: true },
+    });
+
+    if (!user) {
+      return { success: false, error: "USER_NOT_FOUND" };
+    }
+
+    if (user.role !== "OWNER") {
+      return { success: false, error: "NOT_COMPANY_OWNER" };
+    }
+
+    if (user.companyId !== companyId) {
+      return { success: false, error: "NOT_COMPANY_OWNER" };
+    }
+
+    const company = await prisma.company.findUnique({
+      where: { id: companyId },
+      select: { ownerId: true },
+    });
+
+    if (!company) {
+      return { success: false, error: "COMPANY_NOT_FOUND" };
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.notification.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.activityLog.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.timeEntry.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.taskMention.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.taskComment.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.task.deleteMany({
+        where: { companyId },
+      });
+
+      const phases = await tx.phase.findMany({
+        where: { project: { companyId } },
+        select: { id: true },
+      });
+      
+      for (const phase of phases) {
+        await tx.production.deleteMany({
+          where: { phaseId: phase.id },
+        });
+        await tx.product.deleteMany({
+          where: { phaseId: phase.id },
+        });
+      }
+
+      await tx.ganttMarker.deleteMany({
+        where: { project: { companyId } },
+      });
+
+      await tx.subPhase.deleteMany({
+        where: { phase: { project: { companyId } } },
+      });
+
+      await tx.phase.deleteMany({
+        where: { project: { companyId } },
+      });
+
+      await tx.teamMember.deleteMany({
+        where: { team: { project: { companyId } } },
+      });
+
+      await tx.team.deleteMany({
+        where: { project: { companyId } },
+      });
+
+      await tx.project.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.client.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.lane.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.tag.deleteMany({
+        where: { unit: { companyId } },
+      });
+
+      await tx.invitation.deleteMany({
+        where: { companyId },
+      });
+
+      const nonOwnerUsers = await tx.user.findMany({
+        where: { companyId, id: { not: userId } },
+        select: { id: true, clerkId: true },
+      });
+
+      for (const nonOwner of nonOwnerUsers) {
+        await tx.user.update({
+          where: { id: nonOwner.id },
+          data: {
+            companyId: null,
+            unitId: null,
+            role: "USER",
+          },
+        });
+      }
+
+      await tx.unit.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.subscription.deleteMany({
+        where: { companyId },
+      });
+
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          companyId: null,
+          unitId: null,
+          role: "USER",
+        },
+      });
+
+      await tx.company.delete({
+        where: { id: companyId },
+      });
+    });
+
+    const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
+    await clerk.users.updateUser(user.clerkId, {
+      publicMetadata: {
+        role: "USER",
+        companyId: null,
+        unitId: null,
+      },
+    });
+
+    revalidateTag(CacheTags.companies(), "max");
+    revalidateTag(CacheTags.company(companyId), "max");
+
+    return { success: true, data: true };
+  } catch (error) {
+    console.error("Error deleting company:", error);
+    return { success: false, error: "DELETE_FAILED" };
+  }
+}
+
