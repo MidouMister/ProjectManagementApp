@@ -627,12 +627,12 @@ function SidebarCore({
               <TooltipTrigger asChild>
                 <button
                   onClick={() => setCollapsed(true)}
-                  className="p-1 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                  className="p-1 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
                 >
                   <PanelLeftClose className="w-4 h-4" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs bg-popover border shadow-lg">
+              <TooltipContent side="right" className="text-xs bg-foreground text-background px-2 py-1 rounded shadow-lg">
                 Réduire
               </TooltipContent>
             </Tooltip>
@@ -644,12 +644,12 @@ function SidebarCore({
             <TooltipTrigger asChild>
               <button
                 onClick={() => setCollapsed(false)}
-                className="mx-auto mt-1.5 p-1.5 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors focus:outline-none"
+                className="mx-auto mt-1.5 p-1.5 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors focus:outline-none"
               >
                 <PanelRightClose className="w-4 h-4" />
               </button>
             </TooltipTrigger>
-            <TooltipContent side="right" className="text-xs bg-popover border shadow-lg">
+            <TooltipContent side="right" className="text-xs bg-foreground text-background px-2 py-1 rounded shadow-lg">
               Développer
             </TooltipContent>
           </Tooltip>
@@ -823,12 +823,12 @@ function SidebarCore({
                     <TooltipTrigger asChild>
                       <button
                         onClick={() => router.push(`/company/${companyId}/settings`)}
-                        className="p-1.5 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                        className="p-1.5 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
                       >
                         <Settings className="w-3.5 h-3.5" />
                       </button>
                     </TooltipTrigger>
-                    <TooltipContent side="top" className="text-xs bg-popover border shadow-lg">
+                    <TooltipContent side="top" className="text-xs bg-foreground text-background px-2 py-1 rounded shadow-lg">
                       Paramètres
                     </TooltipContent>
                   </Tooltip>
