@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   CircleDot,
   PauseCircle,
-  MoreHorizontal,
   Plus,
 } from "lucide-react";
 import Link from "next/link";
@@ -35,31 +34,31 @@ function getStatusConfig(status: ProjectStatus) {
       return {
         label: "Nouveau",
         icon: CircleDot,
-        className: "bg-[#F3F4F6] text-[#6B7280]",
+        className: "bg-muted text-muted-foreground",
       };
     case "InProgress":
       return {
         label: "En cours",
         icon: TrendingUp,
-        className: "bg-[#EEF2FF] text-[#1E3A8A]",
+        className: "bg-primary/10 text-primary dark:bg-primary/20",
       };
     case "Pause":
       return {
         label: "En pause",
         icon: PauseCircle,
-        className: "bg-amber-50 text-amber-700",
+        className: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
       };
     case "Complete":
       return {
         label: "Terminé",
         icon: CheckCircle2,
-        className: "bg-green-50 text-green-700",
+        className: "bg-green-500/10 text-green-600 dark:text-green-400",
       };
     default:
       return {
         label: status,
         icon: CircleDot,
-        className: "bg-[#F3F4F6] text-[#6B7280]",
+        className: "bg-muted text-muted-foreground",
       };
   }
 }
@@ -144,11 +143,13 @@ export default async function CompanyDashboardPage({ params }: PageProps) {
 
   // Subscription info
   const sub = company.subscription;
+  // eslint-disable-next-line react-hooks/purity -- Server component, Date.now is safe
+  const now = Date.now();
   const daysRemaining = sub
     ? Math.max(
         0,
         Math.ceil(
-          (new Date(sub.endAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+          (new Date(sub.endAt).getTime() - now) / (1000 * 60 * 60 * 24)
         )
       )
     : null;
@@ -159,24 +160,24 @@ export default async function CompanyDashboardPage({ params }: PageProps) {
       {/* ── Page header ── */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#9CA3AF] mb-1">
-            Vue d'ensemble
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">
+            {`Vue d${String.fromCharCode(8217)}ensemble`}
           </p>
-          <h1 className="text-[28px] font-bold text-[#111111] tracking-tight leading-none">
+          <h1 className="text-[28px] font-bold text-foreground tracking-tight leading-none">
             {company.name}
           </h1>
-          <p className="text-[13px] text-[#6B7280] mt-2">
+          <p className="text-[13px] text-muted-foreground mt-2">
             {company.sector} · {company.wilaya}
             {sub && (
               <span className="ml-3 inline-flex items-center gap-1.5">
                 <span
                   className={cn(
                     "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide",
-                    sub.status === "TRIAL" && "bg-amber-100 text-amber-700",
-                    sub.status === "ACTIVE" && "bg-green-100 text-green-700",
-                    sub.status === "GRACE" && "bg-orange-100 text-orange-700",
-                    sub.status === "READONLY" && "bg-red-100 text-red-700",
-                    sub.status === "SUSPENDED" && "bg-red-100 text-red-700",
+                    sub.status === "TRIAL" && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+                    sub.status === "ACTIVE" && "bg-green-500/10 text-green-600 dark:text-green-400",
+                    sub.status === "GRACE" && "bg-orange-500/10 text-orange-600 dark:text-orange-400",
+                    sub.status === "READONLY" && "bg-destructive/10 text-destructive",
+                    sub.status === "SUSPENDED" && "bg-destructive/10 text-destructive",
                   )}
                 >
                   {sub.status === "TRIAL" && `Essai — ${daysRemaining}j restants`}
@@ -192,7 +193,7 @@ export default async function CompanyDashboardPage({ params }: PageProps) {
 
         <Link
           href={`/company/${companyId}/units/new`}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-[#111111] text-white text-[13px] font-semibold rounded-lg hover:bg-[#222222] transition-colors shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-[13px] font-semibold rounded-lg hover:opacity-90 transition-opacity shrink-0"
         >
           <Plus className="w-4 h-4" />
           Nouvelle unité
@@ -237,15 +238,15 @@ export default async function CompanyDashboardPage({ params }: PageProps) {
         {/* Units grid — takes 2/3 */}
         <div className="xl:col-span-2 flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-[15px] font-semibold text-[#111111]">
+            <h2 className="text-[15px] font-semibold text-foreground">
               Unités opérationnelles
-              <span className="ml-2 text-[12px] font-normal text-[#9CA3AF]">
+              <span className="ml-2 text-[12px] font-normal text-muted-foreground">
                 ({totalUnits})
               </span>
             </h2>
             <Link
               href={`/company/${companyId}/units`}
-              className="text-[12px] font-medium text-[#1E3A8A] hover:underline flex items-center gap-1"
+              className="text-[12px] font-medium text-primary hover:underline flex items-center gap-1"
             >
               Voir tout <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
@@ -259,7 +260,6 @@ export default async function CompanyDashboardPage({ params }: PageProps) {
                 <UnitCard
                   key={unit.id}
                   unit={unit}
-                  companyId={companyId}
                 />
               ))}
             </div>
@@ -269,39 +269,39 @@ export default async function CompanyDashboardPage({ params }: PageProps) {
         {/* Activity feed — takes 1/3 */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-[15px] font-semibold text-[#111111]">
+            <h2 className="text-[15px] font-semibold text-foreground">
               Activité récente
             </h2>
           </div>
 
-          <div className="bg-white rounded-xl border border-[#E8E7E5] overflow-hidden">
+          <div className="bg-card rounded-xl border border-border overflow-hidden">
             {company.activityLogs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center px-4">
-                <Clock className="w-8 h-8 text-[#D1D5DB] mb-3" />
-                <p className="text-[13px] font-medium text-[#6B7280]">
+                <Clock className="w-8 h-8 text-muted-foreground mb-3" />
+                <p className="text-[13px] font-medium text-muted-foreground">
                   Aucune activité
                 </p>
-                <p className="text-[12px] text-[#9CA3AF] mt-1">
+                <p className="text-[12px] text-muted-foreground/70 mt-1">
                   Les actions apparaîtront ici
                 </p>
               </div>
             ) : (
-              <div className="divide-y divide-[#F3F4F6]">
+              <div className="divide-y divide-border">
                 {company.activityLogs.map((log) => (
                   <div key={log.id} className="px-4 py-3 flex gap-3">
-                    <div className="w-7 h-7 rounded-full bg-[#EEF2FF] flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="text-[10px] font-bold text-[#1E3A8A]">
+                    <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-[10px] font-bold text-primary">
                         {log.user.name.charAt(0).toUpperCase()}
                       </span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[12px] text-[#374151] leading-snug">
+                      <p className="text-[12px] text-foreground leading-snug">
                         <span className="font-semibold">{log.user.name}</span>{" "}
-                        <span className="text-[#6B7280]">
+                        <span className="text-muted-foreground">
                           {formatActivityAction(log.action, log.entityType)}
                         </span>
                       </p>
-                      <p className="text-[11px] text-[#9CA3AF] mt-0.5">
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
                         {formatDate(log.createdAt)}
                       </p>
                     </div>
@@ -328,18 +328,18 @@ interface KpiCardProps {
 
 function KpiCard({ label, value, sub, icon: Icon, accent }: KpiCardProps) {
   const accentStyles = {
-    blue:   { bg: "bg-[#EEF2FF]", text: "text-[#1E3A8A]" },
-    green:  { bg: "bg-green-50",  text: "text-green-700"  },
-    purple: { bg: "bg-purple-50", text: "text-purple-700" },
-    orange: { bg: "bg-orange-50", text: "text-orange-700" },
+    blue:   { bg: "bg-primary/10", text: "text-primary" },
+    green:  { bg: "bg-green-500/10", text: "text-green-600 dark:text-green-400" },
+    purple: { bg: "bg-purple-500/10", text: "text-purple-600 dark:text-purple-400" },
+    orange: { bg: "bg-orange-500/10", text: "text-orange-600 dark:text-orange-400" },
   };
 
   const style = accentStyles[accent];
 
   return (
-    <div className="bg-white rounded-xl border border-[#E8E7E5] p-5 flex flex-col gap-4">
+    <div className="bg-card rounded-xl border border-border p-5 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-[#9CA3AF]">
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
           {label}
         </span>
         <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", style.bg)}>
@@ -347,10 +347,10 @@ function KpiCard({ label, value, sub, icon: Icon, accent }: KpiCardProps) {
         </div>
       </div>
       <div>
-        <p className="text-[26px] font-bold text-[#111111] leading-none tracking-tight">
+        <p className="text-[26px] font-bold text-foreground leading-none tracking-tight">
           {value}
         </p>
-        <p className="text-[12px] text-[#9CA3AF] mt-1.5">{sub}</p>
+        <p className="text-[12px] text-muted-foreground mt-1.5">{sub}</p>
       </div>
     </div>
   );
@@ -377,23 +377,22 @@ interface UnitCardProps {
       client: { name: string };
     }>;
   };
-  companyId: string;
 }
 
-function UnitCard({ unit, companyId }: UnitCardProps) {
+function UnitCard({ unit }: UnitCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-[#E8E7E5] overflow-hidden">
+    <div className="bg-card rounded-xl border border-border overflow-hidden">
       {/* Unit header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-[#F3F4F6]">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-[#EEF2FF] rounded-lg flex items-center justify-center shrink-0">
-            <Building2 className="w-4 h-4 text-[#1E3A8A]" />
+          <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+            <Building2 className="w-4 h-4 text-primary" />
           </div>
           <div>
-            <h3 className="text-[14px] font-semibold text-[#111111]">
+            <h3 className="text-[14px] font-semibold text-foreground">
               {unit.name}
             </h3>
-            <p className="text-[11px] text-[#9CA3AF] mt-0.5">
+            <p className="text-[11px] text-muted-foreground mt-0.5">
               {unit.admin ? `Admin : ${unit.admin.name}` : "Aucun administrateur assigné"}
             </p>
           </div>
@@ -409,7 +408,7 @@ function UnitCard({ unit, companyId }: UnitCardProps) {
 
           <Link
             href={`/unite/${unit.id}`}
-            className="flex items-center gap-1.5 text-[12px] font-medium text-[#1E3A8A] hover:underline"
+            className="flex items-center gap-1.5 text-[12px] font-medium text-primary hover:underline"
           >
             Ouvrir <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
@@ -418,7 +417,7 @@ function UnitCard({ unit, companyId }: UnitCardProps) {
 
       {/* Recent projects */}
       {unit.projects.length > 0 ? (
-        <div className="divide-y divide-[#F9FAFB]">
+        <div className="divide-y divide-border">
           {unit.projects.map((project) => {
             const statusCfg = getStatusConfig(project.status as ProjectStatus);
             const StatusIcon = statusCfg.icon;
@@ -427,19 +426,19 @@ function UnitCard({ unit, companyId }: UnitCardProps) {
               <Link
                 key={project.id}
                 href={`/unite/${unit.id}/projects/${project.id}`}
-                className="flex items-center gap-4 px-5 py-3 hover:bg-[#FAFAFA] transition-colors group"
+                className="flex items-center gap-4 px-5 py-3 hover:bg-muted/50 transition-colors group"
               >
                 {/* Project code */}
-                <span className="text-[11px] font-mono font-bold text-[#9CA3AF] w-16 shrink-0">
+                <span className="text-[11px] font-mono font-bold text-muted-foreground w-16 shrink-0">
                   {project.code}
                 </span>
 
                 {/* Project name + client */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#111111] truncate group-hover:text-[#1E3A8A] transition-colors">
+                  <p className="text-[13px] font-medium text-foreground truncate group-hover:text-primary transition-colors">
                     {project.name}
                   </p>
-                  <p className="text-[11px] text-[#9CA3AF] truncate">
+                  <p className="text-[11px] text-muted-foreground truncate">
                     {project.client.name}
                   </p>
                 </div>
@@ -457,19 +456,19 @@ function UnitCard({ unit, companyId }: UnitCardProps) {
 
                 {/* Progress bar */}
                 <div className="hidden md:flex items-center gap-2 w-24 shrink-0">
-                  <div className="flex-1 h-1.5 bg-[#F3F4F6] rounded-full overflow-hidden">
+                  <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-[#1E3A8A] rounded-full transition-all"
+                      className="h-full bg-primary rounded-full transition-all"
                       style={{ width: `${Math.min(100, project.progress)}%` }}
                     />
                   </div>
-                  <span className="text-[11px] text-[#9CA3AF] w-8 text-right">
+                  <span className="text-[11px] text-muted-foreground w-8 text-right">
                     {Math.round(project.progress)}%
                   </span>
                 </div>
 
                 {/* Amount */}
-                <span className="hidden lg:block text-[12px] font-semibold text-[#374151] shrink-0 text-right w-32">
+                <span className="hidden lg:block text-[12px] font-semibold text-foreground shrink-0 text-right w-32">
                   {formatAmount(Number(project.montantTTC))}
                 </span>
               </Link>
@@ -477,8 +476,8 @@ function UnitCard({ unit, companyId }: UnitCardProps) {
           })}
         </div>
       ) : (
-        <div className="flex items-center gap-3 px-5 py-4 text-[13px] text-[#9CA3AF]">
-          <AlertTriangle className="w-4 h-4 text-amber-400" />
+        <div className="flex items-center gap-3 px-5 py-4 text-[13px] text-muted-foreground">
+          <AlertTriangle className="w-4 h-4 text-amber-500" />
           Aucun projet dans cette unité
         </div>
       )}
@@ -489,27 +488,27 @@ function UnitCard({ unit, companyId }: UnitCardProps) {
 function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center leading-none">
-      <span className="text-[15px] font-bold text-[#111111]">{value}</span>
-      <span className="text-[10px] text-[#9CA3AF] mt-0.5">{label}</span>
+      <span className="text-[15px] font-bold text-foreground">{value}</span>
+      <span className="text-[10px] text-muted-foreground mt-0.5">{label}</span>
     </div>
   );
 }
 
 function EmptyUnits({ companyId }: { companyId: string }) {
   return (
-    <div className="bg-white rounded-xl border border-[#E8E7E5] flex flex-col items-center justify-center py-16 text-center px-6">
-      <div className="w-12 h-12 bg-[#EEF2FF] rounded-xl flex items-center justify-center mb-4">
-        <Building2 className="w-6 h-6 text-[#1E3A8A]" />
+    <div className="bg-card rounded-xl border border-border flex flex-col items-center justify-center py-16 text-center px-6">
+      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+        <Building2 className="w-6 h-6 text-primary" />
       </div>
-      <p className="text-[14px] font-semibold text-[#374151] mb-1">
+      <p className="text-[14px] font-semibold text-foreground mb-1">
         Aucune unité opérationnelle
       </p>
-      <p className="text-[13px] text-[#9CA3AF] mb-5 max-w-xs">
+      <p className="text-[13px] text-muted-foreground mb-5 max-w-xs">
         Créez votre première unité pour commencer à gérer vos projets et équipes.
       </p>
       <Link
         href={`/company/${companyId}/units/new`}
-        className="inline-flex items-center gap-2 px-4 py-2 bg-[#111111] text-white text-[13px] font-semibold rounded-lg hover:bg-[#222222] transition-colors"
+        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-[13px] font-semibold rounded-lg hover:opacity-90 transition-opacity"
       >
         <Plus className="w-4 h-4" />
         Créer une unité
