@@ -42,10 +42,10 @@ export function InfoBar() {
   return (
     <div
       className={cn(
-        "relative flex items-center justify-center gap-3 px-6 py-2.5 text-[13px] font-medium",
+        "relative flex items-center justify-center gap-3 px-6 py-2.5 text-[13px] font-medium border-b",
         isDanger
-          ? "bg-red-50 text-red-700 border-b border-red-100"
-          : "bg-amber-50 text-amber-800 border-b border-amber-100"
+          ? "bg-destructive/10 text-destructive border-destructive/20 dark:bg-destructive/20"
+          : "bg-amber-50 text-amber-800 border-amber-100 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-900"
       )}
     >
       {isDanger ? (
@@ -80,7 +80,7 @@ export function InfoBar() {
       {!isDanger && (
         <button
           onClick={() => setDismissed(true)}
-          className="absolute right-4 p-1 rounded hover:bg-amber-100 transition-colors"
+          className="absolute right-4 p-1 rounded hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-colors"
           aria-label="Fermer"
         >
           <X className="w-3.5 h-3.5" />

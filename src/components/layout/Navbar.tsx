@@ -74,17 +74,17 @@ export function Navbar() {
   const companyId = user?.publicMetadata?.companyId as string | undefined;
 
   return (
-    <header className="sticky top-0 z-20 h-[60px] bg-[#ECEAE8]/90 backdrop-blur-sm border-b border-[#E8E7E5] flex items-center px-6 justify-between gap-4 shrink-0">
+    <header className="sticky top-0 z-20 h-[60px] bg-background/90 backdrop-blur-sm border-b border-border flex items-center px-6 justify-between gap-4 shrink-0">
 
       {/* Left — mobile menu + breadcrumbs */}
       <div className="flex items-center gap-4 min-w-0">
         {/* Mobile hamburger */}
         <button
-          className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-black/5 transition-colors shrink-0"
+          className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container transition-colors shrink-0"
           onClick={() => setMobileOpen(true)}
           aria-label="Ouvrir le menu"
         >
-          <Menu className="w-4 h-4 text-[#4B5563]" />
+          <Menu className="w-4 h-4 text-on-surface-variant" />
         </button>
 
         {/* Breadcrumbs */}
@@ -92,17 +92,17 @@ export function Navbar() {
           {breadcrumbs.map((crumb, idx) => (
             <React.Fragment key={crumb.href || idx}>
               {idx > 0 && (
-                <ChevronRight className="w-3 h-3 text-[#9CA3AF] shrink-0" />
+                <ChevronRight className="w-3 h-3 text-muted-foreground shrink-0" />
               )}
               {idx < breadcrumbs.length - 1 ? (
                 <Link
                   href={crumb.href ?? "#"}
-                  className="text-[13px] text-[#6B7280] hover:text-[#111111] transition-colors truncate max-w-[120px]"
+                  className="text-[13px] text-on-surface-variant hover:text-on-surface transition-colors truncate max-w-[120px]"
                 >
                   {crumb.label}
                 </Link>
               ) : (
-                <span className="text-[13px] font-semibold text-[#111111] truncate max-w-[200px]">
+                <span className="text-[13px] font-semibold text-on-surface truncate max-w-[200px]">
                   {crumb.label}
                 </span>
               )}
@@ -115,44 +115,44 @@ export function Navbar() {
       <div className="flex items-center gap-2 shrink-0">
         {/* Search */}
         <div className="relative hidden lg:flex items-center">
-          <Search className="absolute left-3 w-3.5 h-3.5 text-[#9CA3AF] pointer-events-none" />
+          <Search className="absolute left-3 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
           <Input
             type="search"
             placeholder="Rechercher..."
             className={cn(
-              "w-56 h-8 pl-9 pr-3 text-[13px] bg-white border border-[#E8E7E5] rounded-lg",
-              "placeholder:text-[#9CA3AF] focus-visible:ring-1 focus-visible:ring-[#1E3A8A] focus-visible:border-[#1E3A8A]",
-              "transition-all focus-visible:w-72 shadow-none"
+              "w-56 h-8 pl-9 pr-3 text-[13px] bg-surface border border-border rounded-lg",
+              "placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary",
+              "transition-all focus-visible:w-72 shadow-none text-on-surface"
             )}
           />
         </div>
 
         {/* Divider */}
-        <div className="w-px h-5 bg-[#E8E7E5]" />
+        <div className="w-px h-5 bg-border" />
 
         {/* Theme + Notifications */}
         <ThemeToggle />
         <NotificationBell />
 
         {/* Divider */}
-        <div className="w-px h-5 bg-[#E8E7E5]" />
+        <div className="w-px h-5 bg-border" />
 
         {/* User menu */}
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-black/5 transition-colors group">
+              <button className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-surface-container transition-colors group">
                 <Avatar className="w-7 h-7 rounded-lg shrink-0">
                   <AvatarImage src={user.imageUrl} />
-                  <AvatarFallback className="rounded-lg bg-[#1E3A8A] text-white text-[10px] font-bold">
+                  <AvatarFallback className="rounded-lg bg-primary text-primary-foreground text-[10px] font-bold">
                     {user.firstName?.charAt(0) ?? "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden lg:flex flex-col items-start leading-none">
-                  <span className="text-[12px] font-semibold text-[#111111] truncate max-w-[100px]">
+                  <span className="text-[12px] font-semibold text-on-surface truncate max-w-[100px]">
                     {user.fullName ?? "Utilisateur"}
                   </span>
-                  <span className="text-[10px] text-[#6B7280] mt-0.5">
+                  <span className="text-[10px] text-muted-foreground mt-0.5">
                     {getRoleLabel(role)}
                   </span>
                 </div>
@@ -162,51 +162,51 @@ export function Navbar() {
             <DropdownMenuContent
               align="end"
               sideOffset={8}
-              className="w-60 p-1.5 rounded-xl border border-[#E8E7E5] bg-white shadow-lg shadow-black/8"
+              className="w-60 p-1.5 rounded-xl border border-border bg-popover shadow-modal"
             >
               {/* User info header */}
               <DropdownMenuLabel className="px-3 py-3">
                 <div className="flex items-center gap-3">
                   <Avatar className="w-10 h-10 rounded-xl shrink-0">
                     <AvatarImage src={user.imageUrl} />
-                    <AvatarFallback className="rounded-xl bg-[#1E3A8A] text-white font-bold">
+                    <AvatarFallback className="rounded-xl bg-primary text-primary-foreground font-bold">
                       {user.firstName?.charAt(0) ?? "U"}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[13px] font-semibold text-[#111111] truncate">
+                    <span className="text-[13px] font-semibold text-on-surface truncate">
                       {user.fullName}
                     </span>
-                    <span className="text-[11px] text-[#6B7280] truncate">
+                    <span className="text-[11px] text-muted-foreground truncate">
                       {user.emailAddresses[0]?.emailAddress}
                     </span>
                   </div>
                 </div>
               </DropdownMenuLabel>
 
-              <DropdownMenuSeparator className="bg-[#F3F4F6] my-1" />
+              <DropdownMenuSeparator className="bg-border my-1" />
 
-              <DropdownMenuItem asChild className="rounded-lg px-3 py-2.5 cursor-pointer text-[13px] focus:bg-[#F9FAFB]">
-                <Link href="/dashboard/profile" className="flex items-center gap-2.5 text-[#374151]">
-                  <User className="w-4 h-4 text-[#6B7280]" />
+              <DropdownMenuItem asChild className="rounded-lg px-3 py-2.5 cursor-pointer text-[13px] focus:bg-surface-container">
+                <Link href="/dashboard/profile" className="flex items-center gap-2.5 text-on-surface">
+                  <User className="w-4 h-4 text-on-surface-variant" />
                   Mon profil
                 </Link>
               </DropdownMenuItem>
 
               {companyId && (
-                <DropdownMenuItem asChild className="rounded-lg px-3 py-2.5 cursor-pointer text-[13px] focus:bg-[#F9FAFB]">
-                  <Link href={`/company/${companyId}/settings`} className="flex items-center gap-2.5 text-[#374151]">
-                    <Settings className="w-4 h-4 text-[#6B7280]" />
+                <DropdownMenuItem asChild className="rounded-lg px-3 py-2.5 cursor-pointer text-[13px] focus:bg-surface-container">
+                  <Link href={`/company/${companyId}/settings`} className="flex items-center gap-2.5 text-on-surface">
+                    <Settings className="w-4 h-4 text-on-surface-variant" />
                     Paramètres
                   </Link>
                 </DropdownMenuItem>
               )}
 
-              <DropdownMenuSeparator className="bg-[#F3F4F6] my-1" />
+              <DropdownMenuSeparator className="bg-border my-1" />
 
               <DropdownMenuItem
                 onClick={() => signOut()}
-                className="rounded-lg px-3 py-2.5 cursor-pointer text-[13px] text-red-600 focus:bg-red-50 focus:text-red-600"
+                className="rounded-lg px-3 py-2.5 cursor-pointer text-[13px] text-destructive focus:bg-destructive/10 focus:text-destructive"
               >
                 <div className="flex items-center gap-2.5">
                   <LogOut className="w-4 h-4" />
