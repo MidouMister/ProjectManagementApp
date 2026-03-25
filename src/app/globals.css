@@ -142,7 +142,7 @@
     --chart-5: oklch(0.75 0.12 265);
     
     /* Sidebar - Darker in dark mode */
-    --sidebar: oklch(0.12 0 0);
+    --sidebar: oklch(12.212% 0.00001 271.152);
     --sidebar-foreground: oklch(0.92 0 0);
     --sidebar-primary: oklch(0.75 0.12 265);
     --sidebar-primary-foreground: var(--on-primary);

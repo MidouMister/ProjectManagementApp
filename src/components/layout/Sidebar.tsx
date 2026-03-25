@@ -2,7 +2,7 @@
 
 import { useAtom } from "jotai";
 import { sidebarCollapsedAtom, sidebarMobileOpenAtom } from "@/store/sidebar";
-import { useUser, useClerk } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -17,318 +17,283 @@ import {
   Building2,
   Bell,
   Settings,
-  LogOut,
   PanelLeftClose,
-  PanelLeft,
   CheckSquare,
   ChevronDown,
   ChevronRight,
+  ChevronsUpDown,
+  Layers,
   type LucideIcon,
+  PanelRightClose,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { useState } from "react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-interface NavSection {
-  type: "section";
-  label: string;
-  id: string;
-}
-
-interface NavLink {
-  type: "link";
-  icon: LucideIcon;
-  label: string;
-  href: string;
-  badge?: string | number;
-}
-
-interface CollapsibleSection {
-  type: "collapsible";
-  id: string;
-  label: string;
-  icon: LucideIcon;
-  items: NavLink[];
-}
-
+interface NavSection { type: "section"; label: string; id: string }
+interface NavLink { type: "link"; icon: LucideIcon; label: string; href: string; badge?: string | number }
+interface CollapsibleSection { type: "collapsible"; id: string; label: string; icon: LucideIcon; items: NavLink[] }
 type NavItem = NavSection | NavLink | CollapsibleSection;
 
-// ─── Subscription Status Badge ────────────────────────────────────────────────
+// ─── Company / Unit Selector ──────────────────────────────────────────────────
 
-interface SubscriptionBadgeProps {
-  status: string;
-  endAt: Date | null;
+interface SelectorUnit { id: string; name: string }
+
+function CompanyUnitSelector({
+  collapsed, companyId, companyName, companyLogo, units, role,
+}: {
   collapsed: boolean;
-}
+  companyId: string | undefined;
+  companyName: string | undefined;
+  companyLogo: string | null | undefined;
+  units: SelectorUnit[];
+  role: string | undefined;
+}) {
+  const router   = useRouter();
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
-function SubscriptionBadge({ status, endAt, collapsed }: SubscriptionBadgeProps) {
-  if (status === "ACTIVE") {
-    return collapsed ? (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Badge variant="default" className="bg-green-500/10 text-green-600 border-green-500/20 h-5 px-1.5 text-[10px]">
-            ✓
-          </Badge>
-        </TooltipTrigger>
-        <TooltipContent side="right" className="text-xs">
-          Abonnement actif
-        </TooltipContent>
-      </Tooltip>
-    ) : (
-      <Badge variant="default" className="bg-green-500/10 text-green-600 border-green-500/20 text-[10px]">
-        ✓ Abonnement actif
-      </Badge>
-    );
+  const isOwner    = role === "OWNER";
+  const onCompany  = companyId ? pathname.startsWith(`/company/${companyId}`) : false;
+  const activeUnit = units.find((u) => pathname.startsWith(`/unite/${u.id}`));
+  const currentName = onCompany ? companyName : activeUnit?.name ?? companyName ?? "Sélectionner";
+
+  function navigate(href: string) {
+    setOpen(false);
+    router.push(href);
+    router.refresh();
   }
 
-  if (status === "TRIAL" && endAt) {
-    const daysRemaining = Math.max(
-      0,
-      Math.ceil((new Date(endAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-    );
+  const logoEl = companyLogo
+    ? <img src={companyLogo} alt={companyName ?? ""} className="w-5 h-5 rounded object-contain" />
+    : <Building2 className="w-5 h-5 text-on-surface-variant" />;
 
-    if (daysRemaining === 0) {
-      return collapsed ? (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Badge variant="destructive" className="h-5 px-1.5 text-[10px] animate-pulse">
-              !
-            </Badge>
-          </TooltipTrigger>
-          <TooltipContent side="right" className="text-xs">
-            Essai expiré
-          </TooltipContent>
-        </Tooltip>
-      ) : (
-        <Badge variant="destructive" className="text-[10px] animate-pulse">
-          ⚠ Essai expiré
-        </Badge>
-      );
-    }
-
-    if (daysRemaining <= 7) {
-      return collapsed ? (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Badge variant="destructive" className="h-5 px-1.5 text-[10px]">
-              {daysRemaining}
-            </Badge>
-          </TooltipTrigger>
-          <TooltipContent side="right" className="text-xs">
-            {daysRemaining} jours restants
-          </TooltipContent>
-        </Tooltip>
-      ) : (
-        <Badge variant="destructive" className="text-[10px]">
-          ⚠ {daysRemaining}j restants
-        </Badge>
-      );
-    }
-
-    return collapsed ? (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 h-5 px-1.5 text-[10px]">
-            {daysRemaining}
-          </Badge>
-        </TooltipTrigger>
-        <TooltipContent side="right" className="text-xs">
-          {daysRemaining} jours d&apos;essai restants
-        </TooltipContent>
-      </Tooltip>
-    ) : (
-      <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-[10px]">
-        ⏱ {daysRemaining}j restants
-      </Badge>
-    );
-  }
-
-  if (status === "GRACE") {
-    return collapsed ? (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Badge variant="destructive" className="h-5 px-1.5 text-[10px]">
-            !
-          </Badge>
-        </TooltipTrigger>
-        <TooltipContent side="right" className="text-xs">
-          Période de grâce
-        </TooltipContent>
-      </Tooltip>
-    ) : (
-      <Badge variant="destructive" className="text-[10px]">
-        ⚠ Période de grâce
-      </Badge>
-    );
-  }
-
-  return null;
-}
-
-// ─── Company Logo ─────────────────────────────────────────────────────────────
-
-interface CompanyLogoProps {
-  logoUrl?: string | null;
-  companyName?: string;
-  collapsed: boolean;
-}
-
-function CompanyLogo({ logoUrl, companyName, collapsed }: CompanyLogoProps) {
-  const logoSize = collapsed ? "w-9 h-9" : "w-10 h-10";
-  
   if (collapsed) {
-    if (logoUrl) {
-      return (
-        <div className={cn(logoSize, "rounded-xl overflow-hidden bg-surface-container-low shrink-0")}>
-          <img src={logoUrl} alt={companyName || "Logo"} className="w-full h-full object-cover" />
-        </div>
-      );
-    }
     return (
-      <div className={cn(logoSize, "bg-primary rounded-xl flex items-center justify-center shrink-0")}>
-        <span className="text-white text-sm font-black tracking-tight">
-          {(companyName || "PMA").charAt(0).toUpperCase()}
-        </span>
+      <div className="flex justify-center py-2 px-2">
+        <Popover open={open} onOpenChange={isOwner ? setOpen : undefined}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <PopoverTrigger asChild>
+                <button
+                  disabled={!isOwner}
+                  aria-label="Changer de contexte"
+                  className={cn(
+                    "w-10 h-10 flex items-center justify-center rounded-btn transition-colors",
+                    "bg-surface-container-lowest shadow-card",
+                    isOwner ? "cursor-pointer hover:bg-surface-container-low" : "cursor-default opacity-60"
+                  )}
+                >
+                  {logoEl}
+                </button>
+              </PopoverTrigger>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="text-body bg-surface border-none shadow-modal">
+              <p className="font-semibold text-on-surface">{currentName}</p>
+            </TooltipContent>
+          </Tooltip>
+          <SelectorPanel companyId={companyId} companyName={companyName} companyLogo={companyLogo} units={units} isOwner={isOwner} onNavigate={navigate} side="right" />
+        </Popover>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center gap-3 min-w-0">
-      {logoUrl ? (
-        <div className={cn(logoSize, "rounded-xl overflow-hidden bg-surface-container-low shrink-0")}>
-          <img src={logoUrl} alt={companyName || "Logo"} className="w-full h-full object-cover" />
-        </div>
-      ) : (
-        <div className={cn(logoSize, "bg-primary rounded-xl flex items-center justify-center shrink-0")}>
-          <span className="text-white text-sm font-black tracking-tight">
-            {(companyName || "PMA").charAt(0).toUpperCase()}
-          </span>
-        </div>
-      )}
-      <div className="flex flex-col leading-none min-w-0">
-        <span className="text-base font-bold text-foreground truncate tracking-tight">
-          {companyName || "AGORA"}
-        </span>
-        <span className="text-[11px] text-muted-foreground font-medium uppercase tracking-wider mt-0.5">
-          Gestion Pro
-        </span>
+    <div className="px-5 py-4">
+      <p className="text-label text-on-surface-variant mb-3 font-bold tracking-wider">ACTIVE ENTITY</p>
+      <div className="bg-surface-container-low rounded-card shadow-card p-3 pb-4 space-y-4">
+        <Popover open={open} onOpenChange={isOwner ? setOpen : undefined}>
+          <PopoverTrigger asChild>
+            <button
+              disabled={!isOwner}
+              className={cn(
+                "w-full flex items-center gap-3 transition-opacity group",
+                isOwner ? "cursor-pointer hover:opacity-80" : "cursor-default"
+              )}
+            >
+              <div className={cn(
+                "w-8 h-8 shrink-0 rounded-[8px] flex items-center justify-center overflow-hidden",
+                "bg-surface-container-high"
+              )}>
+                {companyLogo
+                  ? <img src={companyLogo} alt="" className="w-full h-full object-contain p-0.5" />
+                  : <Building2 className="w-4 h-4 text-on-surface-variant" />
+                }
+              </div>
+              <div className="flex-1 min-w-0 text-left">
+                <p className="text-title font-bold text-on-surface truncate leading-none">{currentName}</p>
+              </div>
+              {isOwner && <ChevronsUpDown className="w-4 h-4 text-on-surface-variant shrink-0" />}
+            </button>
+          </PopoverTrigger>
+          <SelectorPanel companyId={companyId} companyName={companyName} companyLogo={companyLogo} units={units} isOwner={isOwner} onNavigate={navigate} side="bottom" />
+        </Popover>
+
+        {/* Display inline units if any */}
+        {units.length > 0 && (
+          <div className="space-y-3 pl-4 pr-1">
+            {units.slice(0, 3).map((unit) => {
+              const active = pathname.startsWith(`/unite/${unit.id}`);
+              return (
+                <div key={unit.id} className="flex items-center gap-3 group relative cursor-pointer" onClick={() => navigate(`/unite/${unit.id}`)}>
+                  <span className={cn(
+                    "w-2 h-2 rounded-full shrink-0",
+                    active ? "bg-primary" : "bg-surface-container-highest"
+                  )} />
+                  <span className={cn(
+                    "text-body truncate",
+                    active ? "text-primary font-medium" : "text-on-surface-variant"
+                  )}>{unit.name}</span>
+                </div>
+              );
+            })}
+            {units.length > 3 && (
+              <div className="flex items-center gap-3 group cursor-pointer" onClick={() => navigate(`/company/${companyId}/units`)}>
+                <span className="w-2 h-2 rounded-full bg-surface-container-highest shrink-0" />
+                <span className="text-body text-on-surface-variant italic">+{units.length - 3} autres</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-// ─── Collapsible Nav Section ─────────────────────────────────────────────────
+// ─── Selector Popover Panel ───────────────────────────────────────────────────
 
-interface CollapsibleNavSectionProps {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-  items: NavLink[];
-  collapsed: boolean;
-  pathname: string;
-  onClose?: () => void;
+function SelectorPanel({
+  companyId, companyName, companyLogo, units, isOwner, onNavigate, side,
+}: {
+  companyId: string | undefined; companyName: string | undefined; companyLogo: string | null | undefined;
+  units: SelectorUnit[]; isOwner: boolean;
+  onNavigate: (href: string) => void; side: "right" | "bottom";
+}) {
+  return (
+    <PopoverContent
+      side={side} align="start" sideOffset={8} avoidCollisions collisionPadding={12}
+      className={cn(
+        "p-0 rounded-card border-none bg-surface-container-lowest shadow-modal",
+        side === "right" ? "w-72" : "w-[--radix-popover-trigger-width] min-w-64"
+      )}
+    >
+      <Command className="bg-transparent rounded-card">
+        <CommandList className="max-h-72 overflow-y-auto">
+          <CommandEmpty className="py-8 text-center text-body text-on-surface-variant">Aucun résultat</CommandEmpty>
+
+          {isOwner && companyId && (
+            <CommandGroup>
+              <p className="px-4 pt-3 pb-2 text-label text-on-surface-variant">ENTREPRISE</p>
+              <CommandItem
+                value={companyName ?? "entreprise"}
+                onSelect={() => onNavigate(`/company/${companyId}`)}
+                className="mx-2 mb-1 rounded-btn cursor-pointer data-[selected=true]:bg-surface-container-low"
+              >
+                <div className="flex items-center gap-3 w-full py-0.5">
+                  <div className="w-8 h-8 shrink-0 rounded-[6px] flex items-center justify-center overflow-hidden bg-surface-container">
+                    {companyLogo ? <img src={companyLogo} alt={companyName ?? ""} className="w-full h-full object-contain p-1" /> : <Layers className="w-4 h-4 text-primary" />}
+                  </div>
+                  <span className="flex-1 min-w-0 text-body font-semibold truncate text-on-surface">{companyName ?? "Entreprise"}</span>
+                </div>
+              </CommandItem>
+            </CommandGroup>
+          )}
+
+          <CommandGroup>
+            <p className="px-4 pt-3 pb-2 text-label text-on-surface-variant">UNITÉS OPÉRATIONNELLES</p>
+            {units.length > 0 ? units.map((unit) => (
+              <CommandItem
+                key={unit.id} value={unit.name}
+                onSelect={() => onNavigate(`/unite/${unit.id}`)}
+                className="mx-2 mb-1 rounded-btn cursor-pointer data-[selected=true]:bg-surface-container-low"
+              >
+                <div className="flex items-center gap-3 w-full py-0.5">
+                  <div className="w-8 h-8 shrink-0 rounded-[6px] flex items-center justify-center overflow-hidden bg-surface-container">
+                    <Building2 className="w-4 h-4 text-on-surface-variant" />
+                  </div>
+                  <span className="flex-1 min-w-0 text-body font-semibold truncate text-on-surface">{unit.name}</span>
+                </div>
+              </CommandItem>
+            )) : (
+              <div className="mx-2 mb-2 px-3 py-4 rounded-btn bg-surface-container text-center text-body text-on-surface-variant">
+                Aucune unité créée
+              </div>
+            )}
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    </PopoverContent>
+  );
 }
 
-function CollapsibleNavSection({
-  id,
-  label,
-  icon: SectionIcon,
-  items,
-  collapsed,
-  pathname,
-  onClose,
-}: CollapsibleNavSectionProps) {
-  const [isOpen, setIsOpen] = useState(true);
-  const Icon = SectionIcon;
+// ─── Collapsible Nav Section ──────────────────────────────────────────────────
 
-  const hasActiveChild = items.some((item) => {
-    if (item.href === "/dashboard") return pathname === "/dashboard";
-    return pathname === item.href || pathname.startsWith(item.href + "/");
-  });
+function CollapsibleNavSection({ label, icon: Icon, items, collapsed, pathname, onClose }: {
+  id: string; label: string; icon: LucideIcon; items: NavLink[];
+  collapsed: boolean; pathname: string; onClose?: () => void;
+}) {
+  const [isOpen, setIsOpen] = useState(true);
+  const hasActive = items.some((i) => i.href === "/dashboard" ? pathname === i.href : pathname === i.href || pathname.startsWith(i.href + "/"));
 
   if (collapsed) {
     return (
       <Tooltip>
         <TooltipTrigger asChild>
           <div
-            className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-150",
-              hasActiveChild
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-surface-container-low hover:text-foreground"
-            )}
             onClick={() => setIsOpen(!isOpen)}
+            className={cn("flex items-center justify-center w-10 h-10 mx-auto rounded-btn cursor-pointer transition-colors mt-2",
+              hasActive ? "bg-surface-container-lowest text-primary shadow-card" : "text-on-surface-variant hover:bg-surface-container hover:text-on-surface"
+            )}
           >
-            <Icon className="w-4 h-4 shrink-0" />
+            <Icon className="w-5 h-5 shrink-0" />
           </div>
         </TooltipTrigger>
-        <TooltipContent side="right" className="text-xs">
-          <div className="font-semibold mb-1">{label}</div>
-          {items.map((item) => (
-            <div key={item.href} className="text-muted-foreground">
-              {item.label}
-            </div>
-          ))}
+        <TooltipContent side="right" className="text-body bg-surface text-on-surface border-none shadow-modal">
+          <div className="font-semibold mb-1 text-on-surface">{label}</div>
+          {items.map((i) => <div key={i.href} className="text-on-surface-variant">{i.label}</div>)}
         </TooltipContent>
       </Tooltip>
     );
   }
 
   return (
-    <div className="space-y-0.5">
+    <div className="space-y-1 mt-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150",
-          hasActiveChild
-            ? "bg-primary/10 text-primary"
-            : "text-muted-foreground hover:bg-surface-container-low hover:text-foreground"
+        className={cn("w-full flex items-center gap-3 px-5 py-2.5 rounded-btn text-body font-medium transition-colors",
+          hasActive ? "text-primary bg-transparent" : "text-on-surface-variant hover:bg-surface-container hover:text-on-surface"
         )}
       >
-        <Icon className="w-4 h-4 shrink-0" />
+        <Icon className="w-5 h-5 shrink-0" />
         <span className="flex-1 text-left truncate">{label}</span>
-        {isOpen ? (
-          <ChevronDown className="w-3 h-3 shrink-0 opacity-60" />
-        ) : (
-          <ChevronRight className="w-3 h-3 shrink-0 opacity-60" />
-        )}
+        {isOpen ? <ChevronDown className="w-4 h-4 opacity-50" /> : <ChevronRight className="w-4 h-4 opacity-50" />}
       </button>
-
       {isOpen && (
-        <div className="ml-4 pl-3 border-l border-border/50 space-y-0.5">
+        <div className="space-y-0.5">
           {items.map((item) => {
-            const active = item.href === "/dashboard"
-              ? pathname === "/dashboard"
-              : pathname === item.href || pathname.startsWith(item.href + "/");
-            const ItemIcon = item.icon;
-
+            const active = item.href === "/dashboard" ? pathname === item.href : pathname === item.href || pathname.startsWith(item.href + "/");
+            const I = item.icon;
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className={cn(
-                  "relative flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150 group",
-                  active
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-surface-container-low hover:text-foreground"
+              <Link key={item.href} href={item.href} onClick={onClose}
+                className={cn("relative flex items-center gap-3 mx-4 px-3 py-2.5 rounded-btn text-body transition-colors group",
+                  active ? "bg-surface-container-lowest text-primary shadow-card font-semibold z-10" : "text-on-surface-variant font-medium hover:text-on-surface"
                 )}
               >
-                {active && (
-                  <span className="absolute left-0 top-2 bottom-2 w-[3px] bg-primary rounded-r-full" />
-                )}
-                <ItemIcon className="w-4 h-4 shrink-0" />
+                <I className={cn("w-[18px] h-[18px] shrink-0", active ? "text-primary stroke-[2.5px]" : "text-on-surface-variant group-hover:text-on-surface")} />
                 <span className="truncate">{item.label}</span>
-                {item.badge !== undefined && (
-                  <Badge variant="secondary" className="ml-auto text-[10px] h-5 px-1.5">
-                    {item.badge}
-                  </Badge>
-                )}
+                {item.badge !== undefined && <Badge className="ml-auto bg-surface-container text-on-surface-variant text-label h-5 px-1.5 shadow-none rounded-sm">{item.badge}</Badge>}
               </Link>
             );
           })}
@@ -338,48 +303,30 @@ function CollapsibleNavSection({
   );
 }
 
-// ─── Role-based navigation builder ───────────────────────────────────────────
+// ─── Nav builder ─────────────────────────────────────────────────────────────
 
-function buildNavItems(
-  role: string | undefined,
-  companyId: string | undefined,
-  unitId: string | undefined,
-): NavItem[] {
+function buildNavItems(role: string | undefined, companyId: string | undefined, unitId: string | undefined): NavItem[] {
   const items: NavItem[] = [];
 
   if (role === "OWNER" && companyId) {
-    // Entreprise section
-    items.push({ type: "section", label: "Entreprise", id: "entreprise" });
-    items.push({ type: "collapsible", id: "entreprise-nav", label: "Entreprise", icon: Building2, items: [
-      { type: "link", icon: LayoutDashboard, label: "Vue d'ensemble", href: `/company/${companyId}` },
-      { type: "link", icon: Building2, label: "Unités", href: `/company/${companyId}/units` },
-      { type: "link", icon: Users2, label: "Équipe", href: `/company/${companyId}/team` },
-    ]});
-    items.push({ type: "link", icon: CreditCard, label: "Facturation", href: `/company/${companyId}/settings/billing` });
-    items.push({ type: "link", icon: Settings, label: "Paramètres", href: `/company/${companyId}/settings` });
-    
-    // Unités section (for unit selector) - AFTER Paramètres
-    items.push({ type: "section", label: "Unités", id: "unites" });
+    items.push({ type: "link", icon: LayoutDashboard, label: "Tableau de bord", href: `/company/${companyId}` });
+    items.push({ type: "link", icon: Building2,       label: "Unités",         href: `/company/${companyId}/units` });
+    items.push({ type: "link", icon: Users2,          label: "Équipe",         href: `/company/${companyId}/team` });
+    items.push({ type: "link", icon: CreditCard,      label: "Facturation",    href: `/company/${companyId}/settings/billing` });
   }
 
   if ((role === "OWNER" || role === "ADMIN") && unitId) {
-    // Unité section
-    items.push({ type: "section", label: "Unité", id: "unite" });
-    items.push({ type: "collapsible", id: "unite-nav", label: "Opérations", icon: Briefcase, items: [
-      { type: "link", icon: LayoutDashboard, label: "Tableau de bord", href: `/unite/${unitId}` },
-      { type: "link", icon: Briefcase, label: "Projets", href: `/unite/${unitId}/projects` },
-      { type: "link", icon: Kanban, label: "Kanban", href: `/unite/${unitId}/kanban` },
-      { type: "link", icon: Users, label: "Clients", href: `/unite/${unitId}/clients` },
-    ]});
-    items.push({ type: "link", icon: Bell, label: "Notifications", href: `/unite/${unitId}/notifications` });
-    items.push({ type: "link", icon: Settings, label: "Paramètres", href: `/unite/${unitId}/settings` });
+    items.push({ type: "link", icon: LayoutDashboard, label: "Tableau de bord", href: `/unite/${unitId}` });
+    items.push({ type: "link", icon: Briefcase,       label: "Projets",         href: `/unite/${unitId}/projects` });
+    items.push({ type: "link", icon: Kanban,          label: "Kanban",          href: `/unite/${unitId}/kanban` });
+    items.push({ type: "link", icon: Users,           label: "Clients",         href: `/unite/${unitId}/clients` });
+    items.push({ type: "link", icon: Bell,            label: "Notifications",   href: `/unite/${unitId}/notifications` });
   }
 
   if (role === "USER") {
-    items.push({ type: "section", label: "Mon espace", id: "mon-espace" });
     items.push({ type: "link", icon: LayoutDashboard, label: "Tableau de bord", href: `/dashboard` });
-    items.push({ type: "link", icon: CheckSquare, label: "Mes tâches", href: `/dashboard/tasks` });
-    items.push({ type: "link", icon: Bell, label: "Notifications", href: `/dashboard/notifications` });
+    items.push({ type: "link", icon: CheckSquare,     label: "Mes tâches",      href: `/dashboard/tasks` });
+    items.push({ type: "link", icon: Bell,            label: "Notifications",   href: `/dashboard/notifications` });
   }
 
   return items;
@@ -388,30 +335,13 @@ function buildNavItems(
 // ─── SidebarCore ─────────────────────────────────────────────────────────────
 
 interface SidebarCoreProps {
-  collapsed: boolean;
-  setCollapsed: (v: boolean) => void;
-  onClose?: () => void;
-  companyLogo?: string | null;
-  companyName?: string;
-  subscriptionStatus?: string;
-  subscriptionEndAt?: Date | null;
-  units?: Array<{ id: string; name: string }>;
-  currentUnitId?: string | null;
+  collapsed: boolean; setCollapsed: (v: boolean) => void; onClose?: () => void;
+  companyLogo?: string | null; companyName?: string;
+  units?: Array<{ id: string; name: string }>; currentUnitId?: string | null;
 }
 
-function SidebarCore({
-  collapsed,
-  setCollapsed,
-  onClose,
-  companyLogo,
-  companyName,
-  subscriptionStatus = "TRIAL",
-  subscriptionEndAt,
-  units = [],
-  currentUnitId,
-}: SidebarCoreProps) {
+function SidebarCore({ collapsed, setCollapsed, onClose, companyLogo, companyName, units = [] }: SidebarCoreProps) {
   const { user } = useUser();
-  const { signOut } = useClerk();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -421,258 +351,173 @@ function SidebarCore({
 
   const navItems = buildNavItems(role, companyId, unitId);
 
-  async function handleSignOut() {
-    await signOut();
-    router.push("/");
-  }
-
-  const getRoleLabel = (r: string | undefined) => {
-    if (r === "OWNER") return "Propriétaire";
-    if (r === "ADMIN") return "Administrateur";
-    return "Collaborateur";
-  };
+  const getRoleLabel = (r: string | undefined) =>
+    r === "OWNER" ? "Propriétaire" : r === "ADMIN" ? "Administrateur" : "Collaborateur";
 
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "U";
-    const parts = name.split(" ");
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
-    }
-    return name.substring(0, 2).toUpperCase();
+    const p = name.split(" ");
+    return p.length >= 2 ? (p[0][0] + p[1][0]).toUpperCase() : name.substring(0, 2).toUpperCase();
   };
+
+  // Mock team members for facepile visualization based on design requirement
+  const teamMembers = [
+    { initials: "AM", color: "bg-[#b388ff]" },
+    { initials: "KB", color: "bg-[#2979ff]" },
+    { initials: "SH", color: "bg-[#00e676]" },
+    { initials: "YB", color: "bg-[#ff9100]" },
+    { initials: "MK", color: "bg-[#ff3d00]" },
+  ];
 
   return (
     <TooltipProvider delayDuration={0}>
-      <div
-        className={cn(
-          "flex flex-col h-full bg-sidebar border-r border-sidebar-border transition-all duration-300",
-          collapsed ? "w-[64px]" : "w-[260px]"
-        )}
-      >
-        {/* ── Brand header ── */}
-        <div className={cn(
-          "flex items-center h-[64px] border-b border-sidebar-border shrink-0 px-4",
-          collapsed ? "justify-center" : "justify-between"
-        )}>
-          <CompanyLogo
-            logoUrl={companyLogo}
-            companyName={companyName}
-            collapsed={collapsed}
-          />
-          
-          {/* Collapse toggle - always visible */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => setCollapsed(!collapsed)}
-                className="p-2 rounded-lg text-muted-foreground hover:bg-surface-container-low hover:text-foreground transition-colors"
-              >
-                {collapsed
-                  ? <PanelLeft className="w-4 h-4" />
-                  : <PanelLeftClose className="w-4 h-4" />
-                }
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="text-xs">
-              {collapsed ? "Développer" : "Réduire"}
-            </TooltipContent>
-          </Tooltip>
+      <div className={cn(
+        "flex flex-col h-full bg-sidebar transition-all duration-300 relative",
+        collapsed ? "w-[72px]" : "w-[280px]"
+      )}>
+
+        {/* App header (No borders, High quality) */}
+        <div className={cn("flex flex-row items-center h-[80px] shrink-0 px-5 relative", collapsed ? "justify-center" : "justify-between")}>
+          <div className="flex items-center gap-3 min-w-0">
+             <div className="w-10 h-10 bg-primary rounded-lg shrink-0 flex items-center justify-center shadow-sm">
+                <Building2 className="w-5 h-5 text-primary-foreground" />
+             </div>
+             {!collapsed && (
+               <div className="flex flex-col leading-none min-w-0">
+                 <span className="text-headline font-bold text-primary truncate text-xl">PMA</span>
+                 <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Management Suite</span>
+               </div>
+             )}
+          </div>
+          {!collapsed && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button 
+                  onClick={() => setCollapsed(true)} 
+                  className="p-1.5 rounded-btn text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
+                >
+                  <PanelLeftClose className="w-5 h-5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="text-body bg-surface border-none shadow-modal text-on-surface">
+                Réduire
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
 
-        {/* ── Subscription Status (OWNER only) ── */}
-        {role === "OWNER" && !collapsed && (
-          <div className="mx-3 my-2 p-3 rounded-xl bg-surface-container-low">
-            <SubscriptionBadge
-              status={subscriptionStatus}
-              endAt={subscriptionEndAt || null}
-              collapsed={false}
-            />
-          </div>
+        {collapsed && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+               <button 
+                  onClick={() => setCollapsed(false)} 
+                  className="mx-auto mt-2 p-2 rounded-btn text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors focus:outline-none"
+                >
+                  <PanelRightClose className="w-5 h-5" />
+               </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="text-body bg-surface border-none shadow-modal text-on-surface">
+              Développer
+            </TooltipContent>
+          </Tooltip>
         )}
 
-        {/* ── Navigation ── */}
-        <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 px-2 flex flex-col gap-0.5 scrollbar-hide">
+        {/* ── Company / Unit Selector ── */}
+        <CompanyUnitSelector
+          collapsed={collapsed}
+          companyId={companyId}
+          companyName={companyName}
+          companyLogo={companyLogo}
+          units={units}
+          role={role}
+        />
+
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto overflow-x-hidden pt-2 pb-6 flex flex-col gap-1 scrollbar-hide">
           {navItems.map((item, idx) => {
             if (item.type === "section") {
-              // Special handling for "Unités" section - renders unit selector
-              if (item.id === "unites" && role === "OWNER") {
-                if (collapsed) {
-                  return <div key={idx} className="h-px bg-sidebar-border/50 my-2 mx-2" />;
-                }
-                return (
-                  <div key={idx} className="px-3 pt-4 pb-2 first:pt-0">
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-2">
-                      {item.label}
-                    </p>
-                    <div className="relative">
-                      <select
-                        className="w-full h-10 pl-3 pr-8 rounded-lg bg-surface-container-low text-[13px] font-medium text-foreground border-0 focus:ring-2 focus:ring-primary/20 appearance-none cursor-pointer"
-                        value={unitId || ""}
-                        onChange={(e) => {
-                          const newUnitId = e.target.value;
-                          if (newUnitId) {
-                            router.push(`/unite/${newUnitId}`);
-                          }
-                        }}
-                      >
-                        {units.map((unit) => (
-                          <option key={unit.id} value={unit.id}>
-                            {unit.name}
-                          </option>
-                        ))}
-                      </select>
-                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                    </div>
-                  </div>
-                );
-              }
-
-              if (collapsed) {
-                return <div key={idx} className="h-px bg-sidebar-border/50 my-2 mx-2" />;
-              }
-              return (
-                <p
-                  key={idx}
-                  className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 px-3 pt-4 pb-1.5 first:pt-0"
-                >
-                  {item.label}
-                </p>
-              );
+              return collapsed
+                ? <div key={idx} className="h-[2px] w-6 bg-surface-container my-3 mx-auto rounded-full" />
+                : <p key={idx} className="text-label text-on-surface-variant px-5 pt-5 pb-2 first:pt-0">{item.label}</p>;
             }
 
             if (item.type === "collapsible") {
-              return (
-                <CollapsibleNavSection
-                  key={item.id}
-                  id={item.id}
-                  label={item.label}
-                  icon={item.icon}
-                  items={item.items}
-                  collapsed={collapsed}
-                  pathname={pathname}
-                  onClose={onClose}
-                />
-              );
+              return <CollapsibleNavSection key={item.id} id={item.id} label={item.label} icon={item.icon} items={item.items} collapsed={collapsed} pathname={pathname} onClose={onClose} />;
             }
 
-            const active = item.href === "/dashboard"
-              ? pathname === "/dashboard"
-              : pathname === item.href || pathname.startsWith(item.href + "/");
+            const active = item.href === "/dashboard" ? pathname === "/dashboard" : pathname === item.href || pathname.startsWith(item.href + "/");
             const Icon = item.icon;
 
-            const linkContent = (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className={cn(
-                  "relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150 group overflow-hidden",
+            const linkEl = (
+              <Link key={item.href} href={item.href} onClick={onClose}
+                className={cn("relative flex items-center gap-3 mx-4 px-3 py-3 rounded-btn text-body transition-colors group overflow-hidden mb-1",
                   collapsed && "justify-center px-0 w-10 h-10 mx-auto",
-                  active
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-surface-container-low hover:text-foreground"
+                  active ? "bg-surface-container-lowest text-primary shadow-card font-semibold" : "text-on-surface-variant font-medium hover:text-primary"
                 )}
               >
-                {/* Active left bar */}
-                {active && !collapsed && (
-                  <span className="absolute left-0 top-2 bottom-2 w-[3px] bg-primary rounded-r-full" />
-                )}
-
-                <Icon
-                  className={cn(
-                    "w-4 h-4 shrink-0 transition-colors",
-                    active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
-                  )}
-                />
-
-                {!collapsed && (
-                  <span className="truncate">{item.label}</span>
-                )}
-
-                {!collapsed && item.badge !== undefined && (
-                  <Badge variant="secondary" className="ml-auto text-[10px] h-5 px-1.5">
-                    {item.badge}
-                  </Badge>
-                )}
+                <Icon className={cn("w-[20px] h-[20px] shrink-0", active ? "text-primary stroke-[2.5px]" : "text-on-surface-variant group-hover:text-primary")} />
+                {!collapsed && <span className="truncate">{item.label}</span>}
+                {!collapsed && item.badge !== undefined && <Badge className="ml-auto bg-surface-container text-on-surface-variant text-label h-5 px-1.5 shadow-none rounded-sm">{item.badge}</Badge>}
               </Link>
             );
 
-            if (collapsed) {
-              return (
-                <Tooltip key={item.href}>
-                  <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
-                  <TooltipContent side="right" className="text-xs flex items-center gap-2">
-                    {item.label}
-                    {item.badge !== undefined && (
-                      <Badge variant="secondary" className="text-[10px] h-5 px-1">
-                        {item.badge}
-                      </Badge>
-                    )}
-                  </TooltipContent>
-                </Tooltip>
-              );
-            }
-
-            return linkContent;
+            return collapsed
+              ? <Tooltip key={item.href}><TooltipTrigger asChild>{linkEl}</TooltipTrigger><TooltipContent side="right" className="text-body bg-surface text-on-surface border-none shadow-modal flex items-center gap-2">{item.label}{item.badge !== undefined && <Badge className="bg-surface-container text-on-surface-variant text-label h-5 px-1.5 shadow-none rounded-sm">{item.badge}</Badge>}</TooltipContent></Tooltip>
+              : linkEl;
           })}
-        </nav>
 
-        {/* ── Footer ── */}
-        <div className="shrink-0 border-t border-sidebar-border p-3 flex flex-col gap-3">
-          {/* Membres Section (OWNER only) */}
-          {role === "OWNER" && !collapsed && (
-            <div className="space-y-2">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 px-1">
-                Membres
-              </p>
-              <Link
-                href={`/company/${companyId}/team`}
-                className="flex items-center justify-center gap-2 h-10 w-full px-3 rounded-lg bg-primary text-primary-foreground text-[13px] font-medium hover:bg-primary/90 transition-colors"
+          {/* Team Facepile Section */}
+          {!collapsed && role === "OWNER" && (
+            <div className="mt-8 px-5">
+              <p className="text-label text-on-surface-variant mb-4 font-bold tracking-wider">ÉQUIPE</p>
+              
+              <div className="flex -space-x-2 overflow-hidden mb-5">
+                {teamMembers.map((member, i) => (
+                  <div key={i} className={cn(
+                    "inline-block h-8 w-8 rounded-full ring-2 ring-sidebar flex items-center justify-center text-white text-xs font-bold",
+                    member.color
+                  )}>
+                    {member.initials}
+                  </div>
+                ))}
+                <div className="inline-block h-8 w-8 rounded-full ring-2 ring-sidebar bg-surface-container-high flex items-center justify-center text-on-surface-variant text-xs font-bold">
+                  +
+                </div>
+              </div>
+
+              <Link href={`/company/${companyId}/team`} 
+                className="flex items-center gap-3 text-body text-on-surface-variant font-medium hover:text-primary transition-colors group"
+                onClick={onClose}
               >
-                <UserPlus className="w-4 h-4" />
+                <UserPlus className="w-5 h-5 text-on-surface-variant group-hover:text-primary" />
                 <span>Inviter des membres</span>
               </Link>
             </div>
           )}
+        </nav>
 
-          {/* User profile */}
+        {/* Footer (No Line, Minimal Profile) */}
+        <div className="shrink-0 pt-4 pb-6 px-4 bg-sidebar border-t border-outline-variant">
           {user && (
-            <div
-              className={cn(
-                "flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-surface-container-low transition-colors",
-                collapsed && "justify-center"
-              )}
-            >
-              <Avatar className="w-9 h-9 rounded-xl shrink-0">
+            <div className={cn("flex items-center gap-3 px-2 py-2 rounded-btn", collapsed && "justify-center")}>
+              <Avatar className="w-10 h-10 rounded-[8px] shrink-0 border-none shadow-sm relative">
                 <AvatarImage src={user.imageUrl} />
-                <AvatarFallback className="rounded-xl bg-primary text-primary-foreground text-xs font-bold">
-                  {getInitials(user.firstName)}
-                </AvatarFallback>
+                <AvatarFallback className="rounded-[8px] bg-primary-container text-primary text-body font-bold">{getInitials(user.firstName)}</AvatarFallback>
+                <span className="absolute bottom-[-2px] right-[-2px] w-3 h-3 bg-green-500 border-2 border-sidebar rounded-full"></span>
               </Avatar>
-
               {!collapsed && (
                 <>
-                  <div className="flex flex-col min-w-0 flex-1 leading-none">
-                    <span className="text-sm font-semibold text-foreground truncate">
-                      {user.fullName ?? "Utilisateur"}
-                    </span>
-                    <span className="text-[11px] text-primary font-medium mt-0.5">
-                      {getRoleLabel(role)}
-                    </span>
+                  <div className="flex flex-col min-w-0 flex-1 leading-none justify-center">
+                    <span className="text-body font-bold text-on-surface truncate tracking-tight">{user.fullName ?? "Utilisateur"}</span>
+                    <span className="text-[11px] text-on-surface-variant font-semibold mt-1 uppercase tracking-wider">{getRoleLabel(role)}</span>
                   </div>
-
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <button
-                        onClick={handleSignOut}
-                        className="p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
-                      >
-                        <LogOut className="w-4 h-4" />
+                      <button onClick={() => router.push(`/company/${companyId}/settings`)} className="p-2 rounded-btn text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
+                        <Settings className="w-[18px] h-[18px]" />
                       </button>
                     </TooltipTrigger>
-                    <TooltipContent side="top" className="text-xs">
-                      Se déconnecter
-                    </TooltipContent>
+                    <TooltipContent side="top" className="text-body bg-surface text-on-surface border-none shadow-modal">Paramètres</TooltipContent>
                   </Tooltip>
                 </>
               )}
@@ -687,46 +532,29 @@ function SidebarCore({
 // ─── Sidebar (exported) ───────────────────────────────────────────────────────
 
 interface SidebarProps {
-  companyLogo?: string | null;
-  companyName?: string;
-  subscriptionStatus?: string;
-  subscriptionEndAt?: Date | null;
-  units?: Array<{ id: string; name: string }>;
-  currentUnitId?: string | null;
+  companyLogo?: string | null; companyName?: string;
+  units?: Array<{ id: string; name: string }>; currentUnitId?: string | null;
 }
 
 export function Sidebar(props: SidebarProps) {
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom);
   const [mobileOpen, setMobileOpen] = useAtom(sidebarMobileOpenAtom);
   const { isLoaded, user } = useUser();
-
   if (!isLoaded || !user) return null;
 
   return (
     <>
-      {/* Mobile sheet */}
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="p-0 w-[260px] border-0">
+        <SheetContent side="left" className="p-0 w-[280px] border-none shadow-modal bg-sidebar">
           <SheetTitle className="sr-only">Menu principal</SheetTitle>
           <SheetDescription className="sr-only">Navigation PMA</SheetDescription>
           <div className="h-full">
-            <SidebarCore
-              {...props}
-              collapsed={false}
-              setCollapsed={() => {}}
-              onClose={() => setMobileOpen(false)}
-            />
+            <SidebarCore {...props} collapsed={false} setCollapsed={() => {}} onClose={() => setMobileOpen(false)} />
           </div>
         </SheetContent>
       </Sheet>
-
-      {/* Desktop sidebar */}
       <aside className="hidden md:block h-screen sticky top-0 shrink-0 z-30">
-        <SidebarCore
-          {...props}
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-        />
+        <SidebarCore {...props} collapsed={collapsed} setCollapsed={setCollapsed} />
       </aside>
     </>
   );

@@ -27,13 +27,11 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   }
 
   return (
-    <div className="flex h-screen bg-[#ECEAE8] font-sans antialiased overflow-hidden">
-      {/* Sidebar — with subscription status and company info */}
+    <div className="flex h-screen bg-background font-sans antialiased overflow-hidden">
+      {/* Sidebar — with company info */}
       <Sidebar
         companyLogo={companyData?.logo}
         companyName={companyData?.name}
-        subscriptionStatus={companyData?.subscription?.status}
-        subscriptionEndAt={companyData?.subscription?.endAt}
         units={units}
         currentUnitId={authUser?.unitId}
       />

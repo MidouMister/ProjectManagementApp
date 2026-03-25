@@ -98,15 +98,15 @@ export type LegalForm = (typeof LegalFormOptions)[number]
 
 export const SectorOptions = [
   "Construction",
-  "Engineering",
-  "Public Works",
+  "Ingénierie",
+  "Travaux Publics",
   "Architecture",
-  "Consulting",
-  "IT",
-  "Manufacturing",
-  "Energy",
+  "Conseil",
+  "Informatique",
+  "Industrie",
+  "Énergie",
   "Transport",
-  "Other",
+  "Autre",
 ] as const
 export type Sector = (typeof SectorOptions)[number]
 
