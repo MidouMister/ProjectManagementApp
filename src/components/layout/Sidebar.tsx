@@ -397,10 +397,10 @@ function CollapsibleNavSection({ label, icon: Icon, items, collapsed, pathname, 
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full flex items-center gap-2.5 px-4 py-2 rounded-md text-xs font-medium transition-colors",
+          "w-full flex items-center gap-2.5 px-4 py-2 rounded-md text-xs font-medium transition-all duration-150",
           hasActive
             ? "text-primary bg-primary/5"
-            : "text-muted-foreground hover:bg-accent hover:text-foreground"
+            : "text-muted-foreground hover:text-primary hover:bg-primary/5"
         )}
       >
         <Icon className="w-4 h-4 shrink-0" />
@@ -424,16 +424,16 @@ function CollapsibleNavSection({ label, icon: Icon, items, collapsed, pathname, 
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  "relative flex items-center gap-2.5 px-3 py-2 rounded-md text-xs transition-colors group",
+                  "relative flex items-center gap-2.5 px-3 py-2 rounded-md text-xs transition-all duration-150 group",
                   active
                     ? "bg-primary text-primary-foreground font-medium"
-                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                 )}
               >
                 <I
                   className={cn(
-                    "w-3.5 h-3.5 shrink-0",
-                    active ? "" : "group-hover:text-foreground"
+                    "w-3.5 h-3.5 shrink-0 transition-colors duration-150",
+                    active ? "" : "text-muted-foreground group-hover:text-primary"
                   )}
                 />
                 <span className="truncate">{item.label}</span>
@@ -599,24 +599,24 @@ function SidebarCore({
       <div
         className={cn(
           "flex flex-col h-full bg-sidebar transition-all duration-300 relative",
-          collapsed ? "w-[64px]" : "w-[240px]"
+          collapsed ? "w-[56px]" : "w-[220px]"
         )}
       >
         {/* App header */}
         <div
-          className={cn(
-            "flex flex-row items-center h-[56px] shrink-0 px-4 relative",
+            className={cn(
+            "flex flex-row items-center h-[52px] shrink-0 px-3 relative",
             collapsed ? "justify-center" : "justify-between"
           )}
         >
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 bg-primary rounded-lg shrink-0 flex items-center justify-center shadow-sm">
-              <Building2 className="w-4 h-4 text-primary-foreground" />
+            <div className="w-7 h-7 bg-primary rounded-md shrink-0 flex items-center justify-center shadow-sm">
+              <Building2 className="w-3.5 h-3.5 text-primary-foreground" />
             </div>
             {!collapsed && (
               <div className="flex flex-col leading-none min-w-0">
-                <span className="text-base font-bold text-primary truncate">PMA</span>
-                <span className="text-[9px] text-muted-foreground uppercase tracking-widest mt-0.5">
+                <span className="text-sm font-bold text-primary truncate">PMA</span>
+                <span className="text-[8px] text-muted-foreground uppercase tracking-widest mt-0.5">
                   Management
                 </span>
               </div>
@@ -711,17 +711,17 @@ function SidebarCore({
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  "relative flex items-center gap-2.5 mx-2.5 px-2.5 py-2 rounded-md text-xs transition-colors group",
+                  "relative flex items-center gap-2.5 mx-2.5 px-2.5 py-2 rounded-md text-xs transition-all duration-150 group",
                   collapsed && "justify-center px-0 w-8 h-8 mx-auto",
                   active
                     ? "bg-primary text-primary-foreground font-medium"
-                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                 )}
               >
                 <Icon
                   className={cn(
-                    "w-3.5 h-3.5 shrink-0",
-                    active ? "" : "group-hover:text-foreground"
+                    "w-3.5 h-3.5 shrink-0 transition-colors duration-150",
+                    active ? "" : "text-muted-foreground group-hover:text-primary"
                   )}
                 />
                 {!collapsed && (
@@ -860,7 +860,7 @@ export function Sidebar(props: SidebarProps) {
   return (
     <>
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="p-0 w-[240px] border-none shadow-lg bg-sidebar">
+        <SheetContent side="left" className="p-0 w-[220px] border-none shadow-lg bg-sidebar">
           <SheetTitle className="sr-only">Menu principal</SheetTitle>
           <SheetDescription className="sr-only">Navigation PMA</SheetDescription>
           <div className="h-full">
