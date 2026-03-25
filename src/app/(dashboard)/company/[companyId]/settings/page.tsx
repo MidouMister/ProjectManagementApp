@@ -64,7 +64,7 @@ export default async function CompanySettingsPage({
       </div>
 
       {/* Company Form */}
-      <Card className="border-none shadow-[0_4px_6px_-1px_rgba(13,12,34,0.04),0_10px_15px_-3px_rgba(13,12,34,0.08)]">
+      <Card className="border border-border">
         <CardHeader>
           <CardTitle>Informations générales</CardTitle>
           <CardDescription>
@@ -172,7 +172,7 @@ export default async function CompanySettingsPage({
       </Card>
 
       {/* Fiscal Identities */}
-      <Card className="border-none shadow-[0_4px_6px_-1px_rgba(13,12,34,0.04),0_10px_15px_-3px_rgba(13,12,34,0.08)]">
+      <Card className="border border-border">
         <CardHeader>
           <CardTitle>Identifiants fiscaux</CardTitle>
           <CardDescription>

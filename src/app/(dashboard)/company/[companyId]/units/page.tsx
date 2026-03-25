@@ -118,7 +118,7 @@ export default async function UnitsPage({
       </div>
 
       {units.length === 0 ? (
-        <Card className="border-none shadow-[0_4px_6px_-1px_rgba(13,12,34,0.04),0_10px_15px_-3px_rgba(13,12,34,0.08)]">
+        <Card className="border border-border">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <Building2 className="h-16 w-16 text-muted-foreground/30 mb-4" />
             <h3 className="text-lg font-medium text-muted-foreground">Aucune unité</h3>
@@ -132,7 +132,7 @@ export default async function UnitsPage({
                 triggerButton
               />
             ) : (
-              <p className="text-sm text-orange-600 mt-4">
+              <p className="text-sm text-orange-600 dark:text-orange-400 mt-4">
                 Nombre maximum d&apos;unités atteint
               </p>
             )}
@@ -166,10 +166,17 @@ function CreateUnitDialog({
   return (
     <Dialog>
       {!triggerButton ? (
-        <Button disabled={!canCreate} className={canCreate ? "bg-[#111111] hover:bg-[#111111]/90" : ""}>
-          <Plus className="mr-2 h-4 w-4" />
-          Créer une unité
-        </Button>
+        canCreate ? (
+          <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Plus className="mr-2 h-4 w-4" />
+            Créer une unité
+          </Button>
+        ) : (
+          <Button disabled variant="outline" className="opacity-50 cursor-not-allowed">
+            <Plus className="mr-2 h-4 w-4" />
+            Limite atteinte
+          </Button>
+        )
       ) : null}
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
@@ -216,7 +223,7 @@ function CreateUnitDialog({
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-[#111111] hover:bg-[#111111]/90">
+            <Button type="submit" className="bg-primary hover:bg-primary/90">
               Créer l&apos;unité
             </Button>
           </DialogFooter>
@@ -236,9 +243,9 @@ function UnitCard({
   deleteAction: (unitId: string) => Promise<void>;
 }) {
   return (
-    <Card className="border-none shadow-[0_4px_6px_-1px_rgba(13,12,34,0.04),0_10px_15px_-3px_rgba(13,12,34,0.08)] hover:shadow-md transition-shadow">
+    <Card className="border border-border hover:border-primary/30 transition-colors">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
-        <CardTitle className="text-lg font-semibold">{unit.name}</CardTitle>
+        <CardTitle className="text-lg font-semibold text-foreground">{unit.name}</CardTitle>
         <div className="flex items-center gap-1">
           <EditUnitDialog unit={unit} updateAction={updateAction} />
           <DeleteUnitDialog unitId={unit.id} unitName={unit.name} deleteAction={deleteAction} />
@@ -248,7 +255,7 @@ function UnitCard({
         {unit.address && (
           <p className="text-sm text-muted-foreground">{unit.address}</p>
         )}
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-4 text-sm text-foreground">
           <div className="flex items-center gap-1.5">
             <FolderKanban className="h-4 w-4 text-muted-foreground" />
             <span>{unit._count.projects} projets</span>
@@ -330,7 +337,7 @@ function EditUnitDialog({
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-[#111111] hover:bg-[#111111]/90">
+            <Button type="submit" className="bg-primary hover:bg-primary/90">
               Enregistrer
             </Button>
           </DialogFooter>
@@ -356,7 +363,7 @@ function DeleteUnitDialog({
 
   return (
     <AlertDialog>
-      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-600">
+      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
         <Trash2 className="h-4 w-4" />
       </Button>
       <AlertDialogContent>
@@ -369,7 +376,7 @@ function DeleteUnitDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>Annuler</AlertDialogCancel>
           <form action={handleDelete}>
-            <AlertDialogAction type="submit" className="bg-red-600 hover:bg-red-700">
+            <AlertDialogAction type="submit" className="bg-destructive hover:bg-destructive/90">
               Supprimer
             </AlertDialogAction>
           </form>

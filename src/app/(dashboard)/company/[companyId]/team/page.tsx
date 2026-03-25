@@ -149,7 +149,7 @@ export default async function CompanyTeamPage({
 function MembersTable({ members }: { members: MemberWithUnit[] }) {
   if (members.length === 0) {
     return (
-      <Card className="border-none shadow-[0_4px_6px_-1px_rgba(13,12,34,0.04),0_10px_15px_-3px_rgba(13,12,34,0.08)]">
+      <Card className="border border-border">
         <CardContent className="flex flex-col items-center justify-center py-16">
           <Users className="h-16 w-16 text-muted-foreground/30 mb-4" />
           <h3 className="text-lg font-medium text-muted-foreground">Aucun membre</h3>
@@ -162,7 +162,7 @@ function MembersTable({ members }: { members: MemberWithUnit[] }) {
   }
 
   return (
-    <Card className="border-none shadow-[0_4px_6px_-1px_rgba(13,12,34,0.04),0_10px_15px_-3px_rgba(13,12,34,0.08)]">
+    <Card className="border border-border">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Tous les membres</CardTitle>
@@ -187,12 +187,12 @@ function MembersTable({ members }: { members: MemberWithUnit[] }) {
                 <TableCell className="pl-6">
                   <div className="flex items-center gap-3">
                     <Avatar size="sm">
-                      <AvatarFallback className="text-xs">
+                      <AvatarFallback className="text-xs bg-primary/10 text-primary">
                         {getInitials(member.name, member.email)}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">{member.name || "Sans nom"}</p>
+                      <p className="font-medium text-foreground">{member.name || "Sans nom"}</p>
                       <p className="text-xs text-muted-foreground">{member.email}</p>
                     </div>
                   </div>
@@ -206,7 +206,7 @@ function MembersTable({ members }: { members: MemberWithUnit[] }) {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm">
+                  <span className="text-sm text-foreground">
                     {member.unit?.name || (
                       <span className="text-muted-foreground">—</span>
                     )}
@@ -235,7 +235,7 @@ function PendingInvitationsList({
 }) {
   if (invitations.length === 0) {
     return (
-      <Card className="border-none shadow-[0_4px_6px_-1px_rgba(13,12,34,0.04),0_10px_15px_-3px_rgba(13,12,34,0.08)]">
+      <Card className="border border-border">
         <CardContent className="flex flex-col items-center justify-center py-16">
           <Mail className="h-16 w-16 text-muted-foreground/30 mb-4" />
           <h3 className="text-lg font-medium text-muted-foreground">Aucune invitation en attente</h3>
@@ -248,7 +248,7 @@ function PendingInvitationsList({
   }
 
   return (
-    <Card className="border-none shadow-[0_4px_6px_-1px_rgba(13,12,34,0.04),0_10px_15px_-3px_rgba(13,12,34,0.08)]">
+    <Card className="border border-border">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Invitations en attente</CardTitle>
@@ -275,7 +275,7 @@ function PendingInvitationsList({
                 <TableCell className="pl-6">
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">{invitation.email}</span>
+                    <span className="font-medium text-foreground">{invitation.email}</span>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -286,7 +286,7 @@ function PendingInvitationsList({
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm">
+                  <span className="text-sm text-foreground">
                     {invitation.unit?.name || (
                       <span className="text-muted-foreground">—</span>
                     )}
@@ -326,7 +326,7 @@ function InviteMemberDialog({
 }) {
   return (
     <Dialog>
-      <Button className="bg-[#111111] hover:bg-[#111111]/90">
+      <Button className="bg-primary hover:bg-primary/90">
         <UserPlus className="mr-2 h-4 w-4" />
         Inviter un membre
       </Button>
@@ -390,7 +390,7 @@ function InviteMemberDialog({
             </Select>
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-[#111111] hover:bg-[#111111]/90">
+            <Button type="submit" className="bg-primary hover:bg-primary/90">
               <UserPlus className="mr-2 h-4 w-4" />
               Envoyer l&apos;invitation
             </Button>
@@ -418,7 +418,7 @@ function CancelInvitationButton({
 
   return (
     <AlertDialog>
-      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-600">
+      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
         <X className="h-4 w-4" />
       </Button>
       <AlertDialogContent>
@@ -431,7 +431,7 @@ function CancelInvitationButton({
         <AlertDialogFooter>
           <AlertDialogCancel>Annuler</AlertDialogCancel>
           <form action={handleCancel}>
-            <AlertDialogAction type="submit" className="bg-red-600 hover:bg-red-700">
+            <AlertDialogAction type="submit" className="bg-destructive hover:bg-destructive/90">
               Confirmer l&apos;annulation
             </AlertDialogAction>
           </form>
@@ -456,7 +456,7 @@ function ResendInvitationButton({
 
   return (
     <form action={handleResend}>
-      <Button variant="ghost" size="icon" className="h-8 w-8" title="Renvoyer l'invitation">
+      <Button variant="ghost" size="icon" className="h-8 w-8" title="Renvoyer l&apos;invitation">
         <RefreshCw className="h-4 w-4" />
       </Button>
     </form>
